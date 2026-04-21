@@ -72,10 +72,57 @@
                 </div>
             </div>
             
-            <div class="glass-panel h-96 rounded-xl flex items-center justify-center text-slate-500 border-dashed border-2 border-slate-600">
-                [ 3D Tracking Interface / Data Table Placeholder ]
+            <div class="glass-panel p-8 rounded-xl border-t border-l border-slate-600 shadow-2xl relative overflow-hidden">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20"></div>
+
+    <h3 class="text-xl font-semibold text-white mb-6">New Domestic Booking</h3>
+    
+    <form id="bookingForm" class="relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">AWB Number</label>
+                    <input type="text" id="awb" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Sender Name</label>
+                    <input type="text" id="senderName" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Sender Phone</label>
+                    <input type="tel" id="senderPhone" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Weight (KG)</label>
+                        <input type="number" step="0.01" id="weight" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Dest. Pincode</label>
+                        <input type="text" id="pincode" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Receiver Name</label>
+                    <input type="text" id="receiverName" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Receiver Phone</label>
+                    <input type="tel" id="receiverPhone" required class="w-full bg-slate-800 bg-opacity-50 border border-slate-700 rounded-lg p-2.5 text-white focus:outline-none focus:border-blue-500 transition">
+                </div>
             </div>
         </div>
+
+        <button type="submit" id="submitBtn" class="mt-8 w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-bold py-3.5 rounded-lg transition shadow-lg shadow-blue-500/30 flex justify-center items-center">
+            <span id="btnText">Transmit to Database</span>
+            <svg id="loadingIcon" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+        </button>
+        <p class="text-xs text-slate-400 text-center mt-4">Note: Standard delivery schedules starting from the 5th day of dispatch.</p>
+    </form>
+</div>
     </main>
 
     <script src="app.js"></script>
