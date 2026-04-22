@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Nuvana.ex</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { orange: '#F99523', teal: '#027385', beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981', danger: '#EF4444' }, fontFamily: { poppins: ['Poppins', 'sans-serif'], lexend: ['Lexend', 'sans-serif'] } } } }
+    </script>
+    <style>
+        body { font-family: 'Poppins', sans-serif; } h1, h2, h3, h4, h5, h6, .font-lexend { font-family: 'Lexend', sans-serif; }
+        .bento-card { position: relative; border-radius: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; background: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(2, 115, 133, 0.05); border: 1px solid rgba(2, 115, 133, 0.05); }
+        .dark .bento-card { background: rgba(239, 231, 220, 0.03); border: 1px solid rgba(2, 115, 133, 0.20); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+        .bento-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 3px; background: #F99523; transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; }
+        .bento-card:hover { transform: translateY(-2px); } .bento-card:hover::before { left: 0; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(2, 115, 133, 0.2); border-radius: 10px; }
+        .dark ::-webkit-scrollbar-thumb { background: rgba(239, 231, 220, 0.1); }
+    </style>
+</head>
+<body class="bg-beige text-teal dark:bg-charcoal dark:text-beige/80 min-h-screen flex overflow-hidden transition-colors duration-500">
+
+    <aside class="w-20 md:w-64 bg-charcoal text-white dark:bg-charcoal/95 dark:border-r dark:border-teal/20 transition-all duration-500 flex flex-col z-20 backdrop-blur-xl shadow-2xl">
+        <div class="h-24 w-full flex items-center justify-center md:justify-start md:px-8 border-b border-white/5 dark:border-teal/20">
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="Nuvana.ex" class="h-12 md:h-16 w-auto max-w-full object-contain drop-shadow-lg hidden md:block transition-all">
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="NX" class="h-10 w-auto object-contain md:hidden transition-all">
+        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+            <a href="index.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.99 8.241a.75.75 0 11-1.04 1.085l-1.23-1.127V19.5a2.25 2.25 0 01-2.25 2.25h-4.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.25a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75H5.25A2.25 2.25 0 013 19.5v-7.46l-1.23 1.127a.75.75 0 11-1.04-1.085l8.99-8.24z"></path></svg>
+                <span class="hidden md:block font-medium">Command Center</span>
+            </a>
+            <a href="admin.html" class="flex items-center px-4 py-3 rounded-[16px] bg-orange/10 text-orange border border-orange/20 transition shadow-[0_0_15px_rgba(249,149,35,0.05)]">
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
+                <span class="hidden md:block font-medium">Admin Panel</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" id="adminDashboardView">
+        <header class="h-24 flex items-center justify-between px-10 border-b border-teal/10 dark:border-teal/20 z-50 bg-white/40 dark:bg-charcoal/50 backdrop-blur-md relative">
+            <div>
+                <h2 class="text-2xl font-semibold text-charcoal dark:text-white font-lexend">System Administration</h2>
+                <p class="text-sm text-teal dark:text-beige/60 mt-1 font-medium">Manage Users & Infrastructure</p>
+            </div>
+        </header>
+
+        <div class="flex-1 p-6 md:p-10 overflow-y-auto relative z-10 flex flex-col gap-6">
+            
+            <div class="flex bg-white/50 dark:bg-charcoal/50 rounded-xl p-1 border border-teal/10 dark:border-white/10 w-fit backdrop-blur-md">
+                <button id="tabUsersBtn" class="px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md">User Management</button>
+                <button id="tabBranchesBtn" class="px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition">Branch Management</button>
+            </div>
+
+            <div id="sectionUsers" class="grid grid-cols-1 md:grid-cols-12 gap-6 transition-all duration-300">
+                <div class="col-span-1 md:col-span-4 bento-card p-6 h-fit">
+                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white mb-4">Register New User</h3>
+                    <form id="addUserForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Full Name</label>
+                            <input type="text" id="addUserName" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Username (Login ID)</label>
+                            <input type="text" id="addUserUsername" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Password</label>
+                            <input type="text" id="addUserPassword" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Role</label>
+                                <select id="addUserRole" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                                    <option value="Employee">Employee</option>
+                                    <option value="Admin">Admin</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch ID</label>
+                                <input type="text" id="addUserBranch" required placeholder="e.g. HQ-01" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition uppercase">
+                            </div>
+                        </div>
+                        <button type="submit" id="addUserBtn" class="w-full mt-4 bg-teal hover:bg-teal/80 text-white font-bold py-3 rounded-lg transition shadow-md flex justify-center items-center">
+                            <span id="addUserBtnText">Create User</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-span-1 md:col-span-8 bento-card flex flex-col min-h-[500px]">
+                    <div class="p-5 border-b border-teal/10 dark:border-white/5 bg-slate-50/50 dark:bg-charcoal/50 flex justify-between items-center">
+                        <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white">Active Directory</h3>
+                        <button id="refreshUsersBtn" class="text-xs font-bold text-orange hover:text-orange/80 transition">Refresh List</button>
+                    </div>
+                    <div class="flex-1 overflow-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-100 dark:bg-charcoal/80 sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-wider">
+                                <tr><th class="p-4">Username</th><th class="p-4">Full Name</th><th class="p-4">Role</th><th class="p-4">Branch</th><th class="p-4 text-right">Actions</th></tr>
+                            </thead>
+                            <tbody id="usersTableBody" class="divide-y divide-teal/10 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
+                                <tr><td colspan="5" class="p-8 text-center animate-pulse">Loading directory...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="sectionBranches" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6 transition-all duration-300">
+                <div class="col-span-1 md:col-span-4 bento-card p-6 h-fit">
+                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white mb-4">Register Hub / Branch</h3>
+                    <form id="addBranchForm" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch ID Code</label>
+                            <input type="text" id="addBranchId" required placeholder="e.g. DXB-02" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition uppercase font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch Name</label>
+                            <input type="text" id="addBranchName" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">City / Location</label>
+                            <input type="text" id="addBranchLocation" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Manager Name</label>
+                                <input type="text" id="addBranchManager" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Contact</label>
+                                <input type="text" id="addBranchContact" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                            </div>
+                        </div>
+                        <button type="submit" id="addBranchBtn" class="w-full mt-4 bg-teal hover:bg-teal/80 text-white font-bold py-3 rounded-lg transition shadow-md flex justify-center items-center">
+                            <span id="addBranchBtnText">Deploy Branch</span>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="col-span-1 md:col-span-8 bento-card flex flex-col min-h-[500px]">
+                    <div class="p-5 border-b border-teal/10 dark:border-white/5 bg-slate-50/50 dark:bg-charcoal/50 flex justify-between items-center">
+                        <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white">Global Hub Infrastructure</h3>
+                        <button id="refreshBranchesBtn" class="text-xs font-bold text-orange hover:text-orange/80 transition">Refresh List</button>
+                    </div>
+                    <div class="flex-1 overflow-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-100 dark:bg-charcoal/80 sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-wider">
+                                <tr><th class="p-4">Branch ID</th><th class="p-4">Name & Location</th><th class="p-4">Manager</th><th class="p-4">Contact</th></tr>
+                            </thead>
+                            <tbody id="branchesTableBody" class="divide-y divide-teal/10 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
+                                <tr><td colspan="4" class="p-8 text-center animate-pulse">Loading infrastructure...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>

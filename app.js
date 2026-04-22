@@ -452,3 +452,130 @@ if (themeToggleBtnGlobal) {
         }
     });
 }
+// ==========================================
+// 12. ADMIN CONTROL PANEL MODULE
+// ==========================================
+// Security Check: Kick out non-admins trying to access admin.html
+if (window.location.href.includes('admin.html') && activeUser && activeUser.role !== 'Admin') {
+    window.location.replace('index.html');
+}
+
+// Show Admin Link in Sidebars if user is Admin
+if (activeUser && activeUser.role === 'Admin') {
+    const adminLinks = document.querySelectorAll('#navAdminLink');
+    adminLinks.forEach(link => link.classList.remove('hidden'));
+    adminLinks.forEach(link => link.classList.add('flex'));
+}
+
+const adminDashboardView = document.getElementById('adminDashboardView');
+if (adminDashboardView && activeUser && activeUser.role === 'Admin') {
+    
+    // Toggles
+    const tabUsersBtn = document.getElementById('tabUsersBtn');
+    const tabBranchesBtn = document.getElementById('tabBranchesBtn');
+    const sectionUsers = document.getElementById('sectionUsers');
+    const sectionBranches = document.getElementById('sectionBranches');
+
+    tabUsersBtn.addEventListener('click', () => {
+        sectionUsers.classList.remove('hidden'); sectionBranches.classList.add('hidden');
+        tabUsersBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md';
+        tabBranchesBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition';
+        window.fetchUsers();
+    });
+
+    tabBranchesBtn.addEventListener('click', () => {
+        sectionBranches.classList.remove('hidden'); sectionUsers.classList.add('hidden');
+        tabBranchesBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md';
+        tabUsersBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition';
+        window.fetchBranches();
+    });
+
+    // Fetch Users
+    const usersTableBody = document.getElementById('usersTableBody');
+    window.fetchUsers = async function() {
+        usersTableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-teal/70 animate-pulse">Loading directory...</td></tr>';
+        try {
+            const response = await fetch(`${scriptURL}?action=getUsers`); const result = await response.json();
+            if (result.result === 'success') {
+                const data = result.data; usersTableBody.innerHTML = '';
+                if (data.length <= 1) return usersTableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-teal/70">No users found.</td></tr>';
+                for (let i = 1; i < data.length; i++) {
+                    let row = data[i];
+                    let roleStyle = row[4] === 'Admin' ? 'text-orange font-bold' : 'text-teal dark:text-beige/80';
+                    let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
+                    tr.innerHTML = `
+                        <td class="p-4 font-mono font-bold text-charcoal dark:text-white">${row[1]}</td>
+                        <td class="p-4">${row[3]}</td>
+                        <td class="p-4 ${roleStyle}">${row[4]}</td>
+                        <td class="p-4"><span class="px-2 py-1 rounded bg-teal/10 dark:bg-white/10 text-xs font-mono">${row[5]}</span></td>
+                        <td class="p-4 text-right">
+                            <button onclick="deleteUser('${row[1]}')" class="text-xs font-bold text-danger hover:text-red-700 transition uppercase tracking-widest">Delete</button>
+                        </td>`;
+                    usersTableBody.appendChild(tr);
+                }
+            }
+        } catch (e) { usersTableBody.innerHTML = '<tr><td colspan="5" class="text-danger p-4 text-center">Failed to fetch data</td></tr>'; }
+    }
+
+    // Add User Submit
+    document.getElementById('addUserForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('addUserBtn'); const text = document.getElementById('addUserBtnText');
+        text.innerText = "Creating..."; btn.disabled = true; btn.classList.add('opacity-50');
+        const payload = { formType: "addUser", fullName: document.getElementById('addUserName').value, newUsername: document.getElementById('addUserUsername').value, newPassword: document.getElementById('addUserPassword').value, role: document.getElementById('addUserRole').value, branchId: document.getElementById('addUserBranch').value };
+        try {
+            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
+            if(result.result === 'success') { alert('User Created!'); document.getElementById('addUserForm').reset(); window.fetchUsers(); } else alert(result.error);
+        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Create User"; btn.disabled = false; btn.classList.remove('opacity-50'); }
+    });
+
+    // Delete User
+    window.deleteUser = async function(targetUser) {
+        if(targetUser === activeUser.username) return alert("You cannot delete your own account.");
+        if(!confirm(`Are you sure you want to permanently delete user: ${targetUser}?`)) return;
+        try {
+            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ formType: "deleteUser", targetUsername: targetUser }) });
+            const result = await res.json();
+            if(result.result === 'success') { alert('User deleted.'); window.fetchUsers(); } else alert(result.error);
+        } catch(e) { alert('Deletion failed.'); }
+    }
+
+    // Fetch Branches
+    const branchesTableBody = document.getElementById('branchesTableBody');
+    window.fetchBranches = async function() {
+        branchesTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-teal/70 animate-pulse">Loading infrastructure...</td></tr>';
+        try {
+            const response = await fetch(`${scriptURL}?action=getBranches`); const result = await response.json();
+            if (result.result === 'success') {
+                const data = result.data; branchesTableBody.innerHTML = '';
+                if (data.length <= 1) return branchesTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-teal/70">No branches found.</td></tr>';
+                for (let i = 1; i < data.length; i++) {
+                    let row = data[i];
+                    let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
+                    tr.innerHTML = `
+                        <td class="p-4 font-mono font-bold text-orange">${row[1]}</td>
+                        <td class="p-4"><p class="font-bold text-charcoal dark:text-white">${row[2]}</p><p class="text-xs text-teal/70 dark:text-beige/60">${row[3]}</p></td>
+                        <td class="p-4">${row[4]}</td>
+                        <td class="p-4 font-mono text-sm">${row[5]}</td>`;
+                    branchesTableBody.appendChild(tr);
+                }
+            }
+        } catch (e) { branchesTableBody.innerHTML = '<tr><td colspan="4" class="text-danger p-4 text-center">Failed to fetch data</td></tr>'; }
+    }
+
+    // Add Branch Submit
+    document.getElementById('addBranchForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('addBranchBtn'); const text = document.getElementById('addBranchBtnText');
+        text.innerText = "Deploying..."; btn.disabled = true; btn.classList.add('opacity-50');
+        const payload = { formType: "addBranch", branchId: document.getElementById('addBranchId').value, branchName: document.getElementById('addBranchName').value, location: document.getElementById('addBranchLocation').value, manager: document.getElementById('addBranchManager').value, contact: document.getElementById('addBranchContact').value };
+        try {
+            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
+            if(result.result === 'success') { alert('Branch Deployed!'); document.getElementById('addBranchForm').reset(); window.fetchBranches(); } else alert(result.error);
+        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Deploy Branch"; btn.disabled = false; btn.classList.remove('opacity-50'); }
+    });
+
+    document.getElementById('refreshUsersBtn').addEventListener('click', window.fetchUsers);
+    document.getElementById('refreshBranchesBtn').addEventListener('click', window.fetchBranches);
+    window.fetchUsers(); // Load users by default on page load
+}
