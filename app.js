@@ -190,3 +190,74 @@ if (transForm) {
     refreshLedgerBtn.addEventListener('click', window.fetchLedger); 
     window.fetchLedger(); // Auto-fetch on load
 }
+// ==========================================
+// CUSTOMER CRM MODULE
+// ==========================================
+const custForm = document.getElementById('customerForm');
+if (custForm) {
+    const custBtn = document.getElementById('custBtn');
+    const custBtnText = document.getElementById('custBtnText');
+    const customerTableBody = document.getElementById('customerTableBody');
+    const refreshCustBtn = document.getElementById('refreshCustBtn');
+
+    // Submit New Customer
+    custForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        custBtnText.innerText = "Saving...";
+        custBtn.disabled = true; custBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+        const payload = {
+            formType: "addCustomer",
+            fullName: document.getElementById('custName').value,
+            phone: document.getElementById('custPhone').value,
+            email: document.getElementById('custEmail').value,
+            address: document.getElementById('custAddress').value
+        };
+
+        try {
+            const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+            const result = await response.json();
+            if(result.result === 'success') {
+                alert('Customer Profile Saved.');
+                custForm.reset();
+                window.fetchCustomers(); // Auto-refresh table
+            } else { alert('Error: ' + result.error); }
+        } catch (error) { alert('Transmission failed.'); } finally {
+            custBtnText.innerText = "Save Profile";
+            custBtn.disabled = false; custBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+    });
+
+    // Fetch Customer Data
+    window.fetchCustomers = async function() {
+        customerTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-slate-400 animate-pulse">Loading customer data...</td></tr>';
+        try {
+            const response = await fetch(`${scriptURL}?action=getCustomers`);
+            const result = await response.json();
+            if (result.result === 'success') {
+                const data = result.data; customerTableBody.innerHTML = ''; 
+                if (data.length <= 1) { customerTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-slate-500">No customers found.</td></tr>'; return; }
+                
+                // Loop backwards for newest first
+                for (let i = data.length - 1; i > 0; i--) {
+                    let row = data[i]; 
+                    let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-800 transition cursor-pointer border-b border-slate-800';
+                    tr.innerHTML = `
+                        <td class="p-4 font-mono text-indigo-400">${row[1]}</td>
+                        <td class="p-4 text-white font-semibold">${row[2]}</td>
+                        <td class="p-4 text-slate-300">${row[3]}</td>
+                        <td class="p-4 text-right pr-8">
+                            <span class="bg-indigo-900 bg-opacity-50 text-indigo-300 px-3 py-1 rounded-full font-bold text-xs border border-indigo-700 shadow-inner">
+                                ${row[6]} pts
+                            </span>
+                        </td>
+                    `;
+                    customerTableBody.appendChild(tr);
+                }
+            } else customerTableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-400">Error: ${result.message}</td></tr>`;
+        } catch (error) { customerTableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-400">Failed to fetch data.</td></tr>`; }
+    }
+    
+    refreshCustBtn.addEventListener('click', window.fetchCustomers); 
+    window.fetchCustomers(); // Auto-fetch on load
+}
