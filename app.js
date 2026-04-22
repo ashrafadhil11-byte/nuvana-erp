@@ -261,3 +261,129 @@ if (custForm) {
     refreshCustBtn.addEventListener('click', window.fetchCustomers); 
     window.fetchCustomers(); // Auto-fetch on load
 }
+// ==========================================
+// REPORTS & ANALYTICS MODULE
+// ==========================================
+const reportsDashboard = document.getElementById('reportsDashboard');
+if (reportsDashboard) {
+    const generateReportsBtn = document.getElementById('generateReportsBtn');
+    const loadingOverlay = document.getElementById('loadingOverlay');
+    let financeChartInstance = null;
+    let logisticsChartInstance = null;
+
+    // Set default styling for Chart.js to match our dark theme
+    Chart.defaults.color = '#94a3b8'; 
+    Chart.defaults.font.family = 'Inter';
+
+    window.generateAnalytics = async function() {
+        loadingOverlay.classList.remove('hidden');
+
+        try {
+            // Fetch Ledger Data & Bookings Data simultaneously for speed
+            const [ledgerRes, bookingsRes] = await Promise.all([
+                fetch(`${scriptURL}?action=getLedger`),
+                fetch(`${scriptURL}?action=getDomestic`)
+            ]);
+
+            const ledgerJson = await ledgerRes.json();
+            const bookingsJson = await bookingsRes.json();
+
+            // --- 1. PROCESS FINANCIAL DATA ---
+            let totalIncome = 0;
+            let totalExpense = 0;
+
+            if (ledgerJson.result === 'success' && ledgerJson.data.length > 1) {
+                const ledgerData = ledgerJson.data;
+                for (let i = 1; i < ledgerData.length; i++) {
+                    let type = ledgerData[i][3];
+                    let amount = parseFloat(ledgerData[i][5]) || 0;
+                    if (type === 'Income') totalIncome += amount;
+                    if (type === 'Expense') totalExpense += amount;
+                }
+            }
+
+            let netProfit = totalIncome - totalExpense;
+
+            // Update Financial UI Stat Cards
+            document.getElementById('statIncome').innerText = `${totalIncome.toFixed(2)}`;
+            document.getElementById('statExpense').innerText = `${totalExpense.toFixed(2)}`;
+            document.getElementById('statProfit').innerText = `${netProfit.toFixed(2)}`;
+            
+            // Profit color logic
+            document.getElementById('statProfit').className = netProfit >= 0 ? "text-2xl font-bold text-emerald-400" : "text-2xl font-bold text-rose-400";
+
+            // Draw Financial Chart (Doughnut)
+            const ctxFinance = document.getElementById('financeChart').getContext('2d');
+            if (financeChartInstance) financeChartInstance.destroy(); // Clear old chart
+            
+            financeChartInstance = new Chart(ctxFinance, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Income', 'Expenses'],
+                    datasets: [{
+                        data: [totalIncome, totalExpense],
+                        backgroundColor: ['rgba(52, 211, 153, 0.8)', 'rgba(251, 113, 133, 0.8)'],
+                        borderColor: ['#0f172a', '#0f172a'],
+                        borderWidth: 4,
+                        hoverOffset: 4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+            });
+
+            // --- 2. PROCESS LOGISTICS DATA ---
+            let statusCounts = { 'Pending': 0, 'In Transit': 0, 'Dispatched to Hub': 0, 'Out for Delivery': 0, 'Delivered': 0 };
+            let totalShipments = 0;
+
+            if (bookingsJson.result === 'success' && bookingsJson.data.length > 1) {
+                const bookingsData = bookingsJson.data;
+                totalShipments = bookingsData.length - 1; // Subtract header row
+                
+                for (let i = 1; i < bookingsData.length; i++) {
+                    let status = bookingsData[i][9]; // Column J
+                    if (statusCounts[status] !== undefined) {
+                        statusCounts[status]++;
+                    } else {
+                        statusCounts[status] = 1; // Catch any unusual statuses
+                    }
+                }
+            }
+
+            // Update Logistics UI Stat Card
+            document.getElementById('statShipments').innerText = totalShipments;
+
+            // Draw Logistics Chart (Bar)
+            const ctxLogistics = document.getElementById('logisticsChart').getContext('2d');
+            if (logisticsChartInstance) logisticsChartInstance.destroy();
+            
+            logisticsChartInstance = new Chart(ctxLogistics, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(statusCounts),
+                    datasets: [{
+                        label: 'Number of Shipments',
+                        data: Object.values(statusCounts),
+                        backgroundColor: 'rgba(96, 165, 250, 0.7)',
+                        borderColor: 'rgba(96, 165, 250, 1)',
+                        borderWidth: 1,
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } }, x: { grid: { display: false } } }
+                }
+            });
+
+        } catch (error) {
+            console.error("Analytics Error:", error);
+            alert("Failed to load analytics data.");
+        } finally {
+            loadingOverlay.classList.add('hidden');
+        }
+    }
+
+    generateReportsBtn.addEventListener('click', window.generateAnalytics);
+    window.generateAnalytics(); // Auto-load on page visit
+}
