@@ -16,21 +16,7 @@ let activeUser = null;
 if (rawUser && !isLoginPage) {
     activeUser = JSON.parse(rawUser);
     
-    const branchSpans = document.querySelectorAll('.text-sm.text-slate-400');
-    branchSpans.forEach(span => { if(span.innerText.includes('Branch:')) span.innerText = `Branch: ${activeUser.branchId}`; });
-
-    const avatars = document.querySelectorAll('.w-8.h-8.rounded-full');
-    avatars.forEach(av => { av.innerText = activeUser.name.charAt(0).toUpperCase(); });
-
-    const headers = document.querySelectorAll('header .flex.items-center.space-x-4');
-    headers.forEach(h => {
-        const logoutBtn = document.createElement('button');
-        logoutBtn.innerText = 'Logout';
-        logoutBtn.className = 'ml-4 text-xs text-rose-400 hover:text-rose-300 transition uppercase tracking-wider font-bold';
-        logoutBtn.onclick = () => { sessionStorage.removeItem('erp_user'); window.location.replace('login.html'); };
-        h.appendChild(logoutBtn);
-    });
-
+    // Restrict access for non-admins
     if (activeUser.role !== 'Admin') {
         const restrictedLinks = ['accounts.html', 'reports.html', 'customers.html'];
         const links = document.querySelectorAll('nav a');
@@ -54,7 +40,8 @@ if (loginForm) {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
             if(result.result === 'success') {
-                sessionStorage.setItem('erp_user', JSON.stringify({ name: result.name, role: result.role, branchId: result.branchId }));
+                // THE FIX: "username: result.username" is now saved correctly!
+                sessionStorage.setItem('erp_user', JSON.stringify({ username: result.username, name: result.name, role: result.role, branchId: result.branchId }));
                 window.location.replace('index.html'); 
             } else { alert(result.error); loginForm.reset(); }
         } catch (error) { alert('Connection failed.'); } finally {
@@ -134,25 +121,25 @@ if (tableBody) {
     
     let currentView = 'domestic';
 
-    // Toggle styling functions
-    toggleDomBtn.addEventListener('click', () => {
-        currentView = 'domestic';
-        toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-teal-600 text-white transition shadow';
-        toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
-        window.fetchBookings();
-    });
+    if(toggleDomBtn && toggleIntBtn) {
+        toggleDomBtn.addEventListener('click', () => {
+            currentView = 'domestic';
+            toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-teal text-white transition shadow';
+            toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
+            window.fetchBookings();
+        });
 
-    toggleIntBtn.addEventListener('click', () => {
-        currentView = 'international';
-        toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-purple-600 text-white transition shadow';
-        toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
-        window.fetchBookings();
-    });
+        toggleIntBtn.addEventListener('click', () => {
+            currentView = 'international';
+            toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-orange text-white transition shadow';
+            toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
+            window.fetchBookings();
+        });
+    }
 
     window.fetchBookings = async function() {
         tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400 animate-pulse">Fetching live data...</td></tr>';
         
-        // Update Headers based on view
         if (currentView === 'domestic') {
             tableHeaderRow.innerHTML = `<tr><th class="p-4 border-b border-slate-700">Date</th><th class="p-4 border-b border-slate-700">AWB</th><th class="p-4 border-b border-slate-700">Sender</th><th class="p-4 border-b border-slate-700">Receiver</th><th class="p-4 border-b border-slate-700">Dest. Pin</th><th class="p-4 border-b border-slate-700">Status</th></tr>`;
         } else {
@@ -170,13 +157,11 @@ if (tableBody) {
                 
                 for (let i = data.length - 1; i > 0; i--) {
                     let row = data[i]; 
-                    
                     let dateStr, trackingId, sender, receiver, dest, status;
 
                     if (currentView === 'domestic') {
                         dateStr = new Date(row[0]).toLocaleDateString() || row[0]; trackingId = row[1]; sender = row[3]; receiver = row[5]; dest = row[7]; status = row[9];
                     } else {
-                        // International Array Mapping
                         trackingId = row[0]; dateStr = new Date(row[1]).toLocaleDateString() || row[1]; sender = row[2]; receiver = row[9]; dest = row[14]; status = row[61];
                     }
 
@@ -193,7 +178,8 @@ if (tableBody) {
             } else tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Error: ${result.message}</td></tr>`;
         } catch (error) { tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to fetch data.</td></tr>`; }
     }
-    refreshBtn.addEventListener('click', window.fetchBookings); window.fetchBookings(); 
+    if(refreshBtn) refreshBtn.addEventListener('click', window.fetchBookings); 
+    window.fetchBookings(); 
 }
 
 // ==========================================
@@ -247,7 +233,8 @@ if (transForm) {
             } else ledgerTableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">Error: ${result.message}</td></tr>`;
         } catch (error) { ledgerTableBody.innerHTML = `<tr><td colspan="5" class="p-8 text-center text-red-400">Failed to fetch data.</td></tr>`; }
     }
-    refreshLedgerBtn.addEventListener('click', window.fetchLedger); window.fetchLedger(); 
+    if(refreshLedgerBtn) refreshLedgerBtn.addEventListener('click', window.fetchLedger); 
+    window.fetchLedger(); 
 }
 
 // ==========================================
@@ -280,7 +267,8 @@ if (custForm) {
             } else customerTableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-400">Error: ${result.message}</td></tr>`;
         } catch (error) { customerTableBody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-red-400">Failed to fetch data.</td></tr>`; }
     }
-    refreshCustBtn.addEventListener('click', window.fetchCustomers); window.fetchCustomers(); 
+    if(refreshCustBtn) refreshCustBtn.addEventListener('click', window.fetchCustomers); 
+    window.fetchCustomers(); 
 }
 
 // ==========================================
@@ -330,37 +318,20 @@ if (reportsDashboard) {
                 const ctxLogistics = document.getElementById('logisticsChart').getContext('2d');
                 if (logisticsChartInstance) logisticsChartInstance.destroy();
                 
-                // Create custom Deep Teal to Vibrant Orange Gradient
                 let gradientFill = ctxLogistics.createLinearGradient(0, 0, 0, 400);
-                gradientFill.addColorStop(0, '#027385'); // Deep Teal
-                gradientFill.addColorStop(1, '#F99523'); // Vibrant Orange
+                gradientFill.addColorStop(0, '#027385');
+                gradientFill.addColorStop(1, '#F99523');
 
                 logisticsChartInstance = new Chart(ctxLogistics, { 
                     type: 'bar', 
-                    data: { 
-                        labels: Object.keys(statusCounts), 
-                        datasets: [{ 
-                            label: 'Number of Shipments', 
-                            data: Object.values(statusCounts), 
-                            backgroundColor: gradientFill, 
-                            borderWidth: 0, 
-                            borderRadius: 6 
-                        }] 
-                    }, 
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        plugins: { legend: { display: false } }, 
-                        scales: { 
-                            y: { beginAtZero: true, grid: { color: 'rgba(2, 115, 133, 0.1)' } }, 
-                            x: { grid: { display: false } } 
-                        } 
-                    } 
+                    data: { labels: Object.keys(statusCounts), datasets: [{ label: 'Number of Shipments', data: Object.values(statusCounts), backgroundColor: gradientFill, borderWidth: 0, borderRadius: 6 }] }, 
+                    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(2, 115, 133, 0.1)' } }, x: { grid: { display: false } } } } 
                 });
             }
         } catch (error) { console.error(error); alert("Failed to load analytics data."); } finally { loadingOverlay.classList.add('hidden'); }
     }
-    generateReportsBtn.addEventListener('click', window.generateAnalytics); window.generateAnalytics(); 
+    if(generateReportsBtn) generateReportsBtn.addEventListener('click', window.generateAnalytics); 
+    if(reportsDashboard) window.generateAnalytics(); 
 }
 
 // ==========================================
@@ -369,7 +340,6 @@ if (reportsDashboard) {
 const mainDashboardView = document.getElementById('mainDashboardView');
 if (mainDashboardView && activeUser) {
     
-    // --- Dashboard Stats & Live Feed ---
     window.loadDashboardStats = async function() {
         try {
             const [domRes, intRes, custRes] = await Promise.all([ fetch(`${scriptURL}?action=getDomestic`), fetch(`${scriptURL}?action=getInternational`), fetch(`${scriptURL}?action=getCustomers`) ]);
@@ -383,15 +353,13 @@ if (mainDashboardView && activeUser) {
             if(document.getElementById('dashInt')) document.getElementById('dashInt').innerText = totalInt; 
             if(document.getElementById('dashCust')) document.getElementById('dashCust').innerText = totalCust;
 
-            // Inject Live Status
             const liveStatusContainer = document.getElementById('liveStatusContainer');
             if (liveStatusContainer) {
-                liveStatusContainer.innerHTML = ''; // Clear loading text
+                liveStatusContainer.innerHTML = ''; 
                 let hasData = false;
 
-                // Add Last Domestic
                 if (domJson.result === 'success' && domJson.data.length > 1) {
-                    let row = domJson.data[domJson.data.length - 1]; // Get last item
+                    let row = domJson.data[domJson.data.length - 1]; 
                     let awb = row[1]; let dest = row[7]; let status = row[9];
                     let pClass = status === 'Delivered' ? 'bg-success/10 text-success border-success/20' : 'bg-teal/10 text-teal dark:bg-teal/20 dark:text-teal border-teal/20';
                     liveStatusContainer.innerHTML += `
@@ -402,7 +370,6 @@ if (mainDashboardView && activeUser) {
                     hasData = true;
                 }
 
-                // Add Last International
                 if (intJson.result === 'success' && intJson.data.length > 1) {
                     let row = intJson.data[intJson.data.length - 1];
                     let orderId = row[0]; let dest = row[14]; let status = row[61];
@@ -417,7 +384,6 @@ if (mainDashboardView && activeUser) {
 
                 if(!hasData) liveStatusContainer.innerHTML = '<p class="text-sm text-teal/70 dark:text-beige/60">No recent shipments found.</p>';
             }
-
         } catch (error) { 
             console.error(error);
             if(document.getElementById('dashDom')) document.getElementById('dashDom').innerText = "Error"; 
@@ -425,7 +391,6 @@ if (mainDashboardView && activeUser) {
     }
     window.loadDashboardStats();
 
-    // --- Edit Profile Form Submission ---
     const editProfileForm = document.getElementById('editProfileForm');
     if (editProfileForm) {
         const saveProfileBtn = document.getElementById('saveProfileBtn');
@@ -434,8 +399,6 @@ if (mainDashboardView && activeUser) {
         editProfileForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Note: If you don't have activeUser.username, you need to log out and log back in 
-            // after the backend update so the new script passes the username to the browser!
             if (!activeUser.username) {
                 alert("Security Session Expired. Please log out and log back in to edit your profile.");
                 return;
@@ -456,13 +419,12 @@ if (mainDashboardView && activeUser) {
                 const result = await response.json();
                 
                 if (result.result === 'success') {
-                    // Update Local Session Memory
                     activeUser.name = result.newName;
                     sessionStorage.setItem('erp_user', JSON.stringify(activeUser));
                     
                     alert('Profile updated successfully!');
                     document.getElementById('profileModal').classList.add('hidden');
-                    window.location.reload(); // Refresh to show new name everywhere
+                    window.location.reload(); 
                 } else {
                     alert('Error: ' + result.error);
                 }
@@ -474,4 +436,19 @@ if (mainDashboardView && activeUser) {
             }
         });
     }
+}
+
+// ==========================================
+// 11. THEME TOGGLE (GLOBAL)
+// ==========================================
+const themeToggleBtnGlobal = document.getElementById('themeToggleBtn');
+if (themeToggleBtnGlobal) {
+    themeToggleBtnGlobal.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        if (document.documentElement.classList.contains('dark')) {
+            localStorage.theme = 'dark';
+        } else {
+            localStorage.theme = 'light';
+        }
+    });
 }
