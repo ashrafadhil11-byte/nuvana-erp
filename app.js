@@ -324,3 +324,47 @@ if (reportsDashboard) {
     }
     generateReportsBtn.addEventListener('click', window.generateAnalytics); window.generateAnalytics(); 
 }
+// ==========================================
+// 10. DYNAMIC MAIN DASHBOARD
+// ==========================================
+const mainDashboardView = document.getElementById('mainDashboardView');
+if (mainDashboardView && activeUser) {
+    
+    // Personalize the welcome message
+    const welcomeText = document.getElementById('welcomeText');
+    if(welcomeText) welcomeText.innerText = `Welcome back, ${activeUser.name}.`;
+
+    window.loadDashboardStats = async function() {
+        try {
+            // Fetch everything at once for maximum speed
+            const [domRes, intRes, custRes] = await Promise.all([
+                fetch(`${scriptURL}?action=getDomestic`),
+                fetch(`${scriptURL}?action=getInternational`),
+                fetch(`${scriptURL}?action=getCustomers`)
+            ]);
+
+            const domJson = await domRes.json();
+            const intJson = await intRes.json();
+            const custJson = await custRes.json();
+
+            // Calculate totals (subtract 1 to ignore header row)
+            let totalDom = domJson.result === 'success' ? Math.max(0, domJson.data.length - 1) : 0;
+            let totalInt = intJson.result === 'success' ? Math.max(0, intJson.data.length - 1) : 0;
+            let totalCust = custJson.result === 'success' ? Math.max(0, custJson.data.length - 1) : 0;
+
+            // Animate the numbers into the UI
+            document.getElementById('dashDom').innerText = totalDom;
+            document.getElementById('dashInt').innerText = totalInt;
+            document.getElementById('dashCust').innerText = totalCust;
+
+        } catch (error) {
+            console.error("Dashboard fetch error:", error);
+            document.getElementById('dashDom').innerText = "Error";
+            document.getElementById('dashInt').innerText = "Error";
+            document.getElementById('dashCust').innerText = "Error";
+        }
+    }
+    
+    // Load stats immediately
+    window.loadDashboardStats();
+}
