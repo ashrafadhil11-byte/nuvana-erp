@@ -3,24 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Nuvana.ex</title>
+    <title>Master Control Panel - Nuvana.ex</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script>
         if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
-        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { orange: '#F99523', teal: '#027385', beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981', danger: '#EF4444' }, fontFamily: { poppins: ['Poppins', 'sans-serif'], lexend: ['Lexend', 'sans-serif'] } } } }
+        tailwind.config = { darkMode: 'class', theme: { extend: { colors: { orange: '#F99523', teal: '#027385', beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981', danger: '#EF4444', muted: '#6b7280' }, fontFamily: { poppins: ['Poppins', 'sans-serif'], lexend: ['Lexend', 'sans-serif'] } } } }
     </script>
     <style>
         body { font-family: 'Poppins', sans-serif; } h1, h2, h3, h4, h5, h6, .font-lexend { font-family: 'Lexend', sans-serif; }
+        
+        /* Bento Box Styling */
         .bento-card { position: relative; border-radius: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; background: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(2, 115, 133, 0.05); border: 1px solid rgba(2, 115, 133, 0.05); }
         .dark .bento-card { background: rgba(239, 231, 220, 0.03); border: 1px solid rgba(2, 115, 133, 0.20); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
-        .bento-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 3px; background: #F99523; transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; }
-        .bento-card:hover { transform: translateY(-2px); } .bento-card:hover::before { left: 0; }
+        
+        /* Scrollbars */
         ::-webkit-scrollbar { width: 6px; height: 6px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: rgba(2, 115, 133, 0.2); border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: rgba(239, 231, 220, 0.1); }
+        
+        /* Badges Inspired by Reference */
+        .badge-admin { background: rgba(239, 68, 68, 0.1); color: #EF4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-role { background: rgba(2, 115, 133, 0.1); color: #027385; border: 1px solid rgba(2, 115, 133, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .dark .badge-role { background: rgba(239, 231, 220, 0.1); color: #EFE7DC; border-color: rgba(239, 231, 220, 0.2); }
+        
+        .badge-active { background: rgba(16, 185, 129, 0.1); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-hq { background: rgba(249, 149, 35, 0.1); color: #F99523; border: 1px solid rgba(249, 149, 35, 0.2); padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Modal Overlay & Animations */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(13, 35, 48, 0.6); backdrop-filter: blur(8px); z-index: 100; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .form-modal { transform: translateY(40px); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1); width: 100%; max-width: 500px; }
+        .modal-overlay.active .form-modal { transform: translateY(0); }
     </style>
 </head>
 <body class="bg-beige text-teal dark:bg-charcoal dark:text-beige/80 min-h-screen flex overflow-hidden transition-colors duration-500">
+
+    <div class="modal-overlay" id="userModal">
+        <div class="form-modal bento-card p-8 shadow-2xl border-t border-white/20">
+            <div class="flex items-center space-x-3 mb-6 border-b border-teal/10 dark:border-white/10 pb-4">
+                <div class="w-10 h-10 rounded-xl bg-orange/10 flex items-center justify-center border border-orange/20">
+                    <svg class="w-5 h-5 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" /></svg>
+                </div>
+                <h3 class="font-lexend text-xl font-semibold text-charcoal dark:text-white" id="userModalTitle">Register New User</h3>
+            </div>
+            
+            <form id="adminUserForm" class="space-y-4">
+                <input type="hidden" id="userActionType" value="add">
+                
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Username / ID</label>
+                        <input type="text" id="mUserId" required class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition font-mono">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Status</label>
+                        <select id="mUserStatus" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition appearance-none">
+                            <option value="Active">Active</option>
+                            <option value="Suspended">Suspended</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Full Name</label>
+                    <input type="text" id="mUserName" required class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                </div>
+                
+                <div>
+                    <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Account Password</label>
+                    <input type="text" id="mUserPass" required class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">System Role</label>
+                        <select id="mUserRole" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition appearance-none">
+                            <option value="Employee">Employee</option>
+                            <option value="Admin">System Admin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Branch Assignment</label>
+                        <input type="text" id="mUserBranch" required placeholder="e.g. SLL-01" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition font-mono uppercase">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-8 pt-4 border-t border-teal/10 dark:border-white/10">
+                    <button type="button" onclick="document.getElementById('userModal').classList.remove('active')" class="px-5 py-2.5 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 border border-teal/10 dark:border-white/10 hover:bg-teal/5 dark:hover:bg-white/5 transition">Cancel</button>
+                    <button type="submit" id="saveUserBtn" class="px-6 py-2.5 rounded-lg text-sm font-bold bg-orange text-white hover:bg-orange/90 shadow-md transition flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                        <span id="saveUserText">Save User</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="branchModal">
+        <div class="form-modal bento-card p-8 shadow-2xl border-t border-white/20">
+            <div class="flex items-center space-x-3 mb-6 border-b border-teal/10 dark:border-white/10 pb-4">
+                <div class="w-10 h-10 rounded-xl bg-teal/10 dark:bg-white/10 flex items-center justify-center border border-teal/20 dark:border-white/20">
+                    <svg class="w-5 h-5 text-teal dark:text-white" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd" /></svg>
+                </div>
+                <h3 class="font-lexend text-xl font-semibold text-charcoal dark:text-white" id="branchModalTitle">Register New Hub</h3>
+            </div>
+            
+            <form id="adminBranchForm" class="space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Branch ID Code</label>
+                        <input type="text" id="mBranchCode" required class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition font-mono uppercase">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Hub Type</label>
+                        <select id="mBranchType" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition appearance-none">
+                            <option value="Standard Branch">Standard Branch</option>
+                            <option value="Head Quarters">Head Quarters</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Location / City</label>
+                    <input type="text" id="mBranchLoc" required class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Manager Name</label>
+                        <input type="text" id="mBranchManager" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-teal/70 dark:text-beige/60 uppercase mb-1">Contact Phone</label>
+                        <input type="text" id="mBranchContact" class="w-full bg-slate-50 dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition font-mono">
+                    </div>
+                </div>
+
+                <div class="flex justify-end space-x-3 mt-8 pt-4 border-t border-teal/10 dark:border-white/10">
+                    <button type="button" onclick="document.getElementById('branchModal').classList.remove('active')" class="px-5 py-2.5 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 border border-teal/10 dark:border-white/10 hover:bg-teal/5 dark:hover:bg-white/5 transition">Cancel</button>
+                    <button type="submit" id="saveBranchBtn" class="px-6 py-2.5 rounded-lg text-sm font-bold bg-teal text-white hover:bg-teal/90 shadow-md transition flex items-center">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path></svg>
+                        <span id="saveBranchText">Deploy Hub</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <aside class="w-20 md:w-64 bg-charcoal text-white dark:bg-charcoal/95 dark:border-r dark:border-teal/20 transition-all duration-500 flex flex-col z-20 backdrop-blur-xl shadow-2xl">
         <div class="h-24 w-full flex items-center justify-center md:justify-start md:px-8 border-b border-white/5 dark:border-teal/20">
@@ -28,132 +156,134 @@
             <img src="assets/nuvana-ex%20logo%20long.svg" alt="NX" class="h-10 w-auto object-contain md:hidden transition-all">
         </div>
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            <a href="index.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+            <a href="index.html" class="flex items-center px-4 py-3 rounded-[16px] bg-orange/10 text-orange border border-orange/20 transition shadow-[0_0_15px_rgba(249,149,35,0.05)]">
                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.99 8.241a.75.75 0 11-1.04 1.085l-1.23-1.127V19.5a2.25 2.25 0 01-2.25 2.25h-4.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.25a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75H5.25A2.25 2.25 0 013 19.5v-7.46l-1.23 1.127a.75.75 0 11-1.04-1.085l8.99-8.24z"></path></svg>
                 <span class="hidden md:block font-medium">Command Center</span>
             </a>
-            <a href="admin.html" class="flex items-center px-4 py-3 rounded-[16px] bg-orange/10 text-orange border border-orange/20 transition shadow-[0_0_15px_rgba(249,149,35,0.05)]">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
-                <span class="hidden md:block font-medium">Admin Panel</span>
+            
+            <div class="group relative cursor-pointer pt-2">
+                <div class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"></path><path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z"></path></svg>
+                    <span class="hidden md:block flex-1 font-medium">New Booking</span>
+                </div>
+                <div class="hidden group-hover:block pl-12 pr-4 py-2 space-y-2">
+                    <a href="international.html" class="block text-sm text-white/50 hover:text-orange transition">International</a>
+                    <a href="domestic.html" class="block text-sm text-white/50 hover:text-orange transition">Domestic</a>
+                </div>
+            </div>
+            
+            <div class="group relative cursor-pointer">
+                <div class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"></path><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path></svg>
+                    <span class="hidden md:block flex-1 font-medium">Processing</span>
+                </div>
+                <div class="hidden group-hover:block pl-12 pr-4 py-2 space-y-2">
+                    <a href="processing.html" class="block text-sm text-white/50 hover:text-orange transition">Manage Bookings</a>
+                    <a href="update.html" class="block text-sm text-white/50 hover:text-orange transition">Process Update</a>
+                </div>
+            </div>
+
+            <a href="accounts.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"></path></svg>
+                <span class="hidden md:block font-medium">Accounts</span>
+            </a>
+            
+            <a href="customers.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"></path></svg>
+                <span class="hidden md:block font-medium">CRM</span>
+            </a>
+            
+            <a href="reports.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"></path></svg>
+                <span class="hidden md:block font-medium">Analytics</span>
+            </a>
+            <a href="admin.html" id="navAdminLink" class="hidden items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 dark:text-beige/60 dark:hover:text-beige dark:hover:bg-teal/10 rounded-[16px] transition">
+                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
+                 <span class="hidden md:block font-medium">Admin Panel</span>
             </a>
         </nav>
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" id="adminDashboardView">
-        <header class="h-24 flex items-center justify-between px-10 border-b border-teal/10 dark:border-teal/20 z-50 bg-white/40 dark:bg-charcoal/50 backdrop-blur-md relative">
-            <div>
-                <h2 class="text-2xl font-semibold text-charcoal dark:text-white font-lexend">System Administration</h2>
-                <p class="text-sm text-teal dark:text-beige/60 mt-1 font-medium">Manage Users & Infrastructure</p>
+        <header class="h-24 flex items-center justify-between px-10 border-b border-teal/10 dark:border-teal/20 z-10 bg-white/40 dark:bg-charcoal/50 backdrop-blur-md relative">
+            <div class="flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-orange/10 flex items-center justify-center border border-orange/20 shadow-inner">
+                    <svg class="w-6 h-6 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-charcoal dark:text-white font-lexend">Master Control Panel</h2>
+                    <p class="text-sm text-teal dark:text-beige/60 mt-1 font-medium">Manage system users, branch network, and global settings.</p>
+                </div>
             </div>
+            
+            <button id="themeToggleBtn" class="p-2.5 rounded-full bg-white border border-teal/10 text-teal hover:bg-beige dark:bg-white/5 dark:border-teal/30 dark:text-beige dark:hover:bg-teal/20 transition-all duration-300 shadow-sm z-50">
+                <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            </button>
         </header>
 
         <div class="flex-1 p-6 md:p-10 overflow-y-auto relative z-10 flex flex-col gap-6">
             
-            <div class="flex bg-white/50 dark:bg-charcoal/50 rounded-xl p-1 border border-teal/10 dark:border-white/10 w-fit backdrop-blur-md">
-                <button id="tabUsersBtn" class="px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md">User Management</button>
-                <button id="tabBranchesBtn" class="px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition">Branch Management</button>
+            <div class="flex border-b-2 border-teal/10 dark:border-white/10 pb-4 mb-4 gap-4">
+                <button id="tabUsersBtn" class="px-5 py-2.5 rounded-xl text-sm font-bold bg-orange/10 dark:bg-orange/20 text-orange transition flex items-center shadow-sm">
+                    <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z" /></svg>
+                    User Management
+                </button>
+                <button id="tabBranchesBtn" class="px-5 py-2.5 rounded-xl text-sm font-bold text-teal/70 dark:text-beige/60 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center">
+                    <svg class="w-4 h-4 mr-2" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd" /></svg>
+                    Branch Network
+                </button>
             </div>
 
-            <div id="sectionUsers" class="grid grid-cols-1 md:grid-cols-12 gap-6 transition-all duration-300">
-                <div class="col-span-1 md:col-span-4 bento-card p-6 h-fit">
-                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white mb-4">Register New User</h3>
-                    <form id="addUserForm" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Full Name</label>
-                            <input type="text" id="addUserName" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Username (Login ID)</label>
-                            <input type="text" id="addUserUsername" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Password</label>
-                            <input type="text" id="addUserPassword" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Role</label>
-                                <select id="addUserRole" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                                    <option value="Employee">Employee</option>
-                                    <option value="Admin">Admin</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch ID</label>
-                                <input type="text" id="addUserBranch" required placeholder="e.g. HQ-01" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition uppercase">
-                            </div>
-                        </div>
-                        <button type="submit" id="addUserBtn" class="w-full mt-4 bg-teal hover:bg-teal/80 text-white font-bold py-3 rounded-lg transition shadow-md flex justify-center items-center">
-                            <span id="addUserBtnText">Create User</span>
+            <div id="sectionUsers" class="bento-card flex flex-col flex-1 animate-bento">
+                <div class="p-6 border-b border-teal/10 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-charcoal/30">
+                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-teal dark:text-beige/80" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M8.25 6.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0zM15.75 9.75a3 3 0 116 0 3 3 0 01-6 0zM2.25 9.75a3 3 0 116 0 3 3 0 01-6 0zM6.31 15.117A6.745 6.745 0 0112 12a6.745 6.745 0 016.709 7.498.75.75 0 01-.372.568A12.696 12.696 0 0112 21.75c-2.305 0-4.47-.612-6.337-1.684a.75.75 0 01-.372-.568 6.787 6.787 0 011.019-4.38z" clip-rule="evenodd" /></svg>
+                        System Users
+                    </h3>
+                    <div class="flex space-x-3">
+                        <button id="refreshUsersBtn" class="px-4 py-2 rounded-lg text-xs font-bold text-teal dark:text-beige border border-teal/20 dark:border-white/20 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Refresh</button>
+                        <button onclick="document.getElementById('userModal').classList.add('active')" class="px-4 py-2 rounded-lg text-sm font-bold bg-teal text-white hover:bg-teal/80 transition shadow flex items-center">
+                            <svg class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z" /></svg>
+                            Add User
                         </button>
-                    </form>
+                    </div>
                 </div>
-
-                <div class="col-span-1 md:col-span-8 bento-card flex flex-col min-h-[500px]">
-                    <div class="p-5 border-b border-teal/10 dark:border-white/5 bg-slate-50/50 dark:bg-charcoal/50 flex justify-between items-center">
-                        <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white">Active Directory</h3>
-                        <button id="refreshUsersBtn" class="text-xs font-bold text-orange hover:text-orange/80 transition">Refresh List</button>
-                    </div>
-                    <div class="flex-1 overflow-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-100 dark:bg-charcoal/80 sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-wider">
-                                <tr><th class="p-4">Username</th><th class="p-4">Full Name</th><th class="p-4">Role</th><th class="p-4">Branch</th><th class="p-4 text-right">Actions</th></tr>
-                            </thead>
-                            <tbody id="usersTableBody" class="divide-y divide-teal/10 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
-                                <tr><td colspan="5" class="p-8 text-center animate-pulse">Loading directory...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="flex-1 overflow-auto max-h-[600px]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-white dark:bg-charcoal sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-widest shadow-sm">
+                            <tr><th class="p-5 border-b border-teal/10 dark:border-white/10">ID</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Full Name</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Role</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Branch</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Status</th><th class="p-5 border-b border-teal/10 dark:border-white/10 text-right">Actions</th></tr>
+                        </thead>
+                        <tbody id="usersTableBody" class="divide-y divide-teal/5 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
+                            <tr><td colspan="6" class="p-10 text-center animate-pulse text-teal/50">Loading directory...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div id="sectionBranches" class="hidden grid grid-cols-1 md:grid-cols-12 gap-6 transition-all duration-300">
-                <div class="col-span-1 md:col-span-4 bento-card p-6 h-fit">
-                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white mb-4">Register Hub / Branch</h3>
-                    <form id="addBranchForm" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch ID Code</label>
-                            <input type="text" id="addBranchId" required placeholder="e.g. DXB-02" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition uppercase font-mono">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Branch Name</label>
-                            <input type="text" id="addBranchName" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">City / Location</label>
-                            <input type="text" id="addBranchLocation" required class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Manager Name</label>
-                                <input type="text" id="addBranchManager" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-teal/80 dark:text-beige/60 uppercase mb-1">Contact</label>
-                                <input type="text" id="addBranchContact" class="w-full bg-slate-50 dark:bg-charcoal border border-teal/10 dark:border-white/10 rounded-lg p-2.5 text-charcoal dark:text-white focus:outline-none focus:border-orange transition">
-                            </div>
-                        </div>
-                        <button type="submit" id="addBranchBtn" class="w-full mt-4 bg-teal hover:bg-teal/80 text-white font-bold py-3 rounded-lg transition shadow-md flex justify-center items-center">
-                            <span id="addBranchBtnText">Deploy Branch</span>
+            <div id="sectionBranches" class="hidden bento-card flex-col flex-1 animate-bento">
+                <div class="p-6 border-b border-teal/10 dark:border-white/5 flex justify-between items-center bg-slate-50/50 dark:bg-charcoal/30">
+                    <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white flex items-center">
+                        <svg class="w-5 h-5 mr-2 text-teal dark:text-beige/80" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd" /></svg>
+                        Branch Network
+                    </h3>
+                    <div class="flex space-x-3">
+                        <button id="refreshBranchesBtn" class="px-4 py-2 rounded-lg text-xs font-bold text-teal dark:text-beige border border-teal/20 dark:border-white/20 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center"><svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg> Refresh</button>
+                        <button onclick="document.getElementById('branchModal').classList.add('active')" class="px-4 py-2 rounded-lg text-sm font-bold bg-teal text-white hover:bg-teal/80 transition shadow flex items-center">
+                            <svg class="w-4 h-4 mr-1" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd" /></svg>
+                            Add Branch
                         </button>
-                    </form>
+                    </div>
                 </div>
-
-                <div class="col-span-1 md:col-span-8 bento-card flex flex-col min-h-[500px]">
-                    <div class="p-5 border-b border-teal/10 dark:border-white/5 bg-slate-50/50 dark:bg-charcoal/50 flex justify-between items-center">
-                        <h3 class="text-lg font-bold font-lexend text-charcoal dark:text-white">Global Hub Infrastructure</h3>
-                        <button id="refreshBranchesBtn" class="text-xs font-bold text-orange hover:text-orange/80 transition">Refresh List</button>
-                    </div>
-                    <div class="flex-1 overflow-auto">
-                        <table class="w-full text-left border-collapse">
-                            <thead class="bg-slate-100 dark:bg-charcoal/80 sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-wider">
-                                <tr><th class="p-4">Branch ID</th><th class="p-4">Name & Location</th><th class="p-4">Manager</th><th class="p-4">Contact</th></tr>
-                            </thead>
-                            <tbody id="branchesTableBody" class="divide-y divide-teal/10 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
-                                <tr><td colspan="4" class="p-8 text-center animate-pulse">Loading infrastructure...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="flex-1 overflow-auto max-h-[600px]">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-white dark:bg-charcoal sticky top-0 z-10 text-xs font-bold text-teal/70 dark:text-beige/60 uppercase tracking-widest shadow-sm">
+                            <tr><th class="p-5 border-b border-teal/10 dark:border-white/10">Branch ID</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Location</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Type</th><th class="p-5 border-b border-teal/10 dark:border-white/10">Manager</th><th class="p-5 border-b border-teal/10 dark:border-white/10 text-right">Contact</th></tr>
+                        </thead>
+                        <tbody id="branchesTableBody" class="divide-y divide-teal/5 dark:divide-white/5 text-sm text-charcoal dark:text-beige">
+                            <tr><td colspan="5" class="p-10 text-center animate-pulse text-teal/50">Loading network...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 

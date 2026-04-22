@@ -453,129 +453,135 @@ if (themeToggleBtnGlobal) {
     });
 }
 // ==========================================
-// 12. ADMIN CONTROL PANEL MODULE
+// 12. ADMIN CONTROL PANEL MODULE (MODAL VERSION)
 // ==========================================
-// Security Check: Kick out non-admins trying to access admin.html
-if (window.location.href.includes('admin.html') && activeUser && activeUser.role !== 'Admin') {
-    window.location.replace('index.html');
-}
-
-// Show Admin Link in Sidebars if user is Admin
+if (window.location.href.includes('admin.html') && activeUser && activeUser.role !== 'Admin') { window.location.replace('index.html'); }
 if (activeUser && activeUser.role === 'Admin') {
     const adminLinks = document.querySelectorAll('#navAdminLink');
-    adminLinks.forEach(link => link.classList.remove('hidden'));
-    adminLinks.forEach(link => link.classList.add('flex'));
+    adminLinks.forEach(link => { link.classList.remove('hidden'); link.classList.add('flex'); });
 }
 
 const adminDashboardView = document.getElementById('adminDashboardView');
 if (adminDashboardView && activeUser && activeUser.role === 'Admin') {
     
-    // Toggles
-    const tabUsersBtn = document.getElementById('tabUsersBtn');
-    const tabBranchesBtn = document.getElementById('tabBranchesBtn');
-    const sectionUsers = document.getElementById('sectionUsers');
-    const sectionBranches = document.getElementById('sectionBranches');
+    // Tabs Logic
+    const tabUsersBtn = document.getElementById('tabUsersBtn'); const tabBranchesBtn = document.getElementById('tabBranchesBtn');
+    const sectionUsers = document.getElementById('sectionUsers'); const sectionBranches = document.getElementById('sectionBranches');
 
     tabUsersBtn.addEventListener('click', () => {
         sectionUsers.classList.remove('hidden'); sectionBranches.classList.add('hidden');
-        tabUsersBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md';
-        tabBranchesBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition';
+        tabUsersBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold bg-orange/10 dark:bg-orange/20 text-orange transition flex items-center shadow-sm';
+        tabBranchesBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold text-teal/70 dark:text-beige/60 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center';
         window.fetchUsers();
     });
 
     tabBranchesBtn.addEventListener('click', () => {
         sectionBranches.classList.remove('hidden'); sectionUsers.classList.add('hidden');
-        tabBranchesBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold bg-orange text-white transition shadow-md';
-        tabUsersBtn.className = 'px-6 py-2 rounded-lg text-sm font-bold text-teal/70 dark:text-beige/60 hover:text-charcoal dark:hover:text-white transition';
+        tabBranchesBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold bg-orange/10 dark:bg-orange/20 text-orange transition flex items-center shadow-sm';
+        tabUsersBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold text-teal/70 dark:text-beige/60 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center';
         window.fetchBranches();
     });
 
-    // Fetch Users
+    // Users Logic
     const usersTableBody = document.getElementById('usersTableBody');
     window.fetchUsers = async function() {
-        usersTableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-teal/70 animate-pulse">Loading directory...</td></tr>';
+        usersTableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center animate-pulse text-teal/50">Loading directory...</td></tr>';
         try {
             const response = await fetch(`${scriptURL}?action=getUsers`); const result = await response.json();
             if (result.result === 'success') {
-                const data = result.data; usersTableBody.innerHTML = '';
-                if (data.length <= 1) return usersTableBody.innerHTML = '<tr><td colspan="5" class="p-8 text-center text-teal/70">No users found.</td></tr>';
-                for (let i = 1; i < data.length; i++) {
-                    let row = data[i];
-                    let roleStyle = row[4] === 'Admin' ? 'text-orange font-bold' : 'text-teal dark:text-beige/80';
+                usersTableBody.innerHTML = '';
+                if (result.data.length <= 1) return usersTableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-teal/50">No users found.</td></tr>';
+                for (let i = 1; i < result.data.length; i++) {
+                    let r = result.data[i]; 
+                    // Badges Logic
+                    let roleBadge = r[4] === 'Admin' ? '<span class="badge-admin">Admin</span>' : `<span class="badge-role">${r[4]}</span>`;
+                    // Determine Status: If they have a branch, they are active. We will assume Active for now.
+                    let statusBadge = '<span class="badge-active">Active</span>';
+
                     let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
                     tr.innerHTML = `
-                        <td class="p-4 font-mono font-bold text-charcoal dark:text-white">${row[1]}</td>
-                        <td class="p-4">${row[3]}</td>
-                        <td class="p-4 ${roleStyle}">${row[4]}</td>
-                        <td class="p-4"><span class="px-2 py-1 rounded bg-teal/10 dark:bg-white/10 text-xs font-mono">${row[5]}</span></td>
-                        <td class="p-4 text-right">
-                            <button onclick="deleteUser('${row[1]}')" class="text-xs font-bold text-danger hover:text-red-700 transition uppercase tracking-widest">Delete</button>
+                        <td class="p-5 font-mono font-bold text-charcoal dark:text-white">${r[1]}</td>
+                        <td class="p-5 font-medium">${r[3]}</td>
+                        <td class="p-5">${roleBadge}</td>
+                        <td class="p-5"><span class="px-2 py-1 rounded bg-teal/5 dark:bg-white/10 text-xs font-mono font-bold">${r[5]}</span></td>
+                        <td class="p-5">${statusBadge}</td>
+                        <td class="p-5 text-right">
+                            <button onclick="deleteUser('${r[1]}')" class="text-danger hover:text-red-700 transition p-2 bg-red-50 dark:bg-red-500/10 rounded-lg" title="Delete User">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                            </button>
                         </td>`;
                     usersTableBody.appendChild(tr);
                 }
             }
-        } catch (e) { usersTableBody.innerHTML = '<tr><td colspan="5" class="text-danger p-4 text-center">Failed to fetch data</td></tr>'; }
+        } catch (e) { usersTableBody.innerHTML = '<tr><td colspan="6" class="text-danger p-10 text-center">Failed to fetch data</td></tr>'; }
     }
 
-    // Add User Submit
-    document.getElementById('addUserForm').addEventListener('submit', async (e) => {
+    document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('addUserBtn'); const text = document.getElementById('addUserBtnText');
-        text.innerText = "Creating..."; btn.disabled = true; btn.classList.add('opacity-50');
-        const payload = { formType: "addUser", fullName: document.getElementById('addUserName').value, newUsername: document.getElementById('addUserUsername').value, newPassword: document.getElementById('addUserPassword').value, role: document.getElementById('addUserRole').value, branchId: document.getElementById('addUserBranch').value };
+        const btn = document.getElementById('saveUserBtn'); const text = document.getElementById('saveUserText');
+        text.innerText = "Saving..."; btn.disabled = true; btn.classList.add('opacity-50');
+        const payload = { formType: "addUser", newUsername: document.getElementById('mUserId').value, fullName: document.getElementById('mUserName').value, newPassword: document.getElementById('mUserPass').value, role: document.getElementById('mUserRole').value, branchId: document.getElementById('mUserBranch').value };
         try {
             const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
-            if(result.result === 'success') { alert('User Created!'); document.getElementById('addUserForm').reset(); window.fetchUsers(); } else alert(result.error);
-        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Create User"; btn.disabled = false; btn.classList.remove('opacity-50'); }
+            if(result.result === 'success') { 
+                document.getElementById('adminUserForm').reset(); 
+                document.getElementById('userModal').classList.remove('active');
+                window.fetchUsers(); 
+            } else alert(result.error);
+        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Save User"; btn.disabled = false; btn.classList.remove('opacity-50'); }
     });
 
-    // Delete User
     window.deleteUser = async function(targetUser) {
         if(targetUser === activeUser.username) return alert("You cannot delete your own account.");
         if(!confirm(`Are you sure you want to permanently delete user: ${targetUser}?`)) return;
         try {
-            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ formType: "deleteUser", targetUsername: targetUser }) });
-            const result = await res.json();
-            if(result.result === 'success') { alert('User deleted.'); window.fetchUsers(); } else alert(result.error);
+            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ formType: "deleteUser", targetUsername: targetUser }) }); const result = await res.json();
+            if(result.result === 'success') { window.fetchUsers(); } else alert(result.error);
         } catch(e) { alert('Deletion failed.'); }
     }
 
-    // Fetch Branches
+    // Branches Logic
     const branchesTableBody = document.getElementById('branchesTableBody');
     window.fetchBranches = async function() {
-        branchesTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-teal/70 animate-pulse">Loading infrastructure...</td></tr>';
+        branchesTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center animate-pulse text-teal/50">Loading network...</td></tr>';
         try {
             const response = await fetch(`${scriptURL}?action=getBranches`); const result = await response.json();
             if (result.result === 'success') {
-                const data = result.data; branchesTableBody.innerHTML = '';
-                if (data.length <= 1) return branchesTableBody.innerHTML = '<tr><td colspan="4" class="p-8 text-center text-teal/70">No branches found.</td></tr>';
-                for (let i = 1; i < data.length; i++) {
-                    let row = data[i];
+                branchesTableBody.innerHTML = '';
+                if (result.data.length <= 1) return branchesTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-teal/50">No branches found.</td></tr>';
+                for (let i = 1; i < result.data.length; i++) {
+                    let r = result.data[i];
+                    let typeBadge = r[2].includes('HQ') || r[2].includes('Head') ? '<span class="badge-hq">Head Quarters</span>' : '<span class="badge-role">Branch Hub</span>';
+                    
                     let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
                     tr.innerHTML = `
-                        <td class="p-4 font-mono font-bold text-orange">${row[1]}</td>
-                        <td class="p-4"><p class="font-bold text-charcoal dark:text-white">${row[2]}</p><p class="text-xs text-teal/70 dark:text-beige/60">${row[3]}</p></td>
-                        <td class="p-4">${row[4]}</td>
-                        <td class="p-4 font-mono text-sm">${row[5]}</td>`;
+                        <td class="p-5 font-mono font-bold text-orange">${r[1]}</td>
+                        <td class="p-5"><p class="font-bold text-charcoal dark:text-white">${r[2]}</p><p class="text-xs text-teal/70 dark:text-beige/60 mt-1">${r[3]}</p></td>
+                        <td class="p-5">${typeBadge}</td>
+                        <td class="p-5 font-medium">${r[4]}</td>
+                        <td class="p-5 text-right font-mono text-sm">${r[5]}</td>`;
                     branchesTableBody.appendChild(tr);
                 }
             }
-        } catch (e) { branchesTableBody.innerHTML = '<tr><td colspan="4" class="text-danger p-4 text-center">Failed to fetch data</td></tr>'; }
+        } catch (e) { branchesTableBody.innerHTML = '<tr><td colspan="5" class="text-danger p-10 text-center">Failed to fetch data</td></tr>'; }
     }
 
-    // Add Branch Submit
-    document.getElementById('addBranchForm').addEventListener('submit', async (e) => {
+    document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('addBranchBtn'); const text = document.getElementById('addBranchBtnText');
+        const btn = document.getElementById('saveBranchBtn'); const text = document.getElementById('saveBranchText');
         text.innerText = "Deploying..."; btn.disabled = true; btn.classList.add('opacity-50');
-        const payload = { formType: "addBranch", branchId: document.getElementById('addBranchId').value, branchName: document.getElementById('addBranchName').value, location: document.getElementById('addBranchLocation').value, manager: document.getElementById('addBranchManager').value, contact: document.getElementById('addBranchContact').value };
+        const payload = { formType: "addBranch", branchId: document.getElementById('mBranchCode').value, branchName: document.getElementById('mBranchName').value, location: document.getElementById('mBranchLoc').value, manager: document.getElementById('mBranchManager').value, contact: document.getElementById('mBranchContact').value };
         try {
             const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
-            if(result.result === 'success') { alert('Branch Deployed!'); document.getElementById('addBranchForm').reset(); window.fetchBranches(); } else alert(result.error);
-        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Deploy Branch"; btn.disabled = false; btn.classList.remove('opacity-50'); }
+            if(result.result === 'success') { 
+                document.getElementById('adminBranchForm').reset(); 
+                document.getElementById('branchModal').classList.remove('active');
+                window.fetchBranches(); 
+            } else alert(result.error);
+        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Deploy Hub"; btn.disabled = false; btn.classList.remove('opacity-50'); }
     });
 
-    document.getElementById('refreshUsersBtn').addEventListener('click', window.fetchUsers);
-    document.getElementById('refreshBranchesBtn').addEventListener('click', window.fetchBranches);
-    window.fetchUsers(); // Load users by default on page load
+    if(document.getElementById('refreshUsersBtn')) document.getElementById('refreshUsersBtn').addEventListener('click', window.fetchUsers);
+    if(document.getElementById('refreshBranchesBtn')) document.getElementById('refreshBranchesBtn').addEventListener('click', window.fetchBranches);
+    window.fetchUsers(); 
 }
