@@ -364,13 +364,12 @@ if (reportsDashboard) {
 }
 
 // ==========================================
-// 10. DYNAMIC MAIN DASHBOARD
+// 10. DYNAMIC MAIN DASHBOARD & PROFILE
 // ==========================================
 const mainDashboardView = document.getElementById('mainDashboardView');
 if (mainDashboardView && activeUser) {
-    const welcomeText = document.getElementById('welcomeText');
-    if(welcomeText) welcomeText.innerText = `Welcome back, ${activeUser.name}.`;
-
+    
+    // --- Dashboard Stats & Live Feed ---
     window.loadDashboardStats = async function() {
         try {
             const [domRes, intRes, custRes] = await Promise.all([ fetch(`${scriptURL}?action=getDomestic`), fetch(`${scriptURL}?action=getInternational`), fetch(`${scriptURL}?action=getCustomers`) ]);
@@ -380,25 +379,99 @@ if (mainDashboardView && activeUser) {
             let totalInt = intJson.result === 'success' ? Math.max(0, intJson.data.length - 1) : 0;
             let totalCust = custJson.result === 'success' ? Math.max(0, custJson.data.length - 1) : 0;
 
-            document.getElementById('dashDom').innerText = totalDom; document.getElementById('dashInt').innerText = totalInt; document.getElementById('dashCust').innerText = totalCust;
-        } catch (error) { document.getElementById('dashDom').innerText = "Error"; document.getElementById('dashInt').innerText = "Error"; document.getElementById('dashCust').innerText = "Error"; }
+            if(document.getElementById('dashDom')) document.getElementById('dashDom').innerText = totalDom; 
+            if(document.getElementById('dashInt')) document.getElementById('dashInt').innerText = totalInt; 
+            if(document.getElementById('dashCust')) document.getElementById('dashCust').innerText = totalCust;
+
+            // Inject Live Status
+            const liveStatusContainer = document.getElementById('liveStatusContainer');
+            if (liveStatusContainer) {
+                liveStatusContainer.innerHTML = ''; // Clear loading text
+                let hasData = false;
+
+                // Add Last Domestic
+                if (domJson.result === 'success' && domJson.data.length > 1) {
+                    let row = domJson.data[domJson.data.length - 1]; // Get last item
+                    let awb = row[1]; let dest = row[7]; let status = row[9];
+                    let pClass = status === 'Delivered' ? 'bg-success/10 text-success border-success/20' : 'bg-teal/10 text-teal dark:bg-teal/20 dark:text-teal border-teal/20';
+                    liveStatusContainer.innerHTML += `
+                        <div class="flex justify-between items-center pb-4 border-b border-teal/10 dark:border-white/5">
+                            <div><p class="text-xs text-teal/70 dark:text-beige/60 font-lexend">${awb}</p><p class="text-sm font-medium text-charcoal dark:text-white mt-1">Dest: ${dest}</p></div>
+                            <span class="${pClass} border px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full">${status}</span>
+                        </div>`;
+                    hasData = true;
+                }
+
+                // Add Last International
+                if (intJson.result === 'success' && intJson.data.length > 1) {
+                    let row = intJson.data[intJson.data.length - 1];
+                    let orderId = row[0]; let dest = row[14]; let status = row[61];
+                    let pClass = status === 'Delivered' ? 'bg-success/10 text-success border-success/20' : 'bg-orange/10 text-orange dark:bg-orange/20 dark:text-orange border-orange/20';
+                    liveStatusContainer.innerHTML += `
+                        <div class="flex justify-between items-center pb-4 border-b border-teal/10 dark:border-white/5">
+                            <div><p class="text-xs text-teal/70 dark:text-beige/60 font-lexend">${orderId}</p><p class="text-sm font-medium text-charcoal dark:text-white mt-1">Dest: ${dest}</p></div>
+                            <span class="${pClass} border px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full">${status}</span>
+                        </div>`;
+                    hasData = true;
+                }
+
+                if(!hasData) liveStatusContainer.innerHTML = '<p class="text-sm text-teal/70 dark:text-beige/60">No recent shipments found.</p>';
+            }
+
+        } catch (error) { 
+            console.error(error);
+            if(document.getElementById('dashDom')) document.getElementById('dashDom').innerText = "Error"; 
+        }
     }
     window.loadDashboardStats();
-}
-// ==========================================
-// 11. THEME TOGGLE (LIGHT/DARK MODE)
-// ==========================================
-const themeToggleBtn = document.getElementById('themeToggleBtn');
-if (themeToggleBtn) {
-    themeToggleBtn.addEventListener('click', () => {
-        // Toggle the .dark class on the root HTML element
-        document.documentElement.classList.toggle('dark');
+
+    // --- Edit Profile Form Submission ---
+    const editProfileForm = document.getElementById('editProfileForm');
+    if (editProfileForm) {
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const saveProfileText = document.getElementById('saveProfileText');
         
-        // Save preference to localStorage so it remembers across pages
-        if (document.documentElement.classList.contains('dark')) {
-            localStorage.theme = 'dark';
-        } else {
-            localStorage.theme = 'light';
-        }
-    });
+        editProfileForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Note: If you don't have activeUser.username, you need to log out and log back in 
+            // after the backend update so the new script passes the username to the browser!
+            if (!activeUser.username) {
+                alert("Security Session Expired. Please log out and log back in to edit your profile.");
+                return;
+            }
+
+            saveProfileText.innerText = "Saving...";
+            saveProfileBtn.disabled = true; saveProfileBtn.classList.add('opacity-50');
+
+            const payload = {
+                formType: "updateProfile",
+                username: activeUser.username,
+                newName: document.getElementById('editProfileName').value,
+                newPassword: document.getElementById('editProfilePass').value
+            };
+
+            try {
+                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+                const result = await response.json();
+                
+                if (result.result === 'success') {
+                    // Update Local Session Memory
+                    activeUser.name = result.newName;
+                    sessionStorage.setItem('erp_user', JSON.stringify(activeUser));
+                    
+                    alert('Profile updated successfully!');
+                    document.getElementById('profileModal').classList.add('hidden');
+                    window.location.reload(); // Refresh to show new name everywhere
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Connection failed. Could not update profile.');
+            } finally {
+                saveProfileText.innerText = "Save Changes";
+                saveProfileBtn.disabled = false; saveProfileBtn.classList.remove('opacity-50');
+            }
+        });
+    }
 }
