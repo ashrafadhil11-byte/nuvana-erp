@@ -18,7 +18,7 @@
             <h1 class="text-xl font-bold tracking-widest text-blue-400">NUVANA.EX</h1>
         </div>
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="index.html" class="block px-4 py-2 rounded-lg bg-blue-600 bg-opacity-20 text-blue-400 border border-blue-500 border-opacity-30">Dashboard</a>
+            <a href="index.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Dashboard</a>
             
             <div class="group relative cursor-pointer">
                 <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
@@ -31,7 +31,17 @@
                 </div>
             </div>
             
-            <a href="processing.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Processing</a>
+            <div class="group relative cursor-pointer">
+                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
+                    <span>Processing</span>
+                    <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </div>
+                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
+                    <a href="processing.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Manage Bookings</a>
+                    <a href="update.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Process Update</a>
+                </div>
+            </div>
+
             <a href="#" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Accounts</a>
             <a href="#" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Reports</a>
         </nav>
