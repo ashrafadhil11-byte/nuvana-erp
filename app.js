@@ -9,26 +9,19 @@ const scriptURL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJ
 const isLoginPage = window.location.href.includes('login.html');
 const rawUser = sessionStorage.getItem('erp_user');
 
-// Redirect to login if not authenticated
-if (!rawUser && !isLoginPage) {
-    window.location.replace('login.html');
-}
+if (!rawUser && !isLoginPage) window.location.replace('login.html');
 
 let activeUser = null;
 
-// Global UI Updates for Logged-In Users
 if (rawUser && !isLoginPage) {
     activeUser = JSON.parse(rawUser);
     
-    // Update Header with Branch ID
     const branchSpans = document.querySelectorAll('.text-sm.text-slate-400');
     branchSpans.forEach(span => { if(span.innerText.includes('Branch:')) span.innerText = `Branch: ${activeUser.branchId}`; });
 
-    // Update Header Avatar with Initial
     const avatars = document.querySelectorAll('.w-8.h-8.rounded-full');
     avatars.forEach(av => { av.innerText = activeUser.name.charAt(0).toUpperCase(); });
 
-    // Add Logout Button
     const headers = document.querySelectorAll('header .flex.items-center.space-x-4');
     headers.forEach(h => {
         const logoutBtn = document.createElement('button');
@@ -38,14 +31,11 @@ if (rawUser && !isLoginPage) {
         h.appendChild(logoutBtn);
     });
 
-    // ROLE-BASED ACCESS CONTROL (RBAC)
     if (activeUser.role !== 'Admin') {
         const restrictedLinks = ['accounts.html', 'reports.html', 'customers.html'];
         const links = document.querySelectorAll('nav a');
         links.forEach(link => {
-            restrictedLinks.forEach(restricted => {
-                if (link.href.includes(restricted)) link.style.display = 'none';
-            });
+            restrictedLinks.forEach(restricted => { if (link.href.includes(restricted)) link.style.display = 'none'; });
         });
     }
 }
@@ -55,38 +45,20 @@ if (rawUser && !isLoginPage) {
 // ==========================================
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
-    const loginBtn = document.getElementById('loginBtn');
-    const loginBtnText = document.getElementById('loginBtnText');
-    const loginLoadingIcon = document.getElementById('loginLoadingIcon');
-
+    const loginBtn = document.getElementById('loginBtn'); const loginBtnText = document.getElementById('loginBtnText'); const loginLoadingIcon = document.getElementById('loginLoadingIcon');
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        loginBtnText.innerText = "Authenticating..."; loginLoadingIcon.classList.remove('hidden');
-        loginBtn.disabled = true; loginBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
-        const payload = {
-            formType: "login",
-            username: document.getElementById('loginUser').value,
-            password: document.getElementById('loginPass').value
-        };
-
+        loginBtnText.innerText = "Authenticating..."; loginLoadingIcon.classList.remove('hidden'); loginBtn.disabled = true; loginBtn.classList.add('opacity-50');
+        const payload = { formType: "login", username: document.getElementById('loginUser').value, password: document.getElementById('loginPass').value };
         try {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
-            
             if(result.result === 'success') {
-                // Save user securely in the browser session
-                sessionStorage.setItem('erp_user', JSON.stringify({
-                    name: result.name, role: result.role, branchId: result.branchId
-                }));
-                window.location.replace('index.html'); // Send to dashboard
-            } else {
-                alert(result.error);
-                loginForm.reset();
-            }
-        } catch (error) { alert('Connection to Auth Server failed.'); } finally {
-            loginBtnText.innerText = "Secure Login"; loginLoadingIcon.classList.add('hidden');
-            loginBtn.disabled = false; loginBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                sessionStorage.setItem('erp_user', JSON.stringify({ name: result.name, role: result.role, branchId: result.branchId }));
+                window.location.replace('index.html'); 
+            } else { alert(result.error); loginForm.reset(); }
+        } catch (error) { alert('Connection failed.'); } finally {
+            loginBtnText.innerText = "Secure Login"; loginLoadingIcon.classList.add('hidden'); loginBtn.disabled = false; loginBtn.classList.remove('opacity-50');
         }
     });
 }
@@ -100,11 +72,7 @@ if (formDom) {
     formDom.addEventListener('submit', async (e) => {
         e.preventDefault();
         btnTextDom.innerText = "Transmitting..."; loadingIconDom.classList.remove('hidden'); submitBtnDom.disabled = true; submitBtnDom.classList.add('opacity-50');
-        const formData = { 
-            formType: "domestic", awb: document.getElementById('awb').value, 
-            branchId: activeUser.branchId, // Dynamically pulls from login!
-            senderName: document.getElementById('senderName').value, senderPhone: document.getElementById('senderPhone').value, receiverName: document.getElementById('receiverName').value, receiverPhone: document.getElementById('receiverPhone').value, pincode: document.getElementById('pincode').value, weight: document.getElementById('weight').value 
-        };
+        const formData = { formType: "domestic", awb: document.getElementById('awb').value, branchId: activeUser.branchId, senderName: document.getElementById('senderName').value, senderPhone: document.getElementById('senderPhone').value, receiverName: document.getElementById('receiverName').value, receiverPhone: document.getElementById('receiverPhone').value, pincode: document.getElementById('pincode').value, weight: document.getElementById('weight').value };
         try {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
@@ -122,8 +90,7 @@ const intForm = document.getElementById('internationalForm');
 if (intForm) {
     const boxContainer = document.getElementById('boxContainer'); const addBoxBtn = document.getElementById('addBoxBtn'); let boxCount = 0; const MAX_BOXES = 10;
     window.addBox = function() {
-        if (boxCount >= MAX_BOXES) return alert("Max 10 boxes.");
-        boxCount++; const row = document.createElement('div'); row.className = 'grid grid-cols-6 gap-2 animate-fade-in';
+        if (boxCount >= MAX_BOXES) return alert("Max 10 boxes."); boxCount++; const row = document.createElement('div'); row.className = 'grid grid-cols-6 gap-2 animate-fade-in';
         row.innerHTML = `<div class="flex items-center justify-center text-slate-400 font-mono text-sm bg-slate-900 rounded border border-slate-700">Box ${boxCount}</div><input type="number" step="0.01" id="b${boxCount}W" placeholder="0.0" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-sm text-center text-white focus:outline-none focus:border-purple-500" oninput="calculateTotals()"><input type="number" step="0.01" id="b${boxCount}L" placeholder="L" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-sm text-center text-white focus:outline-none focus:border-purple-500" oninput="calculateTotals()"><input type="number" step="0.01" id="b${boxCount}Wi" placeholder="W" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-sm text-center text-white focus:outline-none focus:border-purple-500" oninput="calculateTotals()"><input type="number" step="0.01" id="b${boxCount}H" placeholder="H" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-sm text-center text-white focus:outline-none focus:border-purple-500" oninput="calculateTotals()"><input type="number" step="0.01" id="b${boxCount}CW" readonly placeholder="0.0" class="w-full bg-slate-800 border border-slate-600 rounded p-1.5 text-sm text-center text-purple-300 font-bold focus:outline-none">`;
         boxContainer.appendChild(row); window.calculateTotals();
     }
@@ -156,33 +123,77 @@ if (intForm) {
 }
 
 // ==========================================
-// 5. PROCESSING MODULE
+// 5. PROCESSING MODULE (DUAL TOGGLE)
 // ==========================================
 const tableBody = document.getElementById('bookingsTableBody');
 if (tableBody) {
     const refreshBtn = document.getElementById('refreshTableBtn');
-    window.fetchDomesticBookings = async function() {
+    const toggleDomBtn = document.getElementById('toggleDomBtn');
+    const toggleIntBtn = document.getElementById('toggleIntBtn');
+    const tableHeaderRow = document.getElementById('tableHeaderRow');
+    
+    let currentView = 'domestic';
+
+    // Toggle styling functions
+    toggleDomBtn.addEventListener('click', () => {
+        currentView = 'domestic';
+        toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-teal-600 text-white transition shadow';
+        toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
+        window.fetchBookings();
+    });
+
+    toggleIntBtn.addEventListener('click', () => {
+        currentView = 'international';
+        toggleIntBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold bg-purple-600 text-white transition shadow';
+        toggleDomBtn.className = 'px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition';
+        window.fetchBookings();
+    });
+
+    window.fetchBookings = async function() {
         tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-400 animate-pulse">Fetching live data...</td></tr>';
+        
+        // Update Headers based on view
+        if (currentView === 'domestic') {
+            tableHeaderRow.innerHTML = `<tr><th class="p-4 border-b border-slate-700">Date</th><th class="p-4 border-b border-slate-700">AWB</th><th class="p-4 border-b border-slate-700">Sender</th><th class="p-4 border-b border-slate-700">Receiver</th><th class="p-4 border-b border-slate-700">Dest. Pin</th><th class="p-4 border-b border-slate-700">Status</th></tr>`;
+        } else {
+            tableHeaderRow.innerHTML = `<tr><th class="p-4 border-b border-slate-700">Date</th><th class="p-4 border-b border-slate-700">Order ID</th><th class="p-4 border-b border-slate-700">Shipper</th><th class="p-4 border-b border-slate-700">Receiver</th><th class="p-4 border-b border-slate-700">Destination</th><th class="p-4 border-b border-slate-700">Status</th></tr>`;
+        }
+
         try {
-            const response = await fetch(`${scriptURL}?action=getDomestic`); const result = await response.json();
+            const endpoint = currentView === 'domestic' ? 'getDomestic' : 'getInternational';
+            const response = await fetch(`${scriptURL}?action=${endpoint}`); 
+            const result = await response.json();
+            
             if (result.result === 'success') {
                 const data = result.data; tableBody.innerHTML = ''; 
-                if (data.length <= 1) { tableBody.innerHTML = '<tr><td colspan="6" class="p-8 text-center text-slate-500">No bookings found.</td></tr>'; return; }
+                if (data.length <= 1) { tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-500">No ${currentView} bookings found.</td></tr>`; return; }
+                
                 for (let i = data.length - 1; i > 0; i--) {
-                    let row = data[i]; let dateStr = new Date(row[0]).toLocaleDateString() || row[0];
+                    let row = data[i]; 
+                    
+                    let dateStr, trackingId, sender, receiver, dest, status;
+
+                    if (currentView === 'domestic') {
+                        dateStr = new Date(row[0]).toLocaleDateString() || row[0]; trackingId = row[1]; sender = row[3]; receiver = row[5]; dest = row[7]; status = row[9];
+                    } else {
+                        // International Array Mapping
+                        trackingId = row[0]; dateStr = new Date(row[1]).toLocaleDateString() || row[1]; sender = row[2]; receiver = row[9]; dest = row[14]; status = row[61];
+                    }
+
                     let statusColor = 'text-slate-400 bg-slate-400/10';
-                    if(row[9] === 'Pending') statusColor = 'text-yellow-400 bg-yellow-400/10';
-                    if(row[9] === 'In Transit' || row[9] === 'Dispatched to Hub') statusColor = 'text-blue-400 bg-blue-400/10';
-                    if(row[9] === 'Out for Delivery') statusColor = 'text-purple-400 bg-purple-400/10';
-                    if(row[9] === 'Delivered') statusColor = 'text-green-400 bg-green-400/10';
+                    if(status === 'Pending') statusColor = 'text-yellow-400 bg-yellow-400/10';
+                    if(status === 'In Transit' || status === 'Dispatched to Hub') statusColor = 'text-blue-400 bg-blue-400/10';
+                    if(status === 'Out for Delivery') statusColor = 'text-purple-400 bg-purple-400/10';
+                    if(status === 'Delivered') statusColor = 'text-green-400 bg-green-400/10';
+                    
                     let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-800 transition cursor-pointer';
-                    tr.innerHTML = `<td class="p-4 border-b border-slate-800 whitespace-nowrap">${dateStr}</td><td class="p-4 border-b border-slate-800 font-mono text-blue-400">${row[1]}</td><td class="p-4 border-b border-slate-800">${row[3]}</td><td class="p-4 border-b border-slate-800">${row[5]}</td><td class="p-4 border-b border-slate-800">${row[7]}</td><td class="p-4 border-b border-slate-800"><span class="px-2 py-1 rounded text-xs font-semibold ${statusColor}">${row[9]}</span></td>`;
+                    tr.innerHTML = `<td class="p-4 border-b border-slate-800 whitespace-nowrap">${dateStr}</td><td class="p-4 border-b border-slate-800 font-mono text-blue-400">${trackingId}</td><td class="p-4 border-b border-slate-800">${sender}</td><td class="p-4 border-b border-slate-800">${receiver}</td><td class="p-4 border-b border-slate-800">${dest}</td><td class="p-4 border-b border-slate-800"><span class="px-2 py-1 rounded text-xs font-semibold ${statusColor}">${status}</span></td>`;
                     tableBody.appendChild(tr);
                 }
             } else tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Error: ${result.message}</td></tr>`;
         } catch (error) { tableBody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-red-400">Failed to fetch data.</td></tr>`; }
     }
-    refreshBtn.addEventListener('click', window.fetchDomesticBookings); window.fetchDomesticBookings(); 
+    refreshBtn.addEventListener('click', window.fetchBookings); window.fetchBookings(); 
 }
 
 // ==========================================
@@ -279,7 +290,7 @@ const reportsDashboard = document.getElementById('reportsDashboard');
 if (reportsDashboard) {
     const generateReportsBtn = document.getElementById('generateReportsBtn'); const loadingOverlay = document.getElementById('loadingOverlay');
     let financeChartInstance = null; let logisticsChartInstance = null;
-    if (typeof Chart !== 'undefined') { Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Inter'; }
+    if (typeof Chart !== 'undefined') { Chart.defaults.color = '#94a3b8'; Chart.defaults.font.family = 'Poppins'; }
 
     window.generateAnalytics = async function() {
         loadingOverlay.classList.remove('hidden');
@@ -324,47 +335,26 @@ if (reportsDashboard) {
     }
     generateReportsBtn.addEventListener('click', window.generateAnalytics); window.generateAnalytics(); 
 }
+
 // ==========================================
 // 10. DYNAMIC MAIN DASHBOARD
 // ==========================================
 const mainDashboardView = document.getElementById('mainDashboardView');
 if (mainDashboardView && activeUser) {
-    
-    // Personalize the welcome message
     const welcomeText = document.getElementById('welcomeText');
     if(welcomeText) welcomeText.innerText = `Welcome back, ${activeUser.name}.`;
 
     window.loadDashboardStats = async function() {
         try {
-            // Fetch everything at once for maximum speed
-            const [domRes, intRes, custRes] = await Promise.all([
-                fetch(`${scriptURL}?action=getDomestic`),
-                fetch(`${scriptURL}?action=getInternational`),
-                fetch(`${scriptURL}?action=getCustomers`)
-            ]);
+            const [domRes, intRes, custRes] = await Promise.all([ fetch(`${scriptURL}?action=getDomestic`), fetch(`${scriptURL}?action=getInternational`), fetch(`${scriptURL}?action=getCustomers`) ]);
+            const domJson = await domRes.json(); const intJson = await intRes.json(); const custJson = await custRes.json();
 
-            const domJson = await domRes.json();
-            const intJson = await intRes.json();
-            const custJson = await custRes.json();
-
-            // Calculate totals (subtract 1 to ignore header row)
             let totalDom = domJson.result === 'success' ? Math.max(0, domJson.data.length - 1) : 0;
             let totalInt = intJson.result === 'success' ? Math.max(0, intJson.data.length - 1) : 0;
             let totalCust = custJson.result === 'success' ? Math.max(0, custJson.data.length - 1) : 0;
 
-            // Animate the numbers into the UI
-            document.getElementById('dashDom').innerText = totalDom;
-            document.getElementById('dashInt').innerText = totalInt;
-            document.getElementById('dashCust').innerText = totalCust;
-
-        } catch (error) {
-            console.error("Dashboard fetch error:", error);
-            document.getElementById('dashDom').innerText = "Error";
-            document.getElementById('dashInt').innerText = "Error";
-            document.getElementById('dashCust').innerText = "Error";
-        }
+            document.getElementById('dashDom').innerText = totalDom; document.getElementById('dashInt').innerText = totalInt; document.getElementById('dashCust').innerText = totalCust;
+        } catch (error) { document.getElementById('dashDom').innerText = "Error"; document.getElementById('dashInt').innerText = "Error"; document.getElementById('dashCust').innerText = "Error"; }
     }
-    
-    // Load stats immediately
     window.loadDashboardStats();
 }

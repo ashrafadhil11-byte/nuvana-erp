@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Bookings - Nuvana.ex</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: 'Poppins', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-mono, .tracking-widest { font-family: 'Lexend', sans-serif; }
         .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
@@ -64,10 +65,15 @@
                 
                 <div class="p-6 border-b border-slate-700 flex justify-between items-center bg-slate-800 bg-opacity-40">
                     <div>
-                        <h3 class="text-xl font-semibold text-white">Manage Bookings</h3>
-                        <p class="text-sm text-slate-400">Domestic Shipments Overview</p>
+                        <h3 class="text-xl font-semibold text-white">Logistics Queue</h3>
+                        
+                        <div class="flex mt-3 bg-slate-900 rounded-lg p-1 border border-slate-700 w-fit">
+                            <button id="toggleDomBtn" class="px-4 py-1.5 rounded text-sm font-semibold bg-teal-600 text-white transition shadow">Domestic</button>
+                            <button id="toggleIntBtn" class="px-4 py-1.5 rounded text-sm font-semibold text-slate-400 hover:text-white transition">International</button>
+                        </div>
+
                     </div>
-                    <button id="refreshTableBtn" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition shadow-lg shadow-teal-500/30 flex items-center">
+                    <button id="refreshTableBtn" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center shadow">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                         Refresh Data
                     </button>
@@ -75,16 +81,8 @@
                 
                 <div class="flex-1 overflow-auto p-0">
                     <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-900 bg-opacity-80 sticky top-0 z-10 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <tr>
-                                <th class="p-4 border-b border-slate-700">Date</th>
-                                <th class="p-4 border-b border-slate-700">AWB</th>
-                                <th class="p-4 border-b border-slate-700">Sender</th>
-                                <th class="p-4 border-b border-slate-700">Receiver</th>
-                                <th class="p-4 border-b border-slate-700">Dest. Pin</th>
-                                <th class="p-4 border-b border-slate-700">Status</th>
-                            </tr>
-                        </thead>
+                        <thead id="tableHeaderRow" class="bg-slate-900 bg-opacity-80 sticky top-0 z-10 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                            </thead>
                         <tbody id="bookingsTableBody" class="divide-y divide-slate-800 text-sm text-slate-300">
                             </tbody>
                     </table>
