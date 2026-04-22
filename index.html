@@ -20,13 +20,7 @@
             darkMode: 'class', 
             theme: {
                 extend: {
-                    colors: {
-                        orange: '#F99523',
-                        teal: '#027385',
-                        beige: '#EFE7DC',
-                        charcoal: '#0D2330',
-                        success: '#10B981' 
-                    },
+                    colors: { orange: '#F99523', teal: '#027385', beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981' },
                     fontFamily: { poppins: ['Poppins', 'sans-serif'], lexend: ['Lexend', 'sans-serif'] }
                 }
             }
@@ -36,29 +30,11 @@
         body { font-family: 'Poppins', sans-serif; }
         h1, h2, h3, h4, h5, h6, .font-lexend, .data-number { font-family: 'Lexend', sans-serif; }
         
-        .bento-card {
-            position: relative;
-            border-radius: 20px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden; 
-        }
+        .bento-card { position: relative; border-radius: 20px; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); overflow: hidden; }
+        .bento-card { background: #FFFFFF; box-shadow: 0 10px 25px -5px rgba(2, 115, 133, 0.05); border: 1px solid rgba(2, 115, 133, 0.05); }
+        .dark .bento-card { background: rgba(239, 231, 220, 0.03); border: 1px solid rgba(2, 115, 133, 0.20); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
         
-        .bento-card {
-            background: #FFFFFF;
-            box-shadow: 0 10px 25px -5px rgba(2, 115, 133, 0.05); 
-            border: 1px solid rgba(2, 115, 133, 0.05);
-        }
-
-        .dark .bento-card {
-            background: rgba(239, 231, 220, 0.03); 
-            border: 1px solid rgba(2, 115, 133, 0.20); 
-            box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-        }
-
-        .bento-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 3px; background: #F99523; transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10;
-        }
-
+        .bento-card::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 3px; background: #F99523; transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; }
         .bento-card:hover { transform: translateY(-4px); }
         .bento-card:hover::before { left: 0; }
         .dark .bento-card:hover { box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(249, 149, 35, 0.15); }
@@ -67,11 +43,7 @@
         .animate-bento { opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; } .delay-300 { animation-delay: 300ms; } .delay-400 { animation-delay: 400ms; } .delay-500 { animation-delay: 500ms; }
 
-        .watermark-bg {
-            position: absolute; right: -5%; bottom: -10%; width: 600px; height: 600px;
-            background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10 90 L50 10 L90 90 Z" fill="none" stroke="%23EFE7DC" stroke-width="2" stroke-linejoin="round"/></svg>');
-            background-repeat: no-repeat; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0; filter: blur(2px);
-        }
+        .watermark-bg { position: absolute; right: -5%; bottom: -10%; width: 600px; height: 600px; background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10 90 L50 10 L90 90 Z" fill="none" stroke="%23EFE7DC" stroke-width="2" stroke-linejoin="round"/></svg>'); background-repeat: no-repeat; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0; filter: blur(2px); }
         .dark .watermark-bg { opacity: 0.03; }
 
         ::-webkit-scrollbar { width: 6px; height: 6px; }
@@ -79,6 +51,13 @@
         ::-webkit-scrollbar-thumb { background: rgba(2, 115, 133, 0.2); border-radius: 10px; }
         .dark ::-webkit-scrollbar-thumb { background: rgba(239, 231, 220, 0.1); }
         ::-webkit-scrollbar-thumb:hover { background: #F99523; }
+
+        /* Hides the old auto-generated logout button from app.js to keep header clean */
+        header .flex.items-center.space-x-6 > button:not(#themeToggleBtn):not(#profileBtn) { display: none !important; }
+        
+        /* Dropdown Animation Classes */
+        .dropdown-open { transform: scale(1); opacity: 1; pointer-events: auto; }
+        .dropdown-closed { transform: scale(0.95); opacity: 0; pointer-events: none; }
     </style>
 </head>
 
@@ -87,9 +66,9 @@
     <div class="watermark-bg"></div>
 
     <aside class="w-20 md:w-64 bg-charcoal text-white dark:bg-charcoal/95 dark:border-r dark:border-teal/20 transition-all duration-500 flex flex-col z-20 backdrop-blur-xl shadow-2xl">
-        <div class="h-24 flex items-center justify-center md:justify-start md:px-8 border-b border-white/5 dark:border-teal/20">
-            <img src="assets/nuvana-ex%20logo%20long.svg" alt="Nuvana.ex" class="h-8 md:h-10 w-auto object-contain drop-shadow-lg hidden md:block">
-            <img src="assets/nuvana-ex%20logo%20long.svg" alt="NX" class="h-6 w-auto object-contain md:hidden">
+        <div class="h-24 flex items-center justify-center md:justify-start md:px-6 border-b border-white/5 dark:border-teal/20">
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="Nuvana.ex" class="h-10 md:h-14 w-auto max-w-[200px] object-contain drop-shadow-lg hidden md:block transition-all">
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="NX" class="h-8 w-auto object-contain md:hidden transition-all">
         </div>
         
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
@@ -141,10 +120,10 @@
 
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative z-10" id="mainDashboardView">
         
-        <header class="h-24 flex items-center justify-between px-10 border-b border-teal/10 dark:border-teal/20 z-10 bg-white/40 dark:bg-charcoal/50 backdrop-blur-md">
+        <header class="h-24 flex items-center justify-between px-10 border-b border-teal/10 dark:border-teal/20 z-10 bg-white/40 dark:bg-charcoal/50 backdrop-blur-md relative">
             <div>
-                <h2 class="text-2xl font-semibold text-charcoal dark:text-white font-lexend" id="welcomeText">Global Overview</h2>
-                <p class="text-sm text-teal dark:text-beige/60 mt-1 font-medium">Real-time enterprise metrics</p>
+                <h2 class="text-2xl font-semibold text-charcoal dark:text-white font-lexend transition-all" id="dynamicGreeting">Loading Profile...</h2>
+                <p class="text-sm text-teal dark:text-beige/60 mt-1 font-medium italic transition-all" id="motivationalQuote"></p>
             </div>
             
             <div class="flex items-center space-x-6" id="headerRightSide">
@@ -155,19 +134,47 @@
 
                 <div class="hidden md:flex flex-col text-right">
                     <span class="text-xs text-teal/70 dark:text-beige/50 uppercase tracking-widest font-bold">Node</span>
-                    <span class="text-sm text-charcoal dark:text-white font-lexend">Branch: HQ</span>
+                    <span class="text-sm text-charcoal dark:text-white font-lexend" id="headerBranch">Branch: HQ</span>
                 </div>
-                <div class="w-10 h-10 rounded-[12px] bg-orange/10 border border-orange/30 flex items-center justify-center font-bold text-orange font-lexend shadow-sm dark:shadow-[0_0_10px_rgba(249,149,35,0.15)]">A</div>
+                
+                <div class="relative">
+                    <button id="profileBtn" class="w-10 h-10 rounded-[12px] bg-orange/10 border border-orange/30 flex items-center justify-center font-bold text-orange font-lexend shadow-sm dark:shadow-[0_0_10px_rgba(249,149,35,0.15)] hover:scale-105 transition cursor-pointer z-50">
+                        <span id="headerAvatarText">A</span>
+                    </button>
+                    
+                    <div id="profileDropdown" class="dropdown-closed absolute right-0 mt-3 w-64 bento-card shadow-2xl z-50 origin-top-right transition-all duration-200">
+                        <div class="p-5 border-b border-teal/10 dark:border-white/5 bg-gradient-to-br from-white to-beige/30 dark:from-charcoal dark:to-teal/10">
+                            <p class="text-lg font-bold text-charcoal dark:text-white font-lexend leading-tight" id="profileDropdownName">User Name</p>
+                            <p class="text-xs text-teal/80 dark:text-beige/60 font-mono mt-1" id="profileDropdownRole">Role: Admin</p>
+                        </div>
+                        
+                        <div class="p-2 space-y-1 bg-white dark:bg-charcoal/90">
+                            <button class="w-full text-left px-3 py-2 text-sm text-charcoal dark:text-white hover:bg-teal/5 dark:hover:bg-white/5 rounded-lg transition flex items-center">
+                                <svg class="w-4 h-4 mr-3 text-teal dark:text-beige/60" viewBox="0 0 24 24" fill="currentColor"><path d="M21.731 2.269a2.625 2.625 0 00-3.712 0l-1.157 1.158 3.712 3.712 1.157-1.157a2.625 2.625 0 000-3.712zm-2.218 5.93l-3.712-3.713-12.15 12.15a.75.75 0 00-.222.518v3.105c0 .414.336.75.75.75h3.105a.75.75 0 00.518-.222l12.15-12.15z"/></svg>
+                                Edit Name / Info
+                            </button>
+                            <button class="w-full text-left px-3 py-2 text-sm text-charcoal dark:text-white hover:bg-teal/5 dark:hover:bg-white/5 rounded-lg transition flex items-center">
+                                <svg class="w-4 h-4 mr-3 text-teal dark:text-beige/60" viewBox="0 0 24 24" fill="currentColor"><path d="M12 9a3.75 3.75 0 100 7.5A3.75 3.75 0 0012 9z" clip-rule="evenodd" /><path fill-rule="evenodd" d="M9.344 3.071a49.52 49.52 0 015.312 0c.967.052 1.83.585 2.332 1.39l.821 1.317c.24.383.645.643 1.11.71.386.054.77.113 1.152.177 1.432.239 2.429 1.493 2.429 2.909V18a3 3 0 01-3 3h-15a3 3 0 01-3-3V9.574c0-1.416.997-2.67 2.429-2.909.382-.064.766-.123 1.151-.178a1.56 1.56 0 001.11-.71l.822-1.315a2.942 2.942 0 012.332-1.39zM6.75 12.75a5.25 5.25 0 1110.5 0 5.25 5.25 0 01-10.5 0zm12-1.5a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" /></svg>
+                                Change Profile Image
+                            </button>
+                            <div class="border-t border-teal/10 dark:border-white/5 my-1"></div>
+                            
+                            <button id="dropdownLogoutBtn" class="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg transition flex items-center font-bold">
+                                <svg class="w-4 h-4 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 006 5.25v13.5a1.5 1.5 0 001.5 1.5h6a1.5 1.5 0 001.5-1.5V15a.75.75 0 011.5 0v3.75a3 3 0 01-3 3h-6a3 3 0 01-3-3V5.25a3 3 0 013-3h6a3 3 0 013 3V9A.75.75 0 0115 9V5.25a1.5 1.5 0 00-1.5-1.5h-6zm10.72 4.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9a.75.75 0 010-1.5h10.94l-1.72-1.72a.75.75 0 010-1.06z" clip-rule="evenodd" /></svg>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </header>
 
         <div class="flex-1 p-6 md:p-10 overflow-y-auto relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
-                
                 <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-100 p-6 flex flex-col justify-between group">
                     <div class="absolute -right-6 -top-6 w-24 h-24 bg-teal/5 dark:bg-teal/10 rounded-full blur-2xl"></div>
                     <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5c0 .38-.21.73-.53.92l-7.94 4.56a1.5 1.5 0 01-1.06 0l-7.94-4.56A1.03 1.03 0 013 16.5v-9c0-.38.21-.73.53-.92l7.94-4.56c.33-.19.73-.19 1.06 0l7.94 4.56c.32.19.53.54.53.92v9z"/></svg>
-                    
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-6">
                             <div>
@@ -188,7 +195,6 @@
                 <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-200 p-6 flex flex-col justify-between group">
                     <div class="absolute -right-6 -top-6 w-24 h-24 bg-orange/5 dark:bg-orange/10 rounded-full blur-2xl"></div>
                     <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.262 6.072a8.25 8.25 0 1010.562-.766 4.5 4.5 0 01-1.318 1.357L13.25 7.5l.165 2.29a1.5 1.5 0 01-.14 1.155l-1.343 2.154-1.182-1.282a1.5 1.5 0 01-.35-1.114l.03-1.153L9.125 8.5h-1.5a.75.75 0 00-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75v-1.5H6a.75.75 0 01-.75-.75v-1.5A2.25 2.25 0 017.5 9h1.5l1.246-1.558a1.5 1.5 0 00.32-1.026L10.375 5.5h-1.5a.75.75 0 00-.75.75v1.5H6.262z" /></svg>
-                    
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-6">
                             <div>
@@ -209,7 +215,6 @@
                 <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-300 p-6 flex flex-col justify-between group">
                     <div class="absolute -right-6 -top-6 w-24 h-24 bg-teal/5 dark:bg-teal/10 rounded-full blur-2xl"></div>
                     <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
-                    
                     <div class="relative z-10">
                         <div class="flex justify-between items-start mb-6">
                             <div>
@@ -248,11 +253,9 @@
 
                 <div class="col-span-1 md:col-span-8 bento-card animate-bento delay-500 overflow-hidden relative min-h-[400px] flex items-center justify-center">
                     <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(rgba(2, 115, 133, 0.4) 1px, transparent 1px); background-size: 30px 30px;"></div>
-                    
                     <svg class="absolute inset-0 w-full h-full opacity-30 transition duration-700" xmlns="http://www.w3.org/2000/svg">
                         <path d="M 100 300 Q 300 100 500 250 T 800 150" fill="transparent" stroke="#027385" stroke-width="2" stroke-dasharray="10 10" class="animate-[dash_20s_linear_infinite]" />
                     </svg>
-
                     <div class="absolute top-1/3 left-1/4">
                         <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-orange"></span></span>
                         <span class="absolute top-4 left-[-20px] text-[10px] text-orange font-lexend tracking-widest font-bold">HUB-ALPHA</span>
@@ -261,18 +264,15 @@
                         <span class="relative flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-teal"></span></span>
                         <span class="absolute top-4 left-[-15px] text-[10px] text-teal font-lexend tracking-widest font-bold">SALALAH</span>
                     </div>
-
                     <div class="z-10 text-center bg-white/80 dark:bg-charcoal/80 p-4 rounded-xl backdrop-blur-md shadow-sm border border-teal/10">
                         <h3 class="text-sm font-semibold text-charcoal dark:text-white tracking-widest uppercase font-lexend">Live Telemetry</h3>
                         <p class="text-xs text-teal/70 dark:text-beige/60 mt-1">Awaiting Fleet GPS Integration</p>
                     </div>
-
                     <style> @keyframes dash { to { stroke-dashoffset: -1000; } } </style>
                 </div>
 
                 <div class="col-span-1 md:col-span-4 bento-card animate-bento delay-500 p-6 flex flex-col">
                     <h3 class="text-sm font-bold text-charcoal dark:text-white font-lexend mb-6">Live Status Check</h3>
-                    
                     <div class="space-y-4 flex-1">
                         <div class="flex justify-between items-center pb-4 border-b border-teal/10">
                             <div>
@@ -281,7 +281,6 @@
                             </div>
                             <span class="bg-teal/10 text-teal dark:bg-teal/20 dark:text-teal border border-teal/20 px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full">In Transit</span>
                         </div>
-                        
                         <div class="flex justify-between items-center pb-4 border-b border-teal/10">
                             <div>
                                 <p class="text-xs text-teal/70 dark:text-beige/60 font-lexend">AWB-883921</p>
@@ -290,7 +289,6 @@
                             <span class="bg-success/10 text-success border border-success/20 px-3 py-1 text-[10px] uppercase font-bold tracking-wider rounded-full">Delivered</span>
                         </div>
                     </div>
-
                     <a href="processing.html" class="mt-4 w-full block text-center text-xs text-orange hover:text-orange/80 transition font-bold uppercase tracking-widest">
                         View All Operations →
                     </a>
@@ -299,6 +297,80 @@
             </div>
         </div>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // 1. Intelligent Greetings & Motivational Quotes
+            const greetingEl = document.getElementById('dynamicGreeting');
+            const quoteEl = document.getElementById('motivationalQuote');
+            
+            const hour = new Date().getHours();
+            let greeting = "Good Evening";
+            if(hour < 12) greeting = "Good Morning";
+            else if(hour < 18) greeting = "Good Afternoon";
+
+            const quotes = [
+                '"Logistics is the ball and chain of armored antiquity." — Guderian',
+                '"Leaders win through logistics." — Tom Peters',
+                '"Supply chain is like nature, it is all around us." — Tim Cook',
+                '"Efficiency is doing better what is already being done." — Peter Drucker',
+                '"Without logistics the world stops." — Anonymous',
+                '"Behind every great leader there is an even greater logistician." — M. Cox'
+            ];
+            quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+
+            // Wait for app.js to fetch session data, then update UI
+            setTimeout(() => {
+                const rawUser = sessionStorage.getItem('erp_user');
+                if(rawUser) {
+                    const activeUser = JSON.parse(rawUser);
+                    greetingEl.innerText = `${greeting}, ${activeUser.name.split(' ')[0]}`;
+                    
+                    const pName = document.getElementById('profileDropdownName');
+                    const pRole = document.getElementById('profileDropdownRole');
+                    const hAvatar = document.getElementById('headerAvatarText');
+                    
+                    if(pName) pName.innerText = activeUser.name;
+                    if(pRole) pRole.innerText = `Role: ${activeUser.role} | ${activeUser.branchId}`;
+                    if(hAvatar) hAvatar.innerText = activeUser.name.charAt(0).toUpperCase();
+                }
+            }, 300);
+
+            // 2. Profile Dropdown Modal Logic
+            const profileBtn = document.getElementById('profileBtn');
+            const profileDropdown = document.getElementById('profileDropdown');
+            const dropdownLogoutBtn = document.getElementById('dropdownLogoutBtn');
+
+            if(profileBtn && profileDropdown) {
+                profileBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if(profileDropdown.classList.contains('dropdown-closed')) {
+                        profileDropdown.classList.remove('dropdown-closed');
+                        profileDropdown.classList.add('dropdown-open');
+                    } else {
+                        profileDropdown.classList.add('dropdown-closed');
+                        profileDropdown.classList.remove('dropdown-open');
+                    }
+                });
+
+                // Click outside to close
+                document.addEventListener('click', (e) => {
+                    if(!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+                        profileDropdown.classList.add('dropdown-closed');
+                        profileDropdown.classList.remove('dropdown-open');
+                    }
+                });
+            }
+
+            // 3. Custom Logout Trigger
+            if(dropdownLogoutBtn) {
+                dropdownLogoutBtn.addEventListener('click', () => {
+                    sessionStorage.removeItem('erp_user');
+                    window.location.replace('login.html');
+                });
+            }
+        });
+    </script>
     <script src="app.js"></script>
 </body>
 </html>
