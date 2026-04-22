@@ -358,3 +358,20 @@ if (mainDashboardView && activeUser) {
     }
     window.loadDashboardStats();
 }
+// ==========================================
+// 11. THEME TOGGLE (LIGHT/DARK MODE)
+// ==========================================
+const themeToggleBtn = document.getElementById('themeToggleBtn');
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        // Toggle the .dark class on the root HTML element
+        document.documentElement.classList.toggle('dark');
+        
+        // Save preference to localStorage so it remembers across pages
+        if (document.documentElement.classList.contains('dark')) {
+            localStorage.theme = 'dark';
+        } else {
+            localStorage.theme = 'light';
+        }
+    });
+}
