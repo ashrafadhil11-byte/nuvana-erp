@@ -329,7 +329,34 @@ if (reportsDashboard) {
             if (document.getElementById('logisticsChart')) {
                 const ctxLogistics = document.getElementById('logisticsChart').getContext('2d');
                 if (logisticsChartInstance) logisticsChartInstance.destroy();
-                logisticsChartInstance = new Chart(ctxLogistics, { type: 'bar', data: { labels: Object.keys(statusCounts), datasets: [{ label: 'Number of Shipments', data: Object.values(statusCounts), backgroundColor: 'rgba(96, 165, 250, 0.7)', borderColor: 'rgba(96, 165, 250, 1)', borderWidth: 1, borderRadius: 4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.05)' } }, x: { grid: { display: false } } } } });
+                
+                // Create custom Deep Teal to Vibrant Orange Gradient
+                let gradientFill = ctxLogistics.createLinearGradient(0, 0, 0, 400);
+                gradientFill.addColorStop(0, '#027385'); // Deep Teal
+                gradientFill.addColorStop(1, '#F99523'); // Vibrant Orange
+
+                logisticsChartInstance = new Chart(ctxLogistics, { 
+                    type: 'bar', 
+                    data: { 
+                        labels: Object.keys(statusCounts), 
+                        datasets: [{ 
+                            label: 'Number of Shipments', 
+                            data: Object.values(statusCounts), 
+                            backgroundColor: gradientFill, 
+                            borderWidth: 0, 
+                            borderRadius: 6 
+                        }] 
+                    }, 
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false, 
+                        plugins: { legend: { display: false } }, 
+                        scales: { 
+                            y: { beginAtZero: true, grid: { color: 'rgba(2, 115, 133, 0.1)' } }, 
+                            x: { grid: { display: false } } 
+                        } 
+                    } 
+                });
             }
         } catch (error) { console.error(error); alert("Failed to load analytics data."); } finally { loadingOverlay.classList.add('hidden'); }
     }
