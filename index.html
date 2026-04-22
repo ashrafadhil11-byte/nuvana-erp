@@ -36,7 +36,6 @@
         body { font-family: 'Poppins', sans-serif; }
         h1, h2, h3, h4, h5, h6, .font-lexend, .data-number { font-family: 'Lexend', sans-serif; }
         
-        /* The "N-Curve" Bento Box Concept */
         .bento-card {
             position: relative;
             border-radius: 20px;
@@ -44,66 +43,37 @@
             overflow: hidden; 
         }
         
-        /* Light Mode Card Styling */
         .bento-card {
             background: #FFFFFF;
             box-shadow: 0 10px 25px -5px rgba(2, 115, 133, 0.05); 
             border: 1px solid rgba(2, 115, 133, 0.05);
         }
 
-        /* Dark Mode Card Styling (Obsidian Layering) */
         .dark .bento-card {
             background: rgba(239, 231, 220, 0.03); 
             border: 1px solid rgba(2, 115, 133, 0.20); 
             box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
         }
 
-        /* The Animated Vibrant Orange Top Line */
         .bento-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 100%; height: 3px;
-            background: #F99523;
-            transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 10;
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 3px; background: #F99523; transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10;
         }
 
-        /* 3D Lift Hover Trigger */
         .bento-card:hover { transform: translateY(-4px); }
         .bento-card:hover::before { left: 0; }
-        
-        /* Subtle Dark Mode Glow on Hover */
-        .dark .bento-card:hover {
-            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(249, 149, 35, 0.15);
-        }
+        .dark .bento-card:hover { box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6), 0 0 20px -5px rgba(249, 149, 35, 0.15); }
 
-        /* Bento-Box Reveal Staggered Animations */
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateY(30px); }
-            100% { opacity: 1; transform: translateY(0); }
-        }
-        .animate-bento {
-            opacity: 0;
-            animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-        .delay-100 { animation-delay: 100ms; }
-        .delay-200 { animation-delay: 200ms; }
-        .delay-300 { animation-delay: 300ms; }
-        .delay-400 { animation-delay: 400ms; }
-        .delay-500 { animation-delay: 500ms; }
+        @keyframes slideUpFade { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+        .animate-bento { opacity: 0; animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .delay-100 { animation-delay: 100ms; } .delay-200 { animation-delay: 200ms; } .delay-300 { animation-delay: 300ms; } .delay-400 { animation-delay: 400ms; } .delay-500 { animation-delay: 500ms; }
 
-        /* Subtle Aeroplane Tail Watermark (Dark Mode Only) */
         .watermark-bg {
-            position: absolute; right: -5%; bottom: -10%;
-            width: 600px; height: 600px;
+            position: absolute; right: -5%; bottom: -10%; width: 600px; height: 600px;
             background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M10 90 L50 10 L90 90 Z" fill="none" stroke="%23EFE7DC" stroke-width="2" stroke-linejoin="round"/></svg>');
-            background-repeat: no-repeat; opacity: 0; transition: opacity 0.5s ease;
-            pointer-events: none; z-index: 0; filter: blur(2px);
+            background-repeat: no-repeat; opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0; filter: blur(2px);
         }
         .dark .watermark-bg { opacity: 0.03; }
 
-        /* Minimal Scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(2, 115, 133, 0.2); border-radius: 10px; }
@@ -118,25 +88,19 @@
 
     <aside class="w-20 md:w-64 bg-charcoal text-white dark:bg-charcoal/95 dark:border-r dark:border-teal/20 transition-all duration-500 flex flex-col z-20 backdrop-blur-xl shadow-2xl">
         <div class="h-24 flex items-center justify-center md:justify-start md:px-8 border-b border-white/5 dark:border-teal/20">
-            <h1 class="text-xl md:text-2xl font-bold tracking-widest font-lexend hidden md:block">NUVANA<span class="text-orange">.EX</span></h1>
-            <h1 class="text-xl font-bold font-lexend md:hidden text-orange">NX</h1>
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="Nuvana.ex" class="h-8 md:h-10 w-auto object-contain drop-shadow-lg hidden md:block">
+            <img src="assets/nuvana-ex%20logo%20long.svg" alt="NX" class="h-6 w-auto object-contain md:hidden">
         </div>
         
         <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            
             <a href="index.html" class="flex items-center px-4 py-3 rounded-[16px] bg-orange/10 text-orange border border-orange/20 transition shadow-[0_0_15px_rgba(249,149,35,0.05)]">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M11.47 3.84a.75.75 0 011.06 0l8.99 8.241a.75.75 0 11-1.04 1.085l-1.23-1.127V19.5a2.25 2.25 0 01-2.25 2.25h-4.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.25a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75H5.25A2.25 2.25 0 013 19.5v-7.46l-1.23 1.127a.75.75 0 11-1.04-1.085l8.99-8.24z"></path>
-                </svg>
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.99 8.241a.75.75 0 11-1.04 1.085l-1.23-1.127V19.5a2.25 2.25 0 01-2.25 2.25h-4.5a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.25a.75.75 0 00-.75.75v4.5a.75.75 0 01-.75.75H5.25A2.25 2.25 0 013 19.5v-7.46l-1.23 1.127a.75.75 0 11-1.04-1.085l8.99-8.24z"></path></svg>
                 <span class="hidden md:block font-medium">Command Center</span>
             </a>
             
             <div class="group relative cursor-pointer pt-2">
                 <div class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
-                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"></path>
-                        <path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z"></path>
-                    </svg>
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"></path><path d="M14.25 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0016.5 7.5h-1.875a.375.375 0 01-.375-.375V5.25z"></path></svg>
                     <span class="hidden md:block flex-1 font-medium">New Booking</span>
                     <svg class="w-4 h-4 hidden md:block" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"></path></svg>
                 </div>
@@ -148,10 +112,7 @@
             
             <div class="group relative cursor-pointer">
                 <div class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
-                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"></path>
-                        <path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path>
-                    </svg>
+                    <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"></path><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087zm6.163 3.75A.75.75 0 0110 12h4a.75.75 0 010 1.5h-4a.75.75 0 01-.75-.75z" clip-rule="evenodd"></path></svg>
                     <span class="hidden md:block flex-1 font-medium">Processing</span>
                     <svg class="w-4 h-4 hidden md:block" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"></path></svg>
                 </div>
@@ -162,24 +123,17 @@
             </div>
 
             <a href="accounts.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"></path>
-                </svg>
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"></path></svg>
                 <span class="hidden md:block font-medium">Accounts</span>
             </a>
             
             <a href="customers.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"></path>
-                </svg>
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"></path></svg>
                 <span class="hidden md:block font-medium">CRM</span>
             </a>
             
             <a href="reports.html" class="flex items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 rounded-[16px] transition">
-                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"></path>
-                    <path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"></path>
-                </svg>
+                <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"></path><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"></path></svg>
                 <span class="hidden md:block font-medium">Analytics</span>
             </a>
         </nav>
@@ -210,40 +164,85 @@
         <div class="flex-1 p-6 md:p-10 overflow-y-auto relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-min">
                 
-                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-100 p-6 flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xs text-teal/80 dark:text-beige/60 font-semibold uppercase tracking-widest">Total Domestic</h3>
-                        <div class="w-8 h-8 rounded-full bg-teal/5 dark:bg-teal/20 flex items-center justify-center"><svg class="w-4 h-4 text-teal dark:text-beige" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12 10.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm-2.25 4.5a2.25 2.25 0 114.5 0v3.75a2.25 2.25 0 11-4.5 0v-3.75z" clip-rule="evenodd" /></svg></div>
+                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-100 p-6 flex flex-col justify-between group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-teal/5 dark:bg-teal/10 rounded-full blur-2xl"></div>
+                    <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5c0 .38-.21.73-.53.92l-7.94 4.56a1.5 1.5 0 01-1.06 0l-7.94-4.56A1.03 1.03 0 013 16.5v-9c0-.38.21-.73.53-.92l7.94-4.56c.33-.19.73-.19 1.06 0l7.94 4.56c.32.19.53.54.53.92v9z"/></svg>
+                    
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-xs text-teal/70 dark:text-beige/60 font-bold uppercase tracking-widest mb-1">Total Domestic</h3>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-teal/10 text-teal dark:bg-teal/30 dark:text-beige">Today</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal/10 to-teal/5 dark:from-teal/30 dark:to-teal/10 flex items-center justify-center border border-teal/10 dark:border-teal/20 shadow-inner">
+                                <svg class="w-5 h-5 text-teal dark:text-beige" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.5 3.5a1 1 0 000 2h19a1 1 0 100-2h-19zM2.5 7.5a1 1 0 00-1 1v9a1 1 0 001 1h19a1 1 0 001-1v-9a1 1 0 00-1-1h-19zm2.25 3a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75zm0 3.5a.75.75 0 01.75-.75h3.5a.75.75 0 010 1.5h-3.5a.75.75 0 01-.75-.75z" clip-rule="evenodd" /></svg>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline space-x-3">
+                            <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashDom">...</p>
+                            <span class="text-xs font-bold text-success">+4%</span>
+                        </div>
                     </div>
-                    <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashDom">...</p>
                 </div>
 
-                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-200 p-6 flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xs text-teal/80 dark:text-beige/60 font-semibold uppercase tracking-widest">Total International</h3>
-                        <div class="w-8 h-8 rounded-full bg-teal/5 dark:bg-teal/20 flex items-center justify-center"><svg class="w-4 h-4 text-teal dark:text-beige" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z" /></svg></div>
+                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-200 p-6 flex flex-col justify-between group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-orange/5 dark:bg-orange/10 rounded-full blur-2xl"></div>
+                    <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.262 6.072a8.25 8.25 0 1010.562-.766 4.5 4.5 0 01-1.318 1.357L13.25 7.5l.165 2.29a1.5 1.5 0 01-.14 1.155l-1.343 2.154-1.182-1.282a1.5 1.5 0 01-.35-1.114l.03-1.153L9.125 8.5h-1.5a.75.75 0 00-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75H7.5a.75.75 0 01-.75-.75v-1.5H6a.75.75 0 01-.75-.75v-1.5A2.25 2.25 0 017.5 9h1.5l1.246-1.558a1.5 1.5 0 00.32-1.026L10.375 5.5h-1.5a.75.75 0 00-.75.75v1.5H6.262z" /></svg>
+                    
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-xs text-orange/80 dark:text-orange/60 font-bold uppercase tracking-widest mb-1">Total International</h3>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-orange/10 text-orange dark:bg-orange/20 dark:text-orange">Global</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-orange/10 to-orange/5 dark:from-orange/30 dark:to-orange/10 flex items-center justify-center border border-orange/10 dark:border-orange/20 shadow-inner">
+                                <svg class="w-5 h-5 text-orange dark:text-orange" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z" /></svg>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline space-x-3">
+                            <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashInt">...</p>
+                            <span class="text-xs font-bold text-success">+8%</span>
+                        </div>
                     </div>
-                    <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashInt">...</p>
                 </div>
 
-                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-300 p-6 flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xs text-teal/80 dark:text-beige/60 font-semibold uppercase tracking-widest">Active Clients</h3>
-                        <div class="w-8 h-8 rounded-full bg-teal/5 dark:bg-teal/20 flex items-center justify-center"><svg class="w-4 h-4 text-teal dark:text-beige" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"></path></svg></div>
+                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-300 p-6 flex flex-col justify-between group">
+                    <div class="absolute -right-6 -top-6 w-24 h-24 bg-teal/5 dark:bg-teal/10 rounded-full blur-2xl"></div>
+                    <svg class="absolute -right-4 -bottom-4 w-28 h-28 text-slate-100 dark:text-white/[0.02] transform -rotate-12 group-hover:scale-110 transition duration-500 pointer-events-none" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
+                    
+                    <div class="relative z-10">
+                        <div class="flex justify-between items-start mb-6">
+                            <div>
+                                <h3 class="text-xs text-teal/70 dark:text-beige/60 font-bold uppercase tracking-widest mb-1">Active Clients</h3>
+                                <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-teal/10 text-teal dark:bg-teal/30 dark:text-beige">Network</span>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal/10 to-teal/5 dark:from-teal/30 dark:to-teal/10 flex items-center justify-center border border-teal/10 dark:border-teal/20 shadow-inner">
+                                <svg class="w-5 h-5 text-teal dark:text-beige" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd" /></svg>
+                            </div>
+                        </div>
+                        <div class="flex items-baseline space-x-3">
+                            <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashCust">...</p>
+                            <span class="text-xs font-bold text-success">+15</span>
+                        </div>
                     </div>
-                    <p class="text-4xl font-bold data-number text-charcoal dark:text-white" id="dashCust">...</p>
                 </div>
 
-                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-400 p-6 flex flex-col justify-between">
-                    <div class="flex justify-between items-start mb-4">
-                        <h3 class="text-xs text-teal/80 dark:text-beige/60 font-semibold uppercase tracking-widest">System Status</h3>
+                <div class="col-span-1 md:col-span-3 bento-card animate-bento delay-400 p-6 flex flex-col justify-between group bg-gradient-to-br from-white to-emerald-50/50 dark:from-charcoal dark:to-success/10 border-success/20">
+                    <div class="flex justify-between items-start mb-6">
+                        <div>
+                            <h3 class="text-xs text-success/80 dark:text-success/80 font-bold uppercase tracking-widest mb-1">System Status</h3>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-success/10 text-success">API Online</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-success/10 flex items-center justify-center border border-success/20 shadow-inner">
+                            <svg class="w-5 h-5 text-success" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd" /></svg>
+                        </div>
                     </div>
                     <div class="flex items-center">
                         <span class="relative flex h-4 w-4 mr-3">
                           <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-success opacity-75"></span>
                           <span class="relative inline-flex rounded-full h-4 w-4 bg-success"></span>
                         </span>
-                        <p class="text-xl font-bold data-number text-success">Securely Synced</p>
+                        <p class="text-xl font-bold data-number text-success tracking-wider">Securely Synced</p>
                     </div>
                 </div>
 
@@ -263,7 +262,7 @@
                         <span class="absolute top-4 left-[-15px] text-[10px] text-teal font-lexend tracking-widest font-bold">SALALAH</span>
                     </div>
 
-                    <div class="z-10 text-center bg-white/90 dark:bg-charcoal/90 p-4 rounded-xl backdrop-blur-md shadow-sm">
+                    <div class="z-10 text-center bg-white/80 dark:bg-charcoal/80 p-4 rounded-xl backdrop-blur-md shadow-sm border border-teal/10">
                         <h3 class="text-sm font-semibold text-charcoal dark:text-white tracking-widest uppercase font-lexend">Live Telemetry</h3>
                         <p class="text-xs text-teal/70 dark:text-beige/60 mt-1">Awaiting Fleet GPS Integration</p>
                     </div>
