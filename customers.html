@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -19,108 +18,102 @@
         body { font-family: 'Poppins', sans-serif; background: #f5f2ee; }
         .font-lexend { font-family: 'Lexend', sans-serif; }
 
-```
-    @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-    @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
-    @keyframes spin    { to { transform:rotate(360deg); } }
-    @keyframes fadeRow { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
+        @keyframes spin    { to { transform:rotate(360deg); } }
+        @keyframes fadeRow { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
 
-    .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
-    .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .13s both; }
-    .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .21s both; }
-    .ping    { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
-    .spin    { animation: spin 1s linear infinite; }
-    .fade-row{ animation: fadeRow .22s ease both; }
+        .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
+        .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .13s both; }
+        .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .21s both; }
+        .ping    { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+        .spin    { animation: spin 1s linear infinite; }
+        .fade-row{ animation: fadeRow .22s ease both; }
 
-    ::-webkit-scrollbar { width:5px; height:5px; }
-    ::-webkit-scrollbar-track { background:transparent; }
-    ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
-    ::-webkit-scrollbar-thumb:hover { background:#F99523; }
+        ::-webkit-scrollbar { width:5px; height:5px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
 
-    /* ── Sidebar ── */
-    .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
-    .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
-    .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
-    .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
+        /* ── Sidebar ── */
+        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
+        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
+        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
+        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
 
-    /* ── Panel ── */
-    .panel { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
-    .panel-hdr { padding:13px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
+        /* ── Panel ── */
+        .panel { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
+        .panel-hdr { padding:13px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
 
-    /* ── Stat card ── */
-    .stat-card { background:white; border:1px solid #e8e0d6; border-radius:16px; padding:18px; position:relative; overflow:hidden; transition:transform .25s, box-shadow .25s; }
-    .stat-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,35,48,.08); }
+        /* ── Stat card ── */
+        .stat-card { background:white; border:1px solid #e8e0d6; border-radius:16px; padding:18px; position:relative; overflow:hidden; transition:transform .25s, box-shadow .25s; }
+        .stat-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,35,48,.08); }
 
-    /* ── Field ── */
-    .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s, box-shadow .2s, background .2s; }
-    .field::placeholder { color:rgba(2,115,133,.3); }
-    .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
-    .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
-    .field-wrap { position:relative; }
-    .field-wrap .icon { position:absolute; left:.8rem; top:50%; transform:translateY(-50%); pointer-events:none; }
-    .field-icon { padding-left:2.5rem; }
+        /* ── Field ── */
+        .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s, box-shadow .2s, background .2s; }
+        .field::placeholder { color:rgba(2,115,133,.3); }
+        .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
+        .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
+        .field-wrap { position:relative; }
+        .field-wrap .icon { position:absolute; left:.8rem; top:50%; transform:translateY(-50%); pointer-events:none; }
+        .field-icon { padding-left:2.5rem; }
 
-    /* ── Submit btn ── */
-    .btn-submit { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em; border:none; cursor:pointer; transition:background .2s, transform .15s, box-shadow .2s; display:flex; align-items:center; justify-content:center; gap:.5rem; box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden; }
-    .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
-    .btn-submit > * { position:relative; z-index:1; }
-    .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
-    .btn-submit:hover::after { width:100%; }
-    .btn-submit:active { transform:translateY(0); }
-    .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
+        /* ── Submit btn ── */
+        .btn-submit { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em; border:none; cursor:pointer; transition:background .2s, transform .15s, box-shadow .2s; display:flex; align-items:center; justify-content:center; gap:.5rem; box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden; }
+        .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
+        .btn-submit > * { position:relative; z-index:1; }
+        .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
+        .btn-submit:hover::after { width:100%; }
+        .btn-submit:active { transform:translateY(0); }
+        .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
 
-    /* ── Table ── */
-    .data-table { width:100%; border-collapse:collapse; }
-    .data-table thead th { padding:10px 16px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.55); background:#faf8f5; border-bottom:1px solid #f0ece6; white-space:nowrap; position:sticky; top:0; z-index:5; }
-    .data-table tbody tr { border-bottom:1px solid #f5f2ee; transition:background .15s; cursor:pointer; }
-    .data-table tbody tr:hover { background:#fdf9f5; }
-    .data-table tbody td { padding:11px 16px; font-size:12px; color:#374151; }
+        /* ── Table ── */
+        .data-table { width:100%; border-collapse:collapse; }
+        .data-table thead th { padding:10px 16px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.55); background:#faf8f5; border-bottom:1px solid #f0ece6; white-space:nowrap; position:sticky; top:0; z-index:5; }
+        .data-table tbody tr { border-bottom:1px solid #f5f2ee; transition:background .15s; cursor:pointer; }
+        .data-table tbody tr:hover { background:#fdf9f5; }
+        .data-table tbody td { padding:11px 16px; font-size:12px; color:#374151; }
 
-    /* ── Avatar circle ── */
-    .cust-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Lexend',sans-serif; font-size:12px; font-weight:700; color:white; flex-shrink:0; }
+        /* ── Avatar circle ── */
+        .cust-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Lexend',sans-serif; font-size:12px; font-weight:700; color:white; flex-shrink:0; }
 
-    /* ── Loyalty stars ── */
-    .loyalty-bar { display:flex; gap:2px; }
-    .loyalty-dot { width:6px; height:6px; border-radius:50%; }
+        /* ── Loyalty stars ── */
+        .loyalty-bar { display:flex; gap:2px; }
+        .loyalty-dot { width:6px; height:6px; border-radius:50%; }
 
-    /* ── Search ── */
-    .search-input { background:white; border:1px solid #e8e0d6; border-radius:10px; padding:.5rem .85rem .5rem 2.2rem; font-family:'Poppins',sans-serif; font-size:.8rem; color:#0D2330; outline:none; width:200px; transition:border-color .2s, box-shadow .2s, width .25s; }
-    .search-input::placeholder { color:rgba(2,115,133,.3); }
-    .search-input:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); width:240px; }
+        /* ── Search ── */
+        .search-input { background:white; border:1px solid #e8e0d6; border-radius:10px; padding:.5rem .85rem .5rem 2.2rem; font-family:'Poppins',sans-serif; font-size:.8rem; color:#0D2330; outline:none; width:200px; transition:border-color .2s, box-shadow .2s, width .25s; }
+        .search-input::placeholder { color:rgba(2,115,133,.3); }
+        .search-input:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); width:240px; }
 
-    /* ── Toast ── */
-    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; box-shadow:0 8px 24px rgba(13,35,48,.25); opacity:0; pointer-events:none; transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1); z-index:100; white-space:nowrap; }
-    .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+        /* ── Toast ── */
+        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; box-shadow:0 8px 24px rgba(13,35,48,.25); opacity:0; pointer-events:none; transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1); z-index:100; white-space:nowrap; }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-    /* ── Detail drawer ── */
-    .detail-drawer { position:fixed; right:0; top:0; bottom:0; width:340px; background:white; border-left:1px solid #e8e0d6; box-shadow:-8px 0 32px rgba(13,35,48,.1); z-index:50; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .3s cubic-bezier(.16,1,.3,1); }
-    .detail-drawer.open { transform:translateX(0); }
-    .drawer-overlay { position:fixed; inset:0; background:rgba(13,35,48,.2); backdrop-filter:blur(2px); z-index:40; opacity:0; pointer-events:none; transition:opacity .3s; }
-    .drawer-overlay.open { opacity:1; pointer-events:all; }
-    .detail-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid #f5f2ee; }
-    .detail-row:last-child { border-bottom:none; }
-    .d-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:rgba(2,115,133,.5); }
-    .d-value { font-size:12px; font-weight:600; color:#0D2330; text-align:right; }
-</style>
-```
-
+        /* ── Detail drawer ── */
+        .detail-drawer { position:fixed; right:0; top:0; bottom:0; width:340px; background:white; border-left:1px solid #e8e0d6; box-shadow:-8px 0 32px rgba(13,35,48,.1); z-index:50; display:flex; flex-direction:column; transform:translateX(100%); transition:transform .3s cubic-bezier(.16,1,.3,1); }
+        .detail-drawer.open { transform:translateX(0); }
+        .drawer-overlay { position:fixed; inset:0; background:rgba(13,35,48,.2); backdrop-filter:blur(2px); z-index:40; opacity:0; pointer-events:none; transition:opacity .3s; }
+        .drawer-overlay.open { opacity:1; pointer-events:all; }
+        .detail-row { display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid #f5f2ee; }
+        .detail-row:last-child { border-bottom:none; }
+        .d-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:rgba(2,115,133,.5); }
+        .d-value { font-size:12px; font-weight:600; color:#0D2330; text-align:right; }
+    </style>
 </head>
 
 <body class="min-h-screen flex overflow-hidden">
 
 <!-- Toast -->
-
 <div class="toast" id="toast">
     <svg style="width:15px;height:15px;color:#10B981;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
     <span id="toastMsg">Customer saved!</span>
 </div>
 
 <!-- Drawer overlay -->
-
 <div class="drawer-overlay" id="drawerOverlay"></div>
 
 <!-- Customer detail drawer -->
-
 <div class="detail-drawer" id="detailDrawer">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #f0ece6;background:#faf8f5;">
         <div class="flex items-center gap-3">
@@ -138,7 +131,6 @@
 </div>
 
 <!-- ══ SIDEBAR ══ -->
-
 <aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
     <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
         <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
@@ -191,220 +183,216 @@
 </aside>
 
 <!-- ══ MAIN ══ -->
-
 <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-```
-<!-- Header -->
-<header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
-        style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
-    <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(139,92,246,.1);">
-            <svg class="w-4 h-4" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/>
-            </svg>
-        </div>
-        <div>
-            <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Customer CRM</h2>
-            <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Add clients · Track loyalty · View profiles · Click any row to inspect</p>
-        </div>
-    </div>
-    <div class="flex items-center gap-3">
-        <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
-            <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
-            <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
-        </div>
-        <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
-             style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;">A</div>
-    </div>
-</header>
-
-<!-- Body -->
-<div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
-    <div class="max-w-7xl mx-auto flex flex-col gap-5">
-
-        <!-- ── STAT CARDS ── -->
-        <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
-            <div class="stat-card border-l-4" style="border-left-color:#8b5cf6;">
-                <div class="flex justify-between items-start mb-3">
-                    <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(139,92,246,.1);">
-                        <svg class="w-[18px] h-[18px]" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
-                    </div>
-                </div>
-                <div id="statTotal" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
-                <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Clients</div>
+    <!-- Header -->
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
+            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(139,92,246,.1);">
+                <svg class="w-4 h-4" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/>
+                </svg>
             </div>
-            <div class="stat-card border-l-4" style="border-left-color:#F99523;">
-                <div class="flex justify-between items-start mb-3">
-                    <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
-                        <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd"/></svg>
-                    </div>
-                </div>
-                <div id="statVip" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
-                <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">VIP Clients (50+ pts)</div>
-            </div>
-            <div class="stat-card border-l-4" style="border-left-color:#027385;">
-                <div class="flex justify-between items-start mb-3">
-                    <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(2,115,133,.1);">
-                        <svg class="w-[18px] h-[18px]" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0z" clip-rule="evenodd"/></svg>
-                    </div>
-                </div>
-                <div id="statPoints" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
-                <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Loyalty Points</div>
-            </div>
-            <div class="stat-card border-l-4" style="border-left-color:#0D2330;background:#0D2330;">
-                <div class="flex justify-between items-start mb-3">
-                    <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.18);">
-                        <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
-                    </div>
-                    <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">
-                        <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
-                        <span class="text-[9px] font-bold" style="color:#10B981;">LIVE</span>
-                    </div>
-                </div>
-                <div id="statNew" class="font-lexend text-3xl font-bold" style="color:#EFE7DC;">—</div>
-                <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(239,231,220,.3);">New This Month</div>
+            <div>
+                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Customer CRM</h2>
+                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Add clients · Track loyalty · View profiles · Click any row to inspect</p>
             </div>
         </div>
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
+                <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
+            </div>
+            <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
+                 style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;">A</div>
+        </div>
+    </header>
 
-        <!-- ── MAIN GRID ── -->
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 anim-2">
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
+        <div class="max-w-7xl mx-auto flex flex-col gap-5">
 
-            <!-- ── ADD CUSTOMER FORM ── -->
-            <div class="xl:col-span-1">
-                <div class="panel">
+            <!-- ── STAT CARDS ── -->
+            <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
+                <div class="stat-card border-l-4" style="border-left-color:#8b5cf6;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(139,92,246,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <div id="statTotal" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Clients</div>
+                </div>
+                <div class="stat-card border-l-4" style="border-left-color:#F99523;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.007 5.404.433c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.433 2.082-5.006z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <div id="statVip" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">VIP Clients (50+ pts)</div>
+                </div>
+                <div class="stat-card border-l-4" style="border-left-color:#027385;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(2,115,133,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <div id="statPoints" class="font-lexend text-3xl font-bold" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Loyalty Points</div>
+                </div>
+                <div class="stat-card border-l-4" style="border-left-color:#0D2330;background:#0D2330;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.18);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">
+                            <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                            <span class="text-[9px] font-bold" style="color:#10B981;">LIVE</span>
+                        </div>
+                    </div>
+                    <div id="statNew" class="font-lexend text-3xl font-bold" style="color:#EFE7DC;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(239,231,220,.3);">New This Month</div>
+                </div>
+            </div>
+
+            <!-- ── MAIN GRID ── -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 anim-2">
+
+                <!-- ── ADD CUSTOMER FORM ── -->
+                <div class="xl:col-span-1">
+                    <div class="panel">
+                        <div class="panel-hdr">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(139,92,246,.1);">
+                                    <svg class="w-3.5 h-3.5" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.128a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
+                                </div>
+                                <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Add Customer</span>
+                            </div>
+                        </div>
+                        <div class="p-5">
+                            <form id="customerForm" class="space-y-4">
+                                <div>
+                                    <label class="field-label">Full Name *</label>
+                                    <div class="field-wrap">
+                                        <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></span>
+                                        <input type="text" id="custName" required placeholder="Customer full name" class="field field-icon">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="field-label">Phone Number *</label>
+                                    <div class="field-wrap">
+                                        <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd"/></svg></span>
+                                        <input type="tel" id="custPhone" required placeholder="+968 XXXX XXXX" class="field field-icon">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="field-label">Email Address</label>
+                                    <div class="field-wrap">
+                                        <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></span>
+                                        <input type="email" id="custEmail" placeholder="customer@email.com" class="field field-icon">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label class="field-label">Physical Address</label>
+                                    <div class="field-wrap">
+                                        <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-2.079 3.953-5.159 3.953-9.077A8.223 8.223 0 0012 2.25 8.223 8.223 0 003.75 10.25c0 3.918 2.01 6.998 3.953 9.077a19.58 19.58 0 002.683 2.282 16.975 16.975 0 001.144.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg></span>
+                                        <input type="text" id="custAddress" placeholder="Street, area, city" class="field field-icon">
+                                    </div>
+                                </div>
+                                <button type="submit" id="custBtn" class="btn-submit mt-2">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.128a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
+                                    <span id="custBtnText">Save Profile</span>
+                                    <svg id="custSpinner" class="spin hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                            <!-- Loyalty info -->
+                            <div class="mt-5 pt-4" style="border-top:1px solid #f0ece6;">
+                                <p class="text-[9px] font-bold uppercase tracking-wider mb-3" style="color:rgba(2,115,133,.4);">Loyalty Tiers</p>
+                                <div class="space-y-2">
+                                    <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:#faf8f5;border:1px solid #f0ece6;">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 rounded-full" style="background:#cd7f32;"></div>
+                                            <span class="text-[11px] font-semibold" style="color:#0D2330;">Bronze</span>
+                                        </div>
+                                        <span class="text-[10px]" style="color:rgba(2,115,133,.5);">0–24 pts</span>
+                                    </div>
+                                    <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:#faf8f5;border:1px solid #f0ece6;">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 rounded-full" style="background:#94a3b8;"></div>
+                                            <span class="text-[11px] font-semibold" style="color:#0D2330;">Silver</span>
+                                        </div>
+                                        <span class="text-[10px]" style="color:rgba(2,115,133,.5);">25–49 pts</span>
+                                    </div>
+                                    <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:rgba(249,149,35,.06);border:1px solid rgba(249,149,35,.2);">
+                                        <div class="flex items-center gap-2">
+                                            <div class="w-2 h-2 rounded-full" style="background:#F99523;"></div>
+                                            <span class="text-[11px] font-semibold" style="color:#0D2330;">Gold VIP ⭐</span>
+                                        </div>
+                                        <span class="text-[10px]" style="color:rgba(249,149,35,.8);">50+ pts</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── CUSTOMER TABLE ── -->
+                <div class="xl:col-span-2 panel flex flex-col anim-3" style="min-height:480px;">
                     <div class="panel-hdr">
                         <div class="flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(139,92,246,.1);">
-                                <svg class="w-3.5 h-3.5" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.128a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
+                                <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
                             </div>
-                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Add Customer</span>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Customer Database</span>
                         </div>
-                    </div>
-                    <div class="p-5">
-                        <form id="customerForm" class="space-y-4">
-                            <div>
-                                <label class="field-label">Full Name *</label>
-                                <div class="field-wrap">
-                                    <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></span>
-                                    <input type="text" id="custName" required placeholder="Customer full name" class="field field-icon">
-                                </div>
+                        <div class="flex items-center gap-2">
+                            <div style="position:relative;">
+                                <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);pointer-events:none;"><svg style="width:13px;height:13px;color:rgba(2,115,133,.35);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></span>
+                                <input type="text" id="custSearch" placeholder="Search name, phone…" class="search-input">
                             </div>
-                            <div>
-                                <label class="field-label">Phone Number *</label>
-                                <div class="field-wrap">
-                                    <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 4.5a3 3 0 013-3h1.372c.86 0 1.61.586 1.819 1.42l1.105 4.423a1.875 1.875 0 01-.694 1.955l-1.293.97c-.135.101-.164.249-.126.352a11.285 11.285 0 006.697 6.697c.103.038.25.009.352-.126l.97-1.293a1.875 1.875 0 011.955-.694l4.423 1.105c.834.209 1.42.959 1.42 1.82V19.5a3 3 0 01-3 3h-2.25C8.552 22.5 1.5 15.448 1.5 6.75V4.5z" clip-rule="evenodd"/></svg></span>
-                                    <input type="tel" id="custPhone" required placeholder="+968 XXXX XXXX" class="field field-icon">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="field-label">Email Address</label>
-                                <div class="field-wrap">
-                                    <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z"/><path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z"/></svg></span>
-                                    <input type="email" id="custEmail" placeholder="customer@email.com" class="field field-icon">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="field-label">Physical Address</label>
-                                <div class="field-wrap">
-                                    <span class="icon"><svg class="w-3.5 h-3.5" style="color:rgba(139,92,246,.4);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-2.079 3.953-5.159 3.953-9.077A8.223 8.223 0 0012 2.25 8.223 8.223 0 003.75 10.25c0 3.918 2.01 6.998 3.953 9.077a19.58 19.58 0 002.683 2.282 16.975 16.975 0 001.144.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg></span>
-                                    <input type="text" id="custAddress" placeholder="Street, area, city" class="field field-icon">
-                                </div>
-                            </div>
-                            <button type="submit" id="custBtn" class="btn-submit mt-2">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.128a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
-                                <span id="custBtnText">Save Profile</span>
-                                <svg id="custSpinner" class="spin hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                                </svg>
+                            <button id="refreshCustBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-[9px] text-[11px] font-semibold transition"
+                                    style="background:white;border:1px solid #e8e0d6;color:#0D2330;font-family:'Lexend',sans-serif;"
+                                    onmouseenter="this.style.background='#faf8f5'" onmouseleave="this.style.background='white'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Refresh
                             </button>
-                        </form>
-
-                        <!-- Loyalty info -->
-                        <div class="mt-5 pt-4" style="border-top:1px solid #f0ece6;">
-                            <p class="text-[9px] font-bold uppercase tracking-wider mb-3" style="color:rgba(2,115,133,.4);">Loyalty Tiers</p>
-                            <div class="space-y-2">
-                                <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:#faf8f5;border:1px solid #f0ece6;">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 rounded-full" style="background:#cd7f32;"></div>
-                                        <span class="text-[11px] font-semibold" style="color:#0D2330;">Bronze</span>
-                                    </div>
-                                    <span class="text-[10px]" style="color:rgba(2,115,133,.5);">0–24 pts</span>
-                                </div>
-                                <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:#faf8f5;border:1px solid #f0ece6;">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 rounded-full" style="background:#94a3b8;"></div>
-                                        <span class="text-[11px] font-semibold" style="color:#0D2330;">Silver</span>
-                                    </div>
-                                    <span class="text-[10px]" style="color:rgba(2,115,133,.5);">25–49 pts</span>
-                                </div>
-                                <div class="flex items-center justify-between px-3 py-2 rounded-xl" style="background:rgba(249,149,35,.06);border:1px solid rgba(249,149,35,.2);">
-                                    <div class="flex items-center gap-2">
-                                        <div class="w-2 h-2 rounded-full" style="background:#F99523;"></div>
-                                        <span class="text-[11px] font-semibold" style="color:#0D2330;">Gold VIP ⭐</span>
-                                    </div>
-                                    <span class="text-[10px]" style="color:rgba(249,149,35,.8);">50+ pts</span>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- ── CUSTOMER TABLE ── -->
-            <div class="xl:col-span-2 panel flex flex-col anim-3" style="min-height:480px;">
-                <div class="panel-hdr">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
-                            <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
-                        </div>
-                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Customer Database</span>
+                    <div class="flex-1 overflow-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Customer</th>
+                                    <th>ID</th>
+                                    <th>Phone</th>
+                                    <th>Tier</th>
+                                    <th class="text-right">Loyalty Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customerTableBody">
+                                <tr><td colspan="5" class="px-5 py-12 text-center">
+                                    <div class="flex flex-col items-center gap-2" style="color:rgba(2,115,133,.35);">
+                                        <svg class="w-7 h-7 spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <span style="font-size:12px;">Loading customers...</span>
+                                    </div>
+                                </td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="flex items-center gap-2">
-                        <div style="position:relative;">
-                            <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);pointer-events:none;"><svg style="width:13px;height:13px;color:rgba(2,115,133,.35);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg></span>
-                            <input type="text" id="custSearch" placeholder="Search name, phone…" class="search-input">
-                        </div>
-                        <button id="refreshCustBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-[9px] text-[11px] font-semibold transition"
-                                style="background:white;border:1px solid #e8e0d6;color:#0D2330;font-family:'Lexend',sans-serif;"
-                                onmouseenter="this.style.background='#faf8f5'" onmouseleave="this.style.background='white'">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Refresh
-                        </button>
+                    <div class="px-5 py-2.5 flex items-center justify-between" style="border-top:1px solid #f0ece6;background:#faf8f5;">
+                        <span id="custCountLabel" class="text-[10px]" style="color:rgba(2,115,133,.45);">Loading...</span>
+                        <span class="text-[10px]" style="color:rgba(2,115,133,.3);">Click a row to view full profile</span>
                     </div>
-                </div>
-                <div class="flex-1 overflow-auto">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Customer</th>
-                                <th>ID</th>
-                                <th>Phone</th>
-                                <th>Tier</th>
-                                <th class="text-right">Loyalty Pts</th>
-                            </tr>
-                        </thead>
-                        <tbody id="customerTableBody">
-                            <tr><td colspan="5" class="px-5 py-12 text-center">
-                                <div class="flex flex-col items-center gap-2" style="color:rgba(2,115,133,.35);">
-                                    <svg class="w-7 h-7 spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                    <span style="font-size:12px;">Loading customers...</span>
-                                </div>
-                            </td></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="px-5 py-2.5 flex items-center justify-between" style="border-top:1px solid #f0ece6;background:#faf8f5;">
-                    <span id="custCountLabel" class="text-[10px]" style="color:rgba(2,115,133,.45);">Loading...</span>
-                    <span class="text-[10px]" style="color:rgba(2,115,133,.3);">Click a row to view full profile</span>
                 </div>
             </div>
         </div>
     </div>
-</div>
-```
-
 </main>
 
 <script>
@@ -613,8 +601,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.loadCustomers();
 });
 </script>
-
 <script src="app.js"></script>
-
 </body>
 </html>
