@@ -6,13 +6,12 @@
     <title>Nuvana.ex ERP — Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
- 
+
     <script>
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        } else { document.documentElement.classList.remove('dark'); }
+        // Light mode only — theme toggle removed
+        document.documentElement.classList.remove('dark');
     </script>
- 
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -33,12 +32,12 @@
             }
         }
     </script>
- 
+
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; }
         h1,h2,h3,h4,h5,h6,.font-lexend { font-family: 'Lexend', sans-serif; }
- 
+
         /* ── Page load animations ── */
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(22px); }
@@ -54,22 +53,22 @@
         .anim-4 { animation: slideUp .55s cubic-bezier(.16,1,.3,1) .26s both; }
         .anim-5 { animation: slideUp .55s cubic-bezier(.16,1,.3,1) .33s both; }
         .anim-6 { animation: slideUp .55s cubic-bezier(.16,1,.3,1) .40s both; }
- 
+
         @keyframes ping {
             75%,100% { transform: scale(2); opacity: 0; }
         }
         .ping { animation: ping 1.6s cubic-bezier(0,0,.2,1) infinite; }
- 
+
         @keyframes spin { to { transform: rotate(360deg); } }
         .spin { animation: spin 1s linear infinite; }
- 
+
         /* ── Scrollbar ── */
         ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(2,115,133,.18); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #F99523; }
         .dark ::-webkit-scrollbar-thumb { background: rgba(239,231,220,.1); }
- 
+
         /* ── Sidebar nav item ── */
         .nav-item {
             display: flex; align-items: center; gap: 10px;
@@ -86,7 +85,7 @@
             padding-left: 9px;
         }
         .nav-item svg { flex-shrink: 0; }
- 
+
         /* ── Stat card ── */
         .stat-card {
             background: white;
@@ -106,7 +105,7 @@
             position: absolute; bottom: -12px; right: -12px;
             opacity: .05; pointer-events: none;
         }
- 
+
         /* ── Card ── */
         .card {
             background: white; border: 1px solid #e8e0d6; border-radius: 16px; overflow: hidden;
@@ -117,7 +116,7 @@
             display: flex; align-items: center; justify-content: space-between;
         }
         .dark .card-header { border-color: rgba(255,255,255,.05); }
- 
+
         /* ── Status badges ── */
         .badge { font-size: 10px; font-weight: 600; padding: 3px 9px; border-radius: 5px; white-space: nowrap; font-family: 'Lexend', sans-serif; }
         .badge-transit  { background: #dbeafe; color: #1d4ed8; }
@@ -130,18 +129,18 @@
         .dark .badge-pending  { background: rgba(234,179,8,.18);  color: #fde68a; }
         .dark .badge-held     { background: rgba(239,68,68,.18);  color: #fca5a5; }
         .dark .badge-hub      { background: rgba(168,85,247,.18); color: #d8b4fe; }
- 
+
         /* ── Type pill ── */
         .type-dom { background:rgba(2,115,133,.1); color:#027385; font-size:9px; font-weight:700; padding:2px 9px; border-radius:20px; border:1px solid rgba(2,115,133,.18); }
         .type-int { background:rgba(249,149,35,.1); color:#c47b0a; font-size:9px; font-weight:700; padding:2px 9px; border-radius:20px; border:1px solid rgba(249,149,35,.2); }
         .dark .type-dom { background:rgba(2,115,133,.2); color:#5eead4; border-color:rgba(2,115,133,.3); }
         .dark .type-int { background:rgba(249,149,35,.15); color:#fbbf24; border-color:rgba(249,149,35,.25); }
- 
+
         /* ── Profile dropdown ── */
         .dropdown { transform-origin: top right; transition: transform .18s, opacity .18s; }
         .dropdown.closed { transform: scale(.95); opacity: 0; pointer-events: none; }
         .dropdown.open   { transform: scale(1);   opacity: 1; pointer-events: all; }
- 
+
         /* ── Quick action btn ── */
         .quick-btn {
             display: flex; align-items: center; gap: 9px;
@@ -149,19 +148,19 @@
             transition: opacity .2s, transform .15s; text-decoration: none;
         }
         .quick-btn:hover { opacity: .85; transform: translateX(2px); }
- 
+
         /* ── Trend pill ── */
         .trend-up   { background: rgba(16,185,129,.12); color: #059669; border: 1px solid rgba(16,185,129,.2); font-size:9px; font-weight:700; padding:2px 8px; border-radius:20px; }
         .trend-down { background: rgba(239,68,68,.1);  color: #dc2626; border: 1px solid rgba(239,68,68,.18); font-size:9px; font-weight:700; padding:2px 8px; border-radius:20px; }
         .dark .trend-up { background:rgba(16,185,129,.18); color:#6ee7b7; }
- 
+
         /* ── Dark mode overrides ── */
         .dark body { background: #0a1d2a; }
         .dark .header-bar { background: rgba(13,35,48,.7); border-color: rgba(2,115,133,.2); }
         .dark .page-bg { background: #0e2030; }
         .dark .stat-dark { background: #091820 !important; border-color: #1a3448 !important; }
         .dark .card-header { background: rgba(13,35,48,.4); }
- 
+
         /* ── Misc ── */
         .section-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(239,231,220,.28); padding: 6px 12px 4px; }
         .divider-h { height: 1px; background: rgba(255,255,255,.06); margin: 4px 0; }
@@ -174,9 +173,9 @@
         .dark .field::placeholder { color:rgba(239,231,220,.25); }
     </style>
 </head>
- 
+
 <body class="bg-[#f5f2ee] dark:bg-[#0e2030] text-charcoal dark:text-beige/80 min-h-screen flex overflow-hidden transition-colors duration-500">
- 
+
 <!-- ══════════════════════════════════════════
      PROFILE MODAL
 ══════════════════════════════════════════ -->
@@ -209,30 +208,32 @@
         </form>
     </div>
 </div>
- 
+
 <!-- ══════════════════════════════════════════
      SIDEBAR
 ══════════════════════════════════════════ -->
 <aside class="w-[220px] bg-charcoal flex flex-col flex-shrink-0 z-20 h-screen">
- 
+
     <!-- Logo -->
-    <div class="px-5 py-5 border-b border-white/[0.06]">
-        <div class="font-lexend text-[15px] font-bold tracking-[.14em] text-beige">
-            NUVANA<span class="text-orange">.EX</span>
+    <div class="px-5 py-4 border-b border-white/[0.06] flex items-center">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none">
+            <div class="font-lexend text-[15px] font-bold tracking-[.14em] text-beige">NUVANA<span class="text-orange">.EX</span></div>
+            <div class="text-[9px] tracking-[.1em] text-beige/25 mt-0.5 uppercase">Enterprise Platform</div>
         </div>
-        <div class="text-[9px] tracking-[.1em] text-beige/25 mt-0.5 uppercase">Enterprise Platform</div>
     </div>
- 
+
     <!-- Nav -->
     <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
- 
+
         <a href="index.html" class="nav-item active">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
             Command Center
         </a>
- 
+
         <div class="section-label mt-3">Logistics</div>
- 
+
         <!-- New Booking dropdown -->
         <div class="group">
             <div class="nav-item justify-between">
@@ -253,7 +254,7 @@
                 </a>
             </div>
         </div>
- 
+
         <!-- Processing dropdown -->
         <div class="group">
             <div class="nav-item justify-between">
@@ -268,9 +269,9 @@
                 <a href="update.html"     class="text-[12px] text-beige/40 hover:text-orange py-1.5 px-2 rounded-lg hover:bg-white/5 transition">Process Update</a>
             </div>
         </div>
- 
+
         <div class="section-label mt-3">Finance & CRM</div>
- 
+
         <a href="accounts.html" class="nav-item">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/></svg>
             Accounts
@@ -283,15 +284,15 @@
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>
             Analytics
         </a>
- 
+
         <div class="divider-h my-2"></div>
- 
+
         <a href="admin.html" id="navAdminLink" class="nav-item hidden">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
             Master Control
         </a>
     </nav>
- 
+
     <!-- User profile pill -->
     <div class="px-3 py-4 border-t border-white/[0.06]">
         <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/[0.04] cursor-pointer hover:bg-white/[0.07] transition" id="sidebarProfileBtn">
@@ -304,12 +305,12 @@
         </div>
     </div>
 </aside>
- 
+
 <!-- ══════════════════════════════════════════
      MAIN CONTENT
 ══════════════════════════════════════════ -->
 <main class="flex-1 flex flex-col h-screen overflow-hidden" id="mainDashboardView">
- 
+
     <!-- ── HEADER ── -->
     <header class="header-bar h-[62px] bg-white/80 dark:bg-charcoal/60 backdrop-blur-md border-b border-[#e8e0d6] dark:border-teal/20 flex items-center justify-between px-8 flex-shrink-0 z-10">
         <div>
@@ -319,7 +320,7 @@
             </div>
             <p class="text-[11px] text-teal/70 dark:text-beige/40 italic mt-0.5" id="motivationalQuote"></p>
         </div>
- 
+
         <div class="flex items-center gap-3">
             <!-- API status -->
             <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#f0ece6] dark:bg-success/10 border border-[#ddd5c8] dark:border-success/20">
@@ -329,19 +330,13 @@
                 </span>
                 <span class="text-[10px] font-bold text-charcoal dark:text-success tracking-wider">API ONLINE</span>
             </div>
- 
+
             <!-- Branch badge -->
             <div class="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#EFE7DC] dark:bg-teal/10 border border-[#ddd5c8] dark:border-teal/20">
                 <svg class="w-3 h-3 text-teal dark:text-teal" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5z" clip-rule="evenodd"/></svg>
                 <span class="text-[10px] font-bold text-charcoal dark:text-beige/70" id="headerBranch">HQ</span>
             </div>
- 
-            <!-- Theme toggle -->
-            <button id="themeToggleBtn" class="w-8 h-8 rounded-full flex items-center justify-center bg-[#f0ece6] dark:bg-white/[0.06] border border-[#ddd5c8] dark:border-white/10 text-teal dark:text-beige/60 hover:bg-[#EFE7DC] dark:hover:bg-teal/20 transition">
-                <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
-                <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
-            </button>
- 
+
             <!-- Avatar + dropdown -->
             <div class="relative">
                 <button id="profileBtn" class="w-9 h-9 rounded-[11px] bg-orange/10 border border-orange/30 flex items-center justify-center font-lexend font-bold text-orange text-sm hover:bg-orange/20 transition" id="headerAvatarBtn">
@@ -367,13 +362,13 @@
             </div>
         </div>
     </header>
- 
+
     <!-- ── BODY ── -->
     <div class="flex-1 p-7 overflow-y-auto flex flex-col gap-6">
- 
+
         <!-- ── STAT CARDS ── -->
         <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
- 
+
             <!-- Domestic -->
             <div class="stat-card border-l-4 border-l-teal">
                 <div class="watermark">
@@ -391,7 +386,7 @@
                     <div class="h-1 rounded-full bg-teal w-3/4"></div>
                 </div>
             </div>
- 
+
             <!-- International -->
             <div class="stat-card border-l-4 border-l-orange">
                 <div class="watermark">
@@ -409,7 +404,7 @@
                     <div class="h-1 rounded-full bg-orange w-2/5"></div>
                 </div>
             </div>
- 
+
             <!-- Active Clients -->
             <div class="stat-card border-l-4 border-l-[#8b5cf6]">
                 <div class="watermark">
@@ -427,7 +422,7 @@
                     <div class="h-1 rounded-full bg-violet-500 w-[85%]"></div>
                 </div>
             </div>
- 
+
             <!-- System status — dark card -->
             <div class="stat-card stat-dark bg-charcoal! border-charcoal! dark:bg-[#091820]!" style="background:#0D2330;border-color:#1a3448;">
                 <div class="flex justify-between items-start mb-4">
@@ -446,10 +441,10 @@
                 </div>
             </div>
         </div>
- 
+
         <!-- ── MAIN BOTTOM GRID ── -->
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 flex-1 anim-2">
- 
+
             <!-- Recent Bookings table — takes 2/3 width -->
             <div class="xl:col-span-2 card flex flex-col">
                 <div class="card-header bg-[#faf8f5] dark:bg-charcoal/30">
@@ -481,10 +476,10 @@
                     </table>
                 </div>
             </div>
- 
+
             <!-- Right column -->
             <div class="flex flex-col gap-5">
- 
+
                 <!-- Live Status -->
                 <div class="card flex flex-col">
                     <div class="card-header bg-[#faf8f5] dark:bg-charcoal/30">
@@ -498,7 +493,7 @@
                         <p class="text-[12px] text-slate-400 dark:text-beige/30 text-center py-4 animate-pulse">Syncing...</p>
                     </div>
                 </div>
- 
+
                 <!-- Quick Actions -->
                 <div class="rounded-2xl overflow-hidden" style="background:#0D2330;">
                     <div class="px-5 py-4 border-b border-white/[0.06]">
@@ -547,13 +542,13 @@
         </div>
     </div>
 </main>
- 
+
 <!-- ══════════════════════════════════════════
      INLINE SCRIPTS (non-app.js)
 ══════════════════════════════════════════ -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
- 
+
     /* ── Greeting & Quote ── */
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Good Morning' : hour < 18 ? 'Good Afternoon' : 'Good Evening';
@@ -565,7 +560,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '"Without logistics the world stops." — Anonymous',
     ];
     document.getElementById('motivationalQuote').textContent = quotes[Math.floor(Math.random() * quotes.length)];
- 
+
     /* ── User info from session ── */
     setTimeout(() => {
         const raw = sessionStorage.getItem('erp_user');
@@ -582,13 +577,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('profileDropdownRole').textContent = `Role: ${u.role} | ${u.branchId}`;
         if (document.getElementById('editProfileName')) document.getElementById('editProfileName').value = u.name;
     }, 200);
- 
+
     /* ── Theme ── */
-    document.getElementById('themeToggleBtn').addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-    });
- 
+    // Theme toggle removed — defaults to light mode
+
     /* ── Profile dropdown ── */
     const profileBtn      = document.getElementById('profileBtn');
     const profileDropdown = document.getElementById('profileDropdown');
@@ -603,7 +595,7 @@ document.addEventListener('DOMContentLoaded', () => {
             profileDropdown.classList.remove('open');
         }
     });
- 
+
     /* ── Profile modal ── */
     const modal = document.getElementById('profileModal');
     document.getElementById('openEditProfileBtn').addEventListener('click', () => {
@@ -615,19 +607,19 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(id)?.addEventListener('click', () => modal.classList.add('hidden'));
     });
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
- 
+
     /* ── Logout ── */
     document.getElementById('dropdownLogoutBtn').addEventListener('click', () => {
         sessionStorage.removeItem('erp_user');
         window.location.replace('login.html');
     });
- 
+
     /* ── Sidebar profile shortcut ── */
     document.getElementById('sidebarProfileBtn')?.addEventListener('click', () => {
         modal.classList.remove('hidden');
     });
 });
- 
+
 /* ── Status badge helper ── */
 function statusBadge(s) {
     const map = {
@@ -642,9 +634,9 @@ function statusBadge(s) {
     return `<span class="badge ${map[s] || 'badge-pending'}">${s || 'Pending'}</span>`;
 }
 </script>
- 
+
 <script src="app.js"></script>
- 
+
 <!-- ── Override app.js dashboard loader to render new table ── -->
 <script>
 document.addEventListener('DOMContentLoaded', () => {
@@ -661,21 +653,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const domJson  = await domRes.json();
             const intJson  = await intRes.json();
             const custJson = await custRes.json();
- 
+
             const totalDom  = domJson.result  === 'success' ? Math.max(0, domJson.data.length  - 1) : 0;
             const totalInt  = intJson.result  === 'success' ? Math.max(0, intJson.data.length  - 1) : 0;
             const totalCust = custJson.result === 'success' ? Math.max(0, custJson.data.length - 1) : 0;
- 
+
             if (document.getElementById('dashDom'))  document.getElementById('dashDom').textContent  = totalDom;
             if (document.getElementById('dashInt'))  document.getElementById('dashInt').textContent  = totalInt;
             if (document.getElementById('dashCust')) document.getElementById('dashCust').textContent = totalCust;
- 
+
             /* ── Recent bookings table ── */
             const tbody = document.getElementById('recentBookingsBody');
             if (tbody) {
                 tbody.innerHTML = '';
                 const rows = [];
- 
+
                 if (domJson.result === 'success' && domJson.data.length > 1) {
                     const d = domJson.data;
                     for (let i = Math.max(1, d.length - 5); i < d.length; i++) {
@@ -688,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         rows.push({ id: d[i][0], dest: d[i][14], status: d[i][61], type: 'int' });
                     }
                 }
- 
+
                 rows.reverse();
                 if (rows.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" class="px-5 py-10 text-center text-[12px] text-slate-400 dark:text-beige/30">No bookings found.</td></tr>';
@@ -705,13 +697,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
             }
- 
+
             /* ── Live status cards ── */
             const lsc = document.getElementById('liveStatusContainer');
             if (lsc) {
                 lsc.innerHTML = '';
                 let added = false;
- 
+
                 const addCard = (id, dest, status, type) => {
                     added = true;
                     const div = document.createElement('div');
@@ -724,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${statusBadge(status)}`;
                     lsc.appendChild(div);
                 };
- 
+
                 if (domJson.result === 'success' && domJson.data.length > 1) {
                     const r = domJson.data[domJson.data.length - 1];
                     addCard(r[1], r[7], r[9], 'dom');
@@ -735,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 if (!added) lsc.innerHTML = '<p class="text-[12px] text-slate-400 dark:text-beige/30 text-center py-4">No recent shipments.</p>';
             }
- 
+
         } catch (err) {
             console.error(err);
             ['dashDom','dashInt','dashCust'].forEach(id => {
@@ -744,10 +736,10 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     };
- 
+
     window.loadDashboardStats();
 });
 </script>
- 
+
 </body>
 </html>
