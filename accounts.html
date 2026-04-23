@@ -3,148 +3,696 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuvana.ex ERP</title>
+    <title>Nuvana.ex ERP — Financial Ledger</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.remove('dark');</script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { orange:'#F99523', teal:'#027385', beige:'#EFE7DC', charcoal:'#0D2330', success:'#10B981' }, fontFamily:{ poppins:['Poppins','sans-serif'], lexend:['Lexend','sans-serif'] } } }
+        }
+    </script>
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-mono, .tracking-widest { font-family: 'Lexend', sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f2ee; }
+        .font-lexend { font-family: 'Lexend', sans-serif; }
+
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
+        @keyframes spin    { to { transform:rotate(360deg); } }
+        @keyframes fadeRow { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+
+        .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
+        .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .13s both; }
+        .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .21s both; }
+        .ping    { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+        .spin    { animation: spin 1s linear infinite; }
+        .fade-row{ animation: fadeRow .22s ease both; }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width:5px; height:5px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
+
+        /* ── Sidebar ── */
+        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
+        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
+        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
+        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
+
+        /* ── Stat cards ── */
+        .stat-card { background:white; border:1px solid #e8e0d6; border-radius:16px; padding:18px; position:relative; overflow:hidden; transition:transform .25s, box-shadow .25s; }
+        .stat-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,35,48,.08); }
+        .stat-watermark { position:absolute; bottom:-12px; right:-12px; opacity:.05; pointer-events:none; }
+
+        /* ── Panel ── */
+        .panel { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
+        .panel-hdr { padding:13px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
+
+        /* ── Field ── */
+        .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s, box-shadow .2s, background .2s; }
+        .field::placeholder { color:rgba(2,115,133,.3); }
+        .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
+        .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
+        select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
+
+        /* ── Submit btn ── */
+        .btn-submit { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em; border:none; cursor:pointer; transition:background .2s, transform .15s, box-shadow .2s; display:flex; align-items:center; justify-content:center; gap:.5rem; box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden; }
+        .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
+        .btn-submit > * { position:relative; z-index:1; }
+        .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
+        .btn-submit:hover::after { width:100%; }
+        .btn-submit:active { transform:translateY(0); }
+        .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
+
+        /* ── Table ── */
+        .data-table { width:100%; border-collapse:collapse; }
+        .data-table thead th { padding:10px 16px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.55); background:#faf8f5; border-bottom:1px solid #f0ece6; white-space:nowrap; position:sticky; top:0; z-index:5; }
+        .data-table tbody tr { border-bottom:1px solid #f5f2ee; transition:background .15s; }
+        .data-table tbody tr:hover { background:#fdf9f5; }
+        .data-table tbody td { padding:11px 16px; font-size:12px; color:#374151; white-space:nowrap; }
+
+        /* ── Income / Expense badges ── */
+        .badge-income  { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; padding:3px 9px; border-radius:6px; background:#dcfce7; color:#15803d; font-family:'Lexend',sans-serif; }
+        .badge-expense { display:inline-flex; align-items:center; gap:5px; font-size:10px; font-weight:700; padding:3px 9px; border-radius:6px; background:#fee2e2; color:#b91c1c; font-family:'Lexend',sans-serif; }
+        .badge-income::before  { content:'▲'; font-size:7px; }
+        .badge-expense::before { content:'▼'; font-size:7px; }
+
+        /* ── Type tab ── */
+        .type-tab { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:9px; font-size:11px; font-weight:600; cursor:pointer; border:none; font-family:'Lexend',sans-serif; transition:all .2s; }
+        .type-tab.income-active  { background:#0D2330; color:white; box-shadow:0 3px 10px rgba(13,35,48,.25); }
+        .type-tab.expense-active { background:#b91c1c; color:white; box-shadow:0 3px 10px rgba(185,28,28,.3); }
+        .type-tab.off { background:transparent; color:rgba(13,35,48,.4); }
+        .type-tab.off:hover { background:rgba(2,115,133,.06); color:#0D2330; }
+
+        /* ── Net profit chip ── */
+        .profit-chip { display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:20px; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; }
+
+        /* ── Toast ── */
+        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; box-shadow:0 8px 24px rgba(13,35,48,.25); opacity:0; pointer-events:none; transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1); z-index:100; white-space:nowrap; }
+        .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+        /* ── Mini progress ── */
+        .mini-bar-track { height:4px; border-radius:4px; background:#f0ece6; overflow:hidden; margin-top:10px; }
+        .mini-bar-fill  { height:4px; border-radius:4px; transition:width .6s cubic-bezier(.16,1,.3,1); }
+
+        /* ── Search ── */
+        .search-input { background:white; border:1px solid #e8e0d6; border-radius:10px; padding:.5rem .85rem .5rem 2.2rem; font-family:'Poppins',sans-serif; font-size:.8rem; color:#0D2330; outline:none; width:200px; transition:border-color .2s, box-shadow .2s, width .25s; }
+        .search-input::placeholder { color:rgba(2,115,133,.3); }
+        .search-input:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); width:240px; }
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex overflow-hidden">
 
-    <aside class="w-64 glass-panel border-r border-slate-700 transition-all duration-300 flex flex-col z-20">
-        <div class="p-6 flex justify-between items-center border-b border-slate-700">
-            <h1 class="text-xl font-bold tracking-widest text-blue-400">NUVANA.EX</h1>
+<body class="min-h-screen flex overflow-hidden">
+
+<!-- Toast -->
+<div class="toast" id="toast">
+    <svg style="width:15px;height:15px;color:#10B981;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+    <span id="toastMsg">Transaction saved!</span>
+</div>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
+    <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
+             style="filter:brightness(0) invert(1);"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;">
+            <p class="font-lexend text-[15px] font-bold tracking-[.14em]" style="color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="index.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Dashboard</a>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>New Booking</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    </div>
+    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+        <a href="index.html" class="nav-item">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
+            Command Center
+        </a>
+        <div class="section-label mt-3">Logistics</div>
+        <div class="group">
+            <div class="nav-item justify-between">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                    New Booking
                 </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="international.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">International</a>
-                    <a href="domestic.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Domestic</a>
-                </div>
+                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
             </div>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>Processing</span>
-                    <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="processing.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Manage Bookings</a>
-                    <a href="update.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Process Update</a>
-                </div>
+            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="international.html" class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">International</a>
+                <a href="domestic.html"      class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
             </div>
-
-            <a href="accounts.html" class="block px-4 py-2 rounded-lg bg-emerald-600 bg-opacity-20 text-emerald-400 border border-emerald-500 border-opacity-30 transition font-bold">Accounts</a>
-            <a href="customers.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Customers</a>
-            <a href="reports.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Reports</a>
-            <a href="admin.html" id="navAdminLink" class="hidden items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 dark:text-beige/60 dark:hover:text-beige dark:hover:bg-teal/10 rounded-[16px] transition">
-                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
-                 <span class="hidden md:block font-medium">Admin Panel</span>
-            </a>
-        </nav>
-    </aside>
-
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 glass-panel border-b border-slate-700 flex items-center justify-between px-8 z-10">
-            <h2 class="text-lg font-semibold text-slate-200">Financial Ledger</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-slate-400">Branch: HQ</span>
-                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">A</div>
-            </div>
-        </header>
-
-        <div class="flex-1 p-8 overflow-y-auto relative flex flex-col md:flex-row gap-8">
-            <div class="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full mix-blend-multiply filter blur-[120px] opacity-20 pointer-events-none"></div>
-
-            <div class="w-full md:w-1/3 glass-panel p-6 rounded-xl border-t border-l border-slate-600 shadow-2xl h-fit relative z-10">
-                <h3 class="text-xl font-semibold text-white mb-4">Log Transaction</h3>
-                
-                <form id="transactionForm" class="space-y-4">
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Transaction Type</label>
-                        <select id="transType" required class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition appearance-none">
-                            <option value="Income">Income (Money In)</option>
-                            <option value="Expense">Expense (Money Out)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Category</label>
-                        <select id="transCategory" required class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition appearance-none">
-                            <option value="Booking Payment">Booking Payment</option>
-                            <option value="Fuel & Transport">Fuel & Transport</option>
-                            <option value="Packaging Materials">Packaging Materials</option>
-                            <option value="Office Expense">Office Expense</option>
-                            <option value="Salary / Wages">Salary / Wages</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Amount (OMR/USD)</label>
-                        <input type="number" step="0.01" id="transAmount" required placeholder="0.00" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Reference AWB (Optional)</label>
-                        <input type="text" id="transAwb" placeholder="Leave blank if N/A" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-white font-mono focus:outline-none focus:border-emerald-500 transition">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">Description</label>
-                        <input type="text" id="transDesc" placeholder="Brief note..." class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-white focus:outline-none focus:border-emerald-500 transition">
-                    </div>
-
-                    <button type="submit" id="transBtn" class="w-full bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold py-3.5 rounded-lg transition shadow-lg shadow-emerald-500/30 flex justify-center items-center mt-2">
-                        <span id="transBtnText">Save Record</span>
-                    </button>
-                </form>
-            </div>
-
-            <div class="w-full md:w-2/3 glass-panel rounded-xl border-t border-l border-slate-600 shadow-2xl flex flex-col relative z-10">
-                <div class="p-5 border-b border-slate-700 flex justify-between items-center bg-slate-800 bg-opacity-40">
-                    <h3 class="text-xl font-semibold text-white">Recent Transactions</h3>
-                    <button id="refreshLedgerBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg text-sm font-semibold transition flex items-center">
-                        Refresh
-                    </button>
-                </div>
-                
-                <div class="flex-1 overflow-auto p-0">
-                    <table class="w-full text-left border-collapse">
-                        <thead class="bg-slate-900 bg-opacity-80 sticky top-0 z-10 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                            <tr>
-                                <th class="p-4 border-b border-slate-700">Date</th>
-                                <th class="p-4 border-b border-slate-700">Type</th>
-                                <th class="p-4 border-b border-slate-700">Category</th>
-                                <th class="p-4 border-b border-slate-700 text-right">Amount</th>
-                                <th class="p-4 border-b border-slate-700">Ref AWB</th>
-                            </tr>
-                        </thead>
-                        <tbody id="ledgerTableBody" class="divide-y divide-slate-800 text-sm text-slate-300">
-                            <tr><td colspan="5" class="p-8 text-center text-slate-500">Loading financial data...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
-    </main>
+        <div class="group">
+            <div class="nav-item justify-between">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                    Processing
+                </div>
+                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="processing.html" class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
+                <a href="update.html"     class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
+            </div>
+        </div>
 
-    <script src="app.js"></script>
+        <div class="section-label mt-3">Finance & CRM</div>
+
+        <!-- Accounts — active -->
+        <a href="accounts.html" class="nav-item" style="background:rgba(249,149,35,.13);border-left:3px solid #F99523;color:#F99523;font-weight:600;padding-left:9px;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/></svg>
+            Accounts
+        </a>
+        <a href="customers.html" class="nav-item">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+            CRM
+        </a>
+        <a href="reports.html" class="nav-item">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>
+            Analytics
+        </a>
+        <div class="divider-h my-2"></div>
+        <a href="admin.html" id="navAdminLink" class="nav-item hidden">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
+            Master Control
+        </a>
+    </nav>
+    <div class="px-3 py-4" style="border-top:1px solid rgba(255,255,255,.06);">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:rgba(255,255,255,.04);">
+            <div id="sidebarAvatar" class="w-7 h-7 rounded-[9px] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" style="background:#F99523;">A</div>
+            <div class="overflow-hidden flex-1">
+                <div id="sidebarName" class="text-[11px] font-semibold truncate" style="color:rgba(239,231,220,.9);">—</div>
+                <div id="sidebarRole" class="text-[9px]" style="color:rgba(239,231,220,.35);">—</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
+            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(16,185,129,.1);">
+                <svg class="w-4 h-4" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Financial Ledger</h2>
+                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Log transactions · Track cash flow · Monitor net profit</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
+                <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
+            </div>
+            <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
+                 style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;">A</div>
+        </div>
+    </header>
+
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
+        <div class="max-w-7xl mx-auto flex flex-col gap-5">
+
+            <!-- ── STAT CARDS ── -->
+            <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
+
+                <!-- Total Income -->
+                <div class="stat-card border-l-4 border-l-[#10B981]">
+                    <div class="stat-watermark">
+                        <svg class="w-20 h-20" viewBox="0 0 24 24" fill="#10B981"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(16,185,129,.12);">
+                            <svg class="w-[18px] h-[18px]" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style="background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2);">Money In</div>
+                    </div>
+                    <div id="statIncome" class="font-lexend text-2xl font-bold" style="color:#0D2330;">OMR 0.00</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Income</div>
+                    <div class="mini-bar-track"><div id="barIncome" class="mini-bar-fill" style="background:#10B981;width:0%;"></div></div>
+                </div>
+
+                <!-- Total Expenses -->
+                <div class="stat-card border-l-4 border-l-red-500">
+                    <div class="stat-watermark">
+                        <svg class="w-20 h-20" viewBox="0 0 24 24" fill="#ef4444"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(239,68,68,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#ef4444;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style="background:rgba(239,68,68,.08);color:#dc2626;border:1px solid rgba(239,68,68,.15);">Money Out</div>
+                    </div>
+                    <div id="statExpense" class="font-lexend text-2xl font-bold" style="color:#0D2330;">OMR 0.00</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Expenses</div>
+                    <div class="mini-bar-track"><div id="barExpense" class="mini-bar-fill" style="background:#ef4444;width:0%;"></div></div>
+                </div>
+
+                <!-- Net Profit -->
+                <div class="stat-card border-l-4 border-l-[#F99523]">
+                    <div class="stat-watermark">
+                        <svg class="w-20 h-20" viewBox="0 0 24 24" fill="#F99523"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.12);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div id="profitChip" class="profit-chip" style="background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2);">
+                            <span id="profitArrow">▲</span> Profit
+                        </div>
+                    </div>
+                    <div id="statProfit" class="font-lexend text-2xl font-bold" style="color:#0D2330;">OMR 0.00</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Net Profit</div>
+                    <div class="mini-bar-track"><div id="barProfit" class="mini-bar-fill" style="background:#F99523;width:0%;"></div></div>
+                </div>
+
+                <!-- Transactions count -->
+                <div class="stat-card border-l-4" style="border-left-color:#0D2330;background:#0D2330;">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.18);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 9.832v1.793c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875V9.832a3 3 0 01-.722.512l-4.943 2.472a3.75 3.75 0 01-3.37 0L2.222 10.344a3 3 0 01-.722-.512zM1.5 8.696V7.5A2.25 2.25 0 013.75 5.25h16.5A2.25 2.25 0 0122.5 7.5v1.196a3 3 0 01-1.61 2.684l-4.942 2.472a2.25 2.25 0 01-2.022 0L3.11 11.38A3 3 0 011.5 8.696z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">
+                            <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                            <span class="text-[9px] font-bold" style="color:#10B981;">LIVE</span>
+                        </div>
+                    </div>
+                    <div id="statCount" class="font-lexend text-2xl font-bold" style="color:#EFE7DC;">0</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(239,231,220,.3);">Total Transactions</div>
+                    <div class="mini-bar-track" style="background:rgba(255,255,255,.08);margin-top:10px;"><div class="mini-bar-fill" id="barCount" style="background:#F99523;width:60%;"></div></div>
+                </div>
+            </div>
+
+            <!-- ── MAIN GRID: Form + Table ── -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 anim-2">
+
+                <!-- ── FORM ── -->
+                <div class="xl:col-span-1">
+                    <div class="panel h-full">
+                        <div class="panel-hdr">
+                            <div class="flex items-center gap-2.5">
+                                <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(16,185,129,.1);">
+                                    <svg class="w-3.5 h-3.5" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
+                                </div>
+                                <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Log Transaction</span>
+                            </div>
+                            <!-- Income / Expense mini toggle -->
+                            <div id="typeToggle" class="flex items-center gap-1 p-1 rounded-[9px]" style="background:#f0ece6;">
+                                <button class="type-tab income-active"  id="tabIncome"  onclick="setType('Income')">
+                                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                                    Income
+                                </button>
+                                <button class="type-tab off" id="tabExpense" onclick="setType('Expense')">
+                                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/></svg>
+                                    Expense
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="p-5">
+                            <!-- Hidden type field -->
+                            <input type="hidden" id="transType" value="Income">
+
+                            <!-- Type indicator strip -->
+                            <div id="typeStrip" class="flex items-center gap-2 px-3 py-2 rounded-xl mb-4 transition-all" style="background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);">
+                                <svg id="typeStripIcon" class="w-3.5 h-3.5" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                                <span id="typeStripLabel" class="text-[11px] font-semibold" style="color:#059669;">Recording an Income entry</span>
+                            </div>
+
+                            <form id="transactionForm" class="space-y-4">
+
+                                <div>
+                                    <label class="field-label">Category</label>
+                                    <select id="transCategory" required class="field">
+                                        <option value="Booking Payment">Booking Payment</option>
+                                        <option value="Fuel & Transport">Fuel & Transport</option>
+                                        <option value="Packaging Materials">Packaging Materials</option>
+                                        <option value="Office Expense">Office Expense</option>
+                                        <option value="Salary / Wages">Salary / Wages</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="field-label">Amount (OMR)</label>
+                                    <div style="position:relative;">
+                                        <span style="position:absolute;left:.85rem;top:50%;transform:translateY(-50%);font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;color:rgba(2,115,133,.4);">OMR</span>
+                                        <input type="number" step="0.01" id="transAmount" required placeholder="0.00"
+                                               class="field" style="padding-left:3.2rem;font-family:'Lexend',sans-serif;font-weight:600;letter-spacing:.02em;">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="field-label">Reference AWB <span style="color:rgba(2,115,133,.35);font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+                                    <input type="text" id="transAwb" placeholder="Leave blank if N/A" class="field" style="font-family:'Lexend',sans-serif;letter-spacing:.05em;">
+                                </div>
+
+                                <div>
+                                    <label class="field-label">Description / Note</label>
+                                    <input type="text" id="transDesc" placeholder="Brief description..." class="field">
+                                </div>
+
+                                <button type="submit" id="transBtn" class="btn-submit mt-2">
+                                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                                    <span id="transBtnText">Save Record</span>
+                                    <svg id="transSpinner" class="spin hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                                    </svg>
+                                </button>
+                            </form>
+
+                            <!-- Category breakdown hint -->
+                            <div class="mt-5 pt-4" style="border-top:1px solid #f0ece6;">
+                                <p class="text-[9px] font-bold uppercase tracking-wider mb-2" style="color:rgba(2,115,133,.4);">Common Categories</p>
+                                <div class="flex flex-wrap gap-1.5">
+                                    <span class="text-[10px] px-2 py-1 rounded-lg cursor-pointer transition" style="background:rgba(2,115,133,.07);color:#027385;" onclick="document.getElementById('transCategory').value='Booking Payment'">Booking Payment</span>
+                                    <span class="text-[10px] px-2 py-1 rounded-lg cursor-pointer transition" style="background:rgba(2,115,133,.07);color:#027385;" onclick="document.getElementById('transCategory').value='Fuel & Transport'">Fuel & Transport</span>
+                                    <span class="text-[10px] px-2 py-1 rounded-lg cursor-pointer transition" style="background:rgba(2,115,133,.07);color:#027385;" onclick="document.getElementById('transCategory').value='Salary / Wages'">Salary / Wages</span>
+                                    <span class="text-[10px] px-2 py-1 rounded-lg cursor-pointer transition" style="background:rgba(2,115,133,.07);color:#027385;" onclick="document.getElementById('transCategory').value='Office Expense'">Office Expense</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── LEDGER TABLE ── -->
+                <div class="xl:col-span-2 panel flex flex-col anim-3">
+                    <div class="panel-hdr">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
+                                <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 9.832v1.793c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875V9.832a3 3 0 01-.722.512l-4.943 2.472a3.75 3.75 0 01-3.37 0L2.222 10.344a3 3 0 01-.722-.512zM1.5 8.696V7.5A2.25 2.25 0 013.75 5.25h16.5A2.25 2.25 0 0122.5 7.5v1.196a3 3 0 01-1.61 2.684l-4.942 2.472a2.25 2.25 0 01-2.022 0L3.11 11.38A3 3 0 011.5 8.696z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Recent Transactions</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Search -->
+                            <div style="position:relative;">
+                                <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);pointer-events:none;">
+                                    <svg style="width:13px;height:13px;color:rgba(2,115,133,.35);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                </span>
+                                <input type="text" id="ledgerSearch" placeholder="Search transactions…" class="search-input">
+                            </div>
+                            <button id="refreshLedgerBtn" class="flex items-center gap-1.5 px-3 py-1.5 rounded-[9px] text-[11px] font-semibold transition"
+                                    style="background:white;border:1px solid #e8e0d6;color:#0D2330;font-family:'Lexend',sans-serif;"
+                                    onmouseenter="this.style.background='#faf8f5'" onmouseleave="this.style.background='white'">
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                                Refresh
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="flex-1 overflow-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Category</th>
+                                    <th class="text-right">Amount</th>
+                                    <th>Ref AWB</th>
+                                    <th>Note</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledgerTableBody">
+                                <tr><td colspan="6" class="px-5 py-12 text-center">
+                                    <div class="flex flex-col items-center gap-2" style="color:rgba(2,115,133,.35);">
+                                        <svg class="w-7 h-7 spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                        <span style="font-size:12px;">Loading ledger...</span>
+                                    </div>
+                                </td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="px-5 py-2.5 flex items-center justify-between" style="border-top:1px solid #f0ece6;background:#faf8f5;">
+                        <span id="ledgerCountLabel" class="text-[10px]" style="color:rgba(2,115,133,.45);">Loading...</span>
+                        <span class="text-[10px]" style="color:rgba(2,115,133,.3);">Most recent first</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+let allLedgerRows = [];
+
+/* ── Toast ── */
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+/* ── Type toggle ── */
+window.setType = function(type) {
+    document.getElementById('transType').value = type;
+    const tabI = document.getElementById('tabIncome');
+    const tabE = document.getElementById('tabExpense');
+    const strip = document.getElementById('typeStrip');
+    const stripLabel = document.getElementById('typeStripLabel');
+    const stripIcon  = document.getElementById('typeStripIcon');
+
+    if (type === 'Income') {
+        tabI.className = 'type-tab income-active';
+        tabE.className = 'type-tab off';
+        strip.style.background = 'rgba(16,185,129,.08)';
+        strip.style.border     = '1px solid rgba(16,185,129,.2)';
+        stripLabel.style.color = '#059669';
+        stripLabel.textContent = 'Recording an Income entry';
+        stripIcon.style.color  = '#10B981';
+        stripIcon.innerHTML    = '<path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/>';
+    } else {
+        tabE.className = 'type-tab expense-active';
+        tabI.className = 'type-tab off';
+        strip.style.background = 'rgba(239,68,68,.06)';
+        strip.style.border     = '1px solid rgba(239,68,68,.15)';
+        stripLabel.style.color = '#dc2626';
+        stripLabel.textContent = 'Recording an Expense entry';
+        stripIcon.style.color  = '#ef4444';
+        stripIcon.innerHTML    = '<path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/>';
+    }
+};
+
+/* ── Format currency ── */
+function fmtOMR(v) {
+    const n = parseFloat(v) || 0;
+    return 'OMR ' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+/* ── Format date ── */
+function fmtDate(v) {
+    if (!v) return '—';
+    const d = new Date(v);
+    return isNaN(d) ? v : d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+}
+
+/* ── Render ledger table ── */
+function renderLedger(rows) {
+    const tbody = document.getElementById('ledgerTableBody');
+    if (!rows || rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.3);">
+                <svg style="width:36px;height:36px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M1.5 9.832v1.793c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875V9.832a3 3 0 01-.722.512l-4.943 2.472a3.75 3.75 0 01-3.37 0L2.222 10.344a3 3 0 01-.722-.512zM1.5 8.696V7.5A2.25 2.25 0 013.75 5.25h16.5A2.25 2.25 0 0122.5 7.5v1.196a3 3 0 01-1.61 2.684l-4.942 2.472a2.25 2.25 0 01-2.022 0L3.11 11.38A3 3 0 011.5 8.696z" clip-rule="evenodd"/></svg>
+                <p style="font-size:13px;font-weight:600;">No transactions yet</p>
+                <p style="font-size:11px;">Log your first entry using the form</p>
+            </div>
+        </td></tr>`;
+        document.getElementById('ledgerCountLabel').textContent = '0 records';
+        return;
+    }
+
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+        const type   = r[1] || '';
+        const amount = parseFloat(r[3]) || 0;
+        const isIncome = type === 'Income';
+
+        const tr = document.createElement('tr');
+        tr.className = 'fade-row';
+        tr.innerHTML = `
+            <td style="color:rgba(2,115,133,.6);font-size:11px;">${fmtDate(r[0])}</td>
+            <td>${isIncome
+                ? '<span class="badge-income">Income</span>'
+                : '<span class="badge-expense">Expense</span>'}</td>
+            <td style="color:#374151;font-size:11px;">${r[2] || '—'}</td>
+            <td style="text-align:right;">
+                <span class="font-lexend" style="font-size:12px;font-weight:700;color:${isIncome ? '#15803d' : '#b91c1c'};">
+                    ${isIncome ? '+' : '-'}${fmtOMR(amount)}
+                </span>
+            </td>
+            <td style="font-family:monospace;font-size:11px;color:#027385;">${r[4] || '—'}</td>
+            <td style="color:#6b7280;font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis;">${r[5] || '—'}</td>`;
+        tbody.appendChild(tr);
+    });
+
+    document.getElementById('ledgerCountLabel').textContent = `${rows.length} record${rows.length !== 1 ? 's' : ''}`;
+}
+
+/* ── Update stats from rows ── */
+function updateStats(rows) {
+    let income = 0, expense = 0;
+    rows.forEach(r => {
+        const amt = parseFloat(r[3]) || 0;
+        if (r[1] === 'Income')  income  += amt;
+        if (r[1] === 'Expense') expense += amt;
+    });
+    const profit = income - expense;
+    const max = Math.max(income, expense, 1);
+
+    document.getElementById('statIncome').textContent  = fmtOMR(income);
+    document.getElementById('statExpense').textContent = fmtOMR(expense);
+    document.getElementById('statProfit').textContent  = fmtOMR(Math.abs(profit));
+    document.getElementById('statCount').textContent   = rows.length;
+
+    // Bars
+    setTimeout(() => {
+        document.getElementById('barIncome').style.width  = (income  / max * 100) + '%';
+        document.getElementById('barExpense').style.width = (expense / max * 100) + '%';
+        document.getElementById('barProfit').style.width  = (Math.abs(profit) / max * 100) + '%';
+    }, 100);
+
+    // Profit chip
+    const chip  = document.getElementById('profitChip');
+    const arrow = document.getElementById('profitArrow');
+    if (profit >= 0) {
+        chip.style.background = 'rgba(16,185,129,.1)';
+        chip.style.color      = '#059669';
+        chip.style.border     = '1px solid rgba(16,185,129,.2)';
+        arrow.textContent     = '▲';
+        arrow.nextSibling.textContent = ' Profit';
+    } else {
+        chip.style.background = 'rgba(239,68,68,.1)';
+        chip.style.color      = '#dc2626';
+        chip.style.border     = '1px solid rgba(239,68,68,.2)';
+        arrow.textContent     = '▼';
+        arrow.nextSibling.textContent = ' Loss';
+    }
+}
+
+/* ── Fetch ledger ── */
+window.loadLedger = async function() {
+    document.getElementById('ledgerTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
+            <svg class="spin" style="width:26px;height:26px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+            <span style="font-size:12px;">Fetching transactions...</span>
+        </div>
+    </td></tr>`;
+
+    try {
+        const res    = await fetch(`${SCRIPT_URL}?action=getLedger`);
+        const result = await res.json();
+        if (result.result === 'success') {
+            allLedgerRows = result.data.length > 1 ? [...result.data].slice(1).reverse() : [];
+            renderLedger(allLedgerRows);
+            updateStats(allLedgerRows);
+        } else {
+            document.getElementById('ledgerTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load ledger.</td></tr>`;
+        }
+    } catch(e) {
+        document.getElementById('ledgerTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed. Please refresh.</td></tr>`;
+    }
+};
+
+/* ── Search ── */
+document.getElementById('ledgerSearch').addEventListener('input', function() {
+    const q = this.value.toLowerCase().trim();
+    if (!q) { renderLedger(allLedgerRows); return; }
+    const f = allLedgerRows.filter(r => r.join(' ').toLowerCase().includes(q));
+    renderLedger(f);
+    document.getElementById('ledgerCountLabel').textContent = `${f.length} match${f.length !== 1 ? 'es' : ''} for "${this.value}"`;
+});
+
+/* ── Form submit ── */
+document.addEventListener('DOMContentLoaded', () => {
+    const raw = sessionStorage.getItem('erp_user');
+    if (raw) {
+        const u = JSON.parse(raw);
+        const i = (u.name || 'U').charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent = i;
+        document.getElementById('headerAvatar').textContent  = i;
+        document.getElementById('sidebarName').textContent   = u.name;
+        document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+        if (u.role === 'Admin') {
+            document.getElementById('navAdminLink').classList.remove('hidden');
+            document.getElementById('navAdminLink').classList.add('flex');
+        }
+    }
+
+    document.getElementById('refreshLedgerBtn').addEventListener('click', window.loadLedger);
+
+    const form    = document.getElementById('transactionForm');
+    const btn     = document.getElementById('transBtn');
+    const btnText = document.getElementById('transBtnText');
+    const spinner = document.getElementById('transSpinner');
+
+    // Remove app.js listener via clone
+    const fresh = form.cloneNode(true);
+    form.parentNode.replaceChild(fresh, form);
+
+    // Re-attach quick-category chips (cloned)
+    document.querySelectorAll('[onclick^="document.getElementById(\'transCategory\')"]').forEach(el => {
+        el.addEventListener('click', () => {
+            const val = el.getAttribute('onclick').match(/'([^']+)'\s*\)$/)[1];
+            document.getElementById('transCategory').value = val;
+        });
+        el.removeAttribute('onclick');
+    });
+
+    fresh.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        btnText.textContent = 'Saving...';
+        spinner.classList.remove('hidden');
+        btn.disabled = true;
+
+        const payload = {
+            formType: 'ledger',
+            transType:     document.getElementById('transType').value,
+            transCategory: document.getElementById('transCategory').value,
+            transAmount:   document.getElementById('transAmount').value,
+            transAwb:      document.getElementById('transAwb').value,
+            transDesc:     document.getElementById('transDesc').value,
+        };
+
+        try {
+            const res    = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+            const result = await res.json();
+            if (result.result === 'success') {
+                showToast(`✓ ${payload.transType} of ${fmtOMR(payload.transAmount)} saved!`);
+                fresh.reset();
+                document.getElementById('transType').value = 'Income';
+                setType('Income');
+                window.loadLedger();
+            } else {
+                alert('Error: ' + (result.error || 'Could not save transaction.'));
+            }
+        } catch(err) {
+            alert('Connection failed. Please try again.');
+        } finally {
+            btnText.textContent = 'Save Record';
+            spinner.classList.add('hidden');
+            btn.disabled = false;
+        }
+    });
+
+    window.loadLedger();
+});
+</script>
+
+<script src="app.js"></script>
 </body>
 </html>
