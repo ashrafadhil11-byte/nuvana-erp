@@ -3,147 +3,499 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuvana.ex ERP</title>
+    <title>Nuvana.ex ERP — International Booking</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>document.documentElement.classList.remove('dark');</script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        orange: '#F99523', teal: '#027385',
+                        beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981'
+                    },
+                    fontFamily: { poppins: ['Poppins','sans-serif'], lexend: ['Lexend','sans-serif'] }
+                }
+            }
+        }
+    </script>
+
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-mono, .tracking-widest { font-family: 'Lexend', sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f2ee; }
+        .font-lexend { font-family: 'Lexend', sans-serif; }
+
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
+        @keyframes spin    { to { transform:rotate(360deg); } }
+
+        .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
+        .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .12s both; }
+        .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .19s both; }
+        .anim-4 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .26s both; }
+        .ping   { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+        .spin   { animation: spin 1s linear infinite; }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width:5px; height:5px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
+
+        /* ── Sidebar nav ── */
+        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
+        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
+        .nav-item.active { background:rgba(249,149,35,.13); border-left:3px solid #F99523; color:#F99523; font-weight:600; padding-left:9px; }
+        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
+        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
+
+        /* ── Card ── */
+        .card { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
+        .card-header { padding:14px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
+
+        /* ── Section panel ── */
+        .section-panel { background:white; border:1px solid #e8e0d6; border-radius:14px; overflow:hidden; }
+        .section-panel-header { padding:12px 18px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; gap:9px; background:#faf8f5; }
+
+        /* ── Field ── */
+        .field {
+            width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15);
+            border-radius:10px; padding:.6rem .85rem; font-family:'Poppins',sans-serif;
+            font-size:.8125rem; color:#0D2330; outline:none;
+            transition:border-color .2s, box-shadow .2s, background .2s;
+        }
+        .field::placeholder { color:rgba(2,115,133,.3); }
+        .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
+        .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
+
+        select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
+
+        /* ── Box row ── */
+        .box-row { display:grid; grid-template-columns:48px 1fr 1fr 1fr 1fr 1fr; gap:6px; align-items:center; }
+        .box-input { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.12); border-radius:8px; padding:.45rem .6rem; font-family:'Poppins',sans-serif; font-size:.75rem; color:#0D2330; outline:none; text-align:center; transition:border-color .2s,box-shadow .2s; }
+        .box-input:focus { border-color:#F99523; box-shadow:0 0 0 2px rgba(249,149,35,.1); }
+        .box-input[readonly] { background:rgba(249,149,35,.06); border-color:rgba(249,149,35,.25); color:#c47b0a; font-weight:700; cursor:default; }
+        .box-num { width:48px; height:34px; border-radius:8px; background:rgba(2,115,133,.08); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#027385; font-family:'Lexend',sans-serif; }
+
+        /* ── Submit ── */
+        .btn-submit {
+            width:100%; padding:.9rem 1rem; border-radius:12px; background:#0D2330; color:white;
+            font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em;
+            border:none; cursor:pointer; transition:background .2s,transform .15s,box-shadow .2s;
+            display:flex; align-items:center; justify-content:center; gap:.5rem;
+            box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden;
+        }
+        .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
+        .btn-submit > * { position:relative; z-index:1; }
+        .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
+        .btn-submit:hover::after { width:100%; }
+        .btn-submit:active { transform:translateY(0); }
+        .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
+
+        /* ── Total summary bar ── */
+        .totals-bar { background:#0D2330; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+        .total-item { text-align:center; }
+        .total-item .lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(239,231,220,.35); margin-bottom:3px; }
+        .total-item .val { font-family:'Lexend',sans-serif; font-size:15px; font-weight:700; color:#EFE7DC; }
+        .total-item .val.orange { color:#F99523; }
+
+        /* ── Grand total field ── */
+        .grand-total-field { width:100%; background:rgba(249,149,35,.08); border:2px solid rgba(249,149,35,.35); border-radius:10px; padding:.65rem 1rem; font-family:'Lexend',sans-serif; font-size:1rem; font-weight:700; color:#c47b0a; outline:none; text-align:center; cursor:default; }
+
+        /* ── Add box btn ── */
+        .btn-add-box { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; background:rgba(2,115,133,.1); border:1px solid rgba(2,115,133,.2); color:#027385; font-size:11px; font-weight:700; cursor:pointer; transition:all .2s; font-family:'Lexend',sans-serif; }
+        .btn-add-box:hover { background:rgba(2,115,133,.18); }
+        .btn-add-box:disabled { opacity:.45; cursor:not-allowed; }
+
+        /* ── Column header ── */
+        .col-header { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.5); text-align:center; }
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex overflow-hidden">
 
-    <aside class="w-64 glass-panel border-r border-slate-700 transition-all duration-300 flex flex-col z-20">
-        <div class="p-6 flex justify-between items-center border-b border-slate-700">
-            <h1 class="text-xl font-bold tracking-widest text-blue-400">NUVANA.EX</h1>
+<body class="min-h-screen flex overflow-hidden">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
+    <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
+             style="filter:brightness(0) invert(1);"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;">
+            <p class="font-lexend text-[15px] font-bold tracking-[.14em]" style="color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p>
+            <p class="text-[9px] tracking-[.1em] uppercase mt-0.5" style="color:rgba(239,231,220,.25);">Enterprise Platform</p>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="index.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Dashboard</a>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>New Booking</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+    </div>
+
+    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+        <a href="index.html" class="nav-item">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
+            Command Center
+        </a>
+
+        <div class="section-label mt-3">Logistics</div>
+
+        <div class="group">
+            <div class="nav-item justify-between" style="background:rgba(249,149,35,.08);border-left:3px solid #F99523;padding-left:9px;">
+                <div class="flex items-center gap-2.5" style="color:#F99523;font-weight:600;">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"/></svg>
+                    New Booking
                 </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="international.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">International</a>
-                    <a href="domestic.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Domestic</a>
-                </div>
+                <svg class="w-3 h-3" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
             </div>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>Processing</span>
-                    <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="processing.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Manage Bookings</a>
-                    <a href="update.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Process Update</a>
-                </div>
-            </div>
-
-            <a href="accounts.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Accounts</a>
-            <a href="customers.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Customers</a>
-            <a href="reports.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Reports</a>
-            <a href="admin.html" id="navAdminLink" class="hidden items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 dark:text-beige/60 dark:hover:text-beige dark:hover:bg-teal/10 rounded-[16px] transition">
-                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
-                 <span class="hidden md:block font-medium">Admin Panel</span>
-            </a>
-        </nav>
-    </aside>
-
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 glass-panel border-b border-slate-700 flex items-center justify-between px-8 z-10">
-            <h2 class="text-lg font-semibold text-slate-200">International Booking</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-slate-400">Branch: HQ</span>
-                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">A</div>
-            </div>
-        </header>
-
-        <div class="flex-1 p-8 overflow-y-auto relative">
-            <div class="glass-panel p-8 rounded-xl border-t border-l border-slate-600 shadow-2xl relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-32 h-32 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 pointer-events-none"></div>
-
-                <div class="flex justify-between items-end mb-6">
-                    <h3 class="text-xl font-semibold text-white">International Cargo Booking</h3>
-                    <span class="text-sm text-purple-400 font-mono tracking-wider">NUVEX GLOBAL</span>
-                </div>
-                
-                <form id="internationalForm" class="relative z-10 space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="p-4 bg-slate-800 bg-opacity-40 rounded-lg border border-slate-700">
-                            <h4 class="text-sm text-slate-300 font-semibold mb-3 border-b border-slate-600 pb-1">Shipper Details</h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="text" id="shipperName" placeholder="Shipper Name" required class="col-span-2 w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="contactNumber" placeholder="Phone Number" required class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="altNumber" placeholder="Alt Number" class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="shipperAddress" placeholder="Address" class="col-span-2 w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="originCountry" placeholder="Origin Country" class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="postalCode" placeholder="Postal Code" class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                        </div>
-                        <div class="p-4 bg-slate-800 bg-opacity-40 rounded-lg border border-slate-700">
-                            <h4 class="text-sm text-slate-300 font-semibold mb-3 border-b border-slate-600 pb-1">Receiver Details</h4>
-                            <div class="grid grid-cols-2 gap-3">
-                                <input type="text" id="receiverNameInt" placeholder="Receiver Name" required class="col-span-2 w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="receiverPhoneInt" placeholder="Phone Number" required class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="receiverAltInt" placeholder="Alt Number" class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="receiverAddress" placeholder="Address" class="col-span-2 w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="destCountry" placeholder="Destination Country" required class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                                <input type="text" id="zipCode" placeholder="Zip/Postal Code" class="w-full bg-slate-900 bg-opacity-50 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-4 gap-4 p-4 bg-slate-800 bg-opacity-40 rounded-lg border border-slate-700">
-                        <input type="text" id="shipmentType" placeholder="Shipment Type" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="text" id="cargoType" placeholder="Cargo Type" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="text" id="commodity" placeholder="Commodity" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="text" id="shipmentValue" placeholder="Declared Value ($)" class="w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="text" id="description" placeholder="Description of Goods" class="col-span-4 w-full bg-slate-900 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                    </div>
-
-                    <div class="p-4 bg-slate-800 bg-opacity-40 rounded-lg border border-slate-700">
-                        <div class="flex justify-between items-center mb-3 border-b border-slate-600 pb-1">
-                            <h4 class="text-sm text-slate-300 font-semibold">Box Dimensions & Weights</h4>
-                            <button type="button" id="addBoxBtn" class="text-xs bg-purple-600 hover:bg-purple-500 text-white px-3 py-1 rounded transition shadow-lg shadow-purple-500/20">+ Add Box</button>
-                        </div>
-                        <div class="grid grid-cols-6 gap-2 mb-2 text-xs text-slate-400 font-semibold tracking-wider text-center">
-                            <div>Box #</div><div>Actual Wt (kg)</div><div>L (cm)</div><div>W (cm)</div><div>H (cm)</div><div>Chargeable (kg)</div>
-                        </div>
-                        <div id="boxContainer" class="space-y-2"></div>
-                        <div class="mt-4 flex justify-end space-x-6 text-sm font-bold text-white bg-slate-900 p-3 rounded border border-slate-700 shadow-inner">
-                            <div>Total Boxes: <span id="lblTotalBoxes" class="text-purple-400">0</span></div>
-                            <div>Total Actual: <span id="lblTotalActual" class="text-purple-400">0</span> kg</div>
-                            <div>Total Chargeable: <span id="lblTotalCW" class="text-purple-400">0</span> kg</div>
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-4 gap-4">
-                        <input type="number" id="rate" placeholder="Rate per kg" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="number" id="packingCharges" placeholder="Packing Charges" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="number" id="additionalCharges" placeholder="Additional Charges" class="w-full bg-slate-800 border border-slate-700 rounded p-2 text-sm text-white focus:outline-none focus:border-purple-500">
-                        <input type="number" id="grandTotal" placeholder="GRAND TOTAL" readonly class="w-full bg-purple-900 bg-opacity-30 border border-purple-500 rounded p-2 text-sm text-purple-200 font-bold font-mono focus:outline-none">
-                    </div>
-
-                    <button type="submit" id="submitIntBtn" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3.5 rounded-lg transition shadow-lg shadow-purple-500/30 flex justify-center items-center">
-                        <span id="btnTextInt">Transmit International Booking</span>
-                        <svg id="loadingIconInt" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
-                    <p class="text-xs text-slate-400 text-center mt-2">Note: Standard delivery schedules starting from the 5th day of dispatch.</p>
-                </form>
+            <div class="flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="international.html" class="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[12px] font-semibold transition" style="color:#F99523;background:rgba(249,149,35,.08);">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
+                    International
+                </a>
+                <a href="domestic.html" class="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                    Domestic
+                </a>
             </div>
         </div>
-    </main>
 
-    <script src="app.js"></script>
+        <div class="group">
+            <div class="nav-item justify-between">
+                <div class="flex items-center gap-2.5">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                    Processing
+                </div>
+                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="processing.html" class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">Manage Bookings</a>
+                <a href="update.html"     class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">Process Update</a>
+            </div>
+        </div>
+
+        <div class="section-label mt-3">Finance & CRM</div>
+        <a href="accounts.html"  class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
+        <a href="customers.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
+        <a href="reports.html"   class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
+        <div class="divider-h my-2"></div>
+        <a href="admin.html" id="navAdminLink" class="nav-item hidden"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+    </nav>
+
+    <div class="px-3 py-4" style="border-top:1px solid rgba(255,255,255,.06);">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:rgba(255,255,255,.04);">
+            <div class="w-7 h-7 rounded-[9px] bg-orange flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" id="sidebarAvatar">A</div>
+            <div class="overflow-hidden flex-1">
+                <div class="text-[11px] font-semibold truncate" style="color:rgba(239,231,220,.9);" id="sidebarName">—</div>
+                <div class="text-[9px]" style="color:rgba(239,231,220,.35);" id="sidebarRole">—</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
+            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                <svg class="w-4 h-4" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg>
+            </div>
+            <div>
+                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">International Cargo Booking</h2>
+                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">NUVEX GLOBAL · Complete all required fields</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
+                <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
+            </div>
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm" style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;" id="headerAvatar">A</div>
+        </div>
+    </header>
+
+    <!-- Scrollable body -->
+    <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
+        <form id="internationalForm" class="space-y-5 max-w-6xl mx-auto">
+
+            <!-- ── ROW 1: Shipper + Receiver ── -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 anim-1">
+
+                <!-- Shipper -->
+                <div class="section-panel">
+                    <div class="section-panel-header">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(2,115,133,.1);">
+                            <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Shipper Details</span>
+                        <span class="ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider" style="background:rgba(2,115,133,.1);color:#027385;">Origin</span>
+                    </div>
+                    <div class="p-5 grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="field-label">Shipper Full Name *</label>
+                            <input type="text" id="shipperName" required placeholder="Full name" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Primary Phone *</label>
+                            <input type="text" id="contactNumber" required placeholder="+968 XXXX XXXX" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Alternate Phone</label>
+                            <input type="text" id="altNumber" placeholder="Optional" class="field">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="field-label">Address</label>
+                            <input type="text" id="shipperAddress" placeholder="Street, area, city" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Origin Country</label>
+                            <input type="text" id="originCountry" placeholder="e.g. Oman" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Postal Code</label>
+                            <input type="text" id="postalCode" placeholder="123" class="field">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Receiver -->
+                <div class="section-panel">
+                    <div class="section-panel-header">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(249,149,35,.1);">
+                            <svg class="w-3.5 h-3.5" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Receiver Details</span>
+                        <span class="ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider" style="background:rgba(249,149,35,.1);color:#c47b0a;">Destination</span>
+                    </div>
+                    <div class="p-5 grid grid-cols-2 gap-4">
+                        <div class="col-span-2">
+                            <label class="field-label">Receiver Full Name *</label>
+                            <input type="text" id="receiverNameInt" required placeholder="Full name" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Primary Phone *</label>
+                            <input type="text" id="receiverPhoneInt" required placeholder="+XX XXXX XXXX" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Alternate Phone</label>
+                            <input type="text" id="receiverAltInt" placeholder="Optional" class="field">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="field-label">Delivery Address</label>
+                            <input type="text" id="receiverAddress" placeholder="Street, area, city" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Destination Country *</label>
+                            <input type="text" id="destCountry" required placeholder="e.g. United Kingdom" class="field">
+                        </div>
+                        <div>
+                            <label class="field-label">Zip / Postal Code</label>
+                            <input type="text" id="zipCode" placeholder="SW1A 1AA" class="field">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── ROW 2: Shipment Details ── -->
+            <div class="section-panel anim-2">
+                <div class="section-panel-header">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(139,92,246,.1);">
+                        <svg class="w-3.5 h-3.5" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Shipment Details</span>
+                </div>
+                <div class="p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div>
+                        <label class="field-label">Shipment Type</label>
+                        <input type="text" id="shipmentType" placeholder="e.g. Air Freight" class="field">
+                    </div>
+                    <div>
+                        <label class="field-label">Cargo Type</label>
+                        <input type="text" id="cargoType" placeholder="e.g. General" class="field">
+                    </div>
+                    <div>
+                        <label class="field-label">Commodity</label>
+                        <input type="text" id="commodity" placeholder="e.g. Electronics" class="field">
+                    </div>
+                    <div>
+                        <label class="field-label">Declared Value (USD)</label>
+                        <input type="text" id="shipmentValue" placeholder="0.00" class="field">
+                    </div>
+                    <div class="col-span-2 md:col-span-4">
+                        <label class="field-label">Description of Goods</label>
+                        <input type="text" id="description" placeholder="Brief description of contents" class="field">
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── ROW 3: Box Dimensions ── -->
+            <div class="section-panel anim-3">
+                <div class="section-panel-header">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(16,185,129,.1);">
+                        <svg class="w-3.5 h-3.5" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
+                    </div>
+                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Box Dimensions & Weights</span>
+                    <div class="ml-auto flex items-center gap-3">
+                        <span class="text-[10px]" style="color:rgba(2,115,133,.5);">Chargeable = max(actual, L×W×H÷5000)</span>
+                        <button type="button" id="addBoxBtn" class="btn-add-box">
+                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
+                            Add Box
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-5">
+                    <!-- Column headers -->
+                    <div class="box-row mb-2 px-1">
+                        <div class="col-header">Box</div>
+                        <div class="col-header">Actual Wt (kg)</div>
+                        <div class="col-header">L (cm)</div>
+                        <div class="col-header">W (cm)</div>
+                        <div class="col-header">H (cm)</div>
+                        <div class="col-header">Chargeable (kg)</div>
+                    </div>
+
+                    <!-- Box rows container -->
+                    <div id="boxContainer" class="space-y-2"></div>
+
+                    <!-- Totals bar -->
+                    <div class="totals-bar mt-5">
+                        <div class="total-item">
+                            <div class="lbl">Total Boxes</div>
+                            <div class="val orange" id="lblTotalBoxes">0</div>
+                        </div>
+                        <div class="w-px h-8" style="background:rgba(255,255,255,.1);"></div>
+                        <div class="total-item">
+                            <div class="lbl">Total Actual Weight</div>
+                            <div class="val" id="lblTotalActual">0.00 kg</div>
+                        </div>
+                        <div class="w-px h-8" style="background:rgba(255,255,255,.1);"></div>
+                        <div class="total-item">
+                            <div class="lbl">Total Chargeable</div>
+                            <div class="val orange" id="lblTotalCW">0.00 kg</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── ROW 4: Pricing ── -->
+            <div class="section-panel anim-4">
+                <div class="section-panel-header">
+                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(249,149,35,.1);">
+                        <svg class="w-3.5 h-3.5" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Pricing & Charges</span>
+                </div>
+                <div class="p-5">
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+                        <div>
+                            <label class="field-label">Rate per kg (OMR)</label>
+                            <input type="number" step="0.01" id="rate" placeholder="0.00" class="field" oninput="calculateTotals()">
+                        </div>
+                        <div>
+                            <label class="field-label">Packing Charges</label>
+                            <input type="number" step="0.01" id="packingCharges" placeholder="0.00" class="field" oninput="calculateTotals()">
+                        </div>
+                        <div>
+                            <label class="field-label">Additional Charges</label>
+                            <input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field" oninput="calculateTotals()">
+                        </div>
+                        <div>
+                            <label class="field-label">Grand Total (OMR)</label>
+                            <input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="grand-total-field">
+                        </div>
+                    </div>
+                    <p class="text-[10px]" style="color:rgba(2,115,133,.45);">
+                        * Standard delivery schedules starting from the 5th day of dispatch. Grand total auto-calculates from chargeable weight × rate + charges.
+                    </p>
+                </div>
+            </div>
+
+            <!-- ── SUBMIT ── -->
+            <div class="anim-4">
+                <button type="submit" id="submitIntBtn" class="btn-submit">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"/></svg>
+                    <span id="btnTextInt">Transmit International Booking</span>
+                    <svg id="loadingIconInt" class="spin hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    </svg>
+                </button>
+            </div>
+
+        </form>
+    </div>
+</main>
+
+<script>
+/* ── Box management ── */
+let boxCount = 0;
+const MAX_BOXES = 10;
+
+function addBox() {
+    if (boxCount >= MAX_BOXES) return;
+    boxCount++;
+    const row = document.createElement('div');
+    row.className = 'box-row';
+    row.id = `boxRow${boxCount}`;
+    row.innerHTML = `
+        <div class="box-num">${boxCount}</div>
+        <input type="number" step="0.01" id="b${boxCount}W"  placeholder="0.00" class="box-input" oninput="calculateTotals()">
+        <input type="number" step="0.01" id="b${boxCount}L"  placeholder="0" class="box-input" oninput="calculateTotals()">
+        <input type="number" step="0.01" id="b${boxCount}Wi" placeholder="0" class="box-input" oninput="calculateTotals()">
+        <input type="number" step="0.01" id="b${boxCount}H"  placeholder="0" class="box-input" oninput="calculateTotals()">
+        <input type="number" step="0.01" id="b${boxCount}CW" readonly placeholder="—" class="box-input">`;
+    document.getElementById('boxContainer').appendChild(row);
+    document.getElementById(`b${boxCount}W`).focus();
+    calculateTotals();
+    if (boxCount >= MAX_BOXES) document.getElementById('addBoxBtn').disabled = true;
+}
+
+window.calculateTotals = function() {
+    let totalActual = 0, totalCW = 0;
+    for (let i = 1; i <= boxCount; i++) {
+        const actW = parseFloat(document.getElementById(`b${i}W`)?.value)  || 0;
+        const l    = parseFloat(document.getElementById(`b${i}L`)?.value)  || 0;
+        const w    = parseFloat(document.getElementById(`b${i}Wi`)?.value) || 0;
+        const h    = parseFloat(document.getElementById(`b${i}H`)?.value)  || 0;
+        const cw   = Math.max(actW, (l * w * h) / 5000);
+        const cwEl = document.getElementById(`b${i}CW`);
+        if (cwEl) cwEl.value = cw > 0 ? cw.toFixed(2) : '';
+        totalActual += actW;
+        totalCW     += cw;
+    }
+    document.getElementById('lblTotalBoxes').textContent  = boxCount;
+    document.getElementById('lblTotalActual').textContent = totalActual.toFixed(2) + ' kg';
+    document.getElementById('lblTotalCW').textContent     = totalCW.toFixed(2) + ' kg';
+
+    const rate = parseFloat(document.getElementById('rate').value) || 0;
+    const pack = parseFloat(document.getElementById('packingCharges').value) || 0;
+    const add  = parseFloat(document.getElementById('additionalCharges').value) || 0;
+    document.getElementById('grandTotal').value = rate > 0 ? ((totalCW * rate) + pack + add).toFixed(2) : '';
+};
+
+document.getElementById('addBoxBtn').addEventListener('click', addBox);
+
+/* ── User info ── */
+document.addEventListener('DOMContentLoaded', () => {
+    addBox(); // start with 1 box
+    const raw = sessionStorage.getItem('erp_user');
+    if (raw) {
+        const u = JSON.parse(raw);
+        const first = (u.name || 'U').charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent = first;
+        document.getElementById('headerAvatar').textContent  = first;
+        document.getElementById('sidebarName').textContent   = u.name;
+        document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+        if (u.role === 'Admin') {
+            document.getElementById('navAdminLink').classList.remove('hidden');
+            document.getElementById('navAdminLink').classList.add('flex');
+        }
+    }
+});
+</script>
+
+<script src="app.js"></script>
 </body>
 </html>

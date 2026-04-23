@@ -424,64 +424,78 @@
 
 <script src="app.js"></script>
 
-<!-- Override app.js login handler with enhanced version -->
+<!-- Login handler — Enter key or button click both trigger submit -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const form    = document.getElementById('loginForm');
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+
+async function doLogin() {
+    const userEl  = document.getElementById('loginUser');
+    const passEl  = document.getElementById('loginPass');
     const btn     = document.getElementById('loginBtn');
     const btnText = document.getElementById('loginBtnText');
     const spinner = document.getElementById('loginLoadingIcon');
     const arrow   = document.getElementById('loginArrowIcon');
-    if (!form) return;
 
-    /* Clone removes any listener attached by app.js */
-    const fresh = form.cloneNode(true);
-    form.parentNode.replaceChild(fresh, form);
+    if (!userEl.value.trim() || !passEl.value.trim()) {
+        showLoginError('Please enter your username and password.');
+        return;
+    }
 
-    fresh.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        hideLoginError();
+    hideLoginError();
+    btnText.textContent = 'Authenticating...';
+    spinner.classList.remove('hidden');
+    arrow.classList.add('hidden');
+    btn.disabled = true;
 
-        btnText.textContent = 'Authenticating...';
-        spinner.classList.remove('hidden');
-        arrow.classList.add('hidden');
-        btn.disabled = true;
+    try {
+        const res    = await fetch(SCRIPT_URL, {
+            method:  'POST',
+            body:    JSON.stringify({ formType: 'login', username: userEl.value.trim(), password: passEl.value }),
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        const result = await res.json();
 
-        const scriptURL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
-        const payload = {
-            formType: 'login',
-            username: fresh.querySelector('#loginUser').value,
-            password: fresh.querySelector('#loginPass').value
-        };
-
-        try {
-            const res    = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
-            const result = await res.json();
-
-            if (result.result === 'success') {
-                sessionStorage.setItem('erp_user', JSON.stringify({
-                    username: result.username,
-                    name:     result.name,
-                    role:     result.role,
-                    branchId: result.branchId
-                }));
-                btnText.textContent = 'Redirecting...';
-                window.location.replace('index.html');
-            } else {
-                showLoginError(result.error || 'Invalid credentials. Please try again.');
-                fresh.querySelector('#loginPass').value = '';
-            }
-        } catch (err) {
-            showLoginError('Connection failed. Please check your network and try again.');
-        } finally {
-            if (btnText.textContent !== 'Redirecting...') {
-                btnText.textContent = 'Sign In to Workspace';
-                spinner.classList.add('hidden');
-                arrow.classList.remove('hidden');
-                btn.disabled = false;
-            }
+        if (result.result === 'success') {
+            sessionStorage.setItem('erp_user', JSON.stringify({
+                username: result.username,
+                name:     result.name,
+                role:     result.role,
+                branchId: result.branchId
+            }));
+            btnText.textContent = 'Redirecting...';
+            window.location.replace('index.html');
+        } else {
+            showLoginError(result.error || 'Invalid credentials. Please try again.');
+            passEl.value = '';
+            passEl.focus();
         }
+    } catch (err) {
+        showLoginError('Connection failed. Please check your network.');
+    } finally {
+        if (btnText.textContent !== 'Redirecting...') {
+            btnText.textContent = 'Sign In to Workspace';
+            spinner.classList.add('hidden');
+            arrow.classList.remove('hidden');
+            btn.disabled = false;
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('loginForm');
+
+    /* Form submit (covers both button click AND Enter key) */
+    form.addEventListener('submit', (e) => { e.preventDefault(); doLogin(); });
+
+    /* Also fire on Enter keydown inside either input for extra safety */
+    ['loginUser', 'loginPass'].forEach(id => {
+        document.getElementById(id).addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') { e.preventDefault(); doLogin(); }
+        });
     });
+
+    /* Auto-focus username on load */
+    document.getElementById('loginUser').focus();
 });
 </script>
 
