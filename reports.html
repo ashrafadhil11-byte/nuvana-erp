@@ -3,118 +3,483 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuvana.ex ERP</title>
+    <title>Nuvana.ex ERP — Analytics</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.remove('dark');</script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { extend: { colors: { orange:'#F99523', teal:'#027385', beige:'#EFE7DC', charcoal:'#0D2330', success:'#10B981' }, fontFamily:{ poppins:['Poppins','sans-serif'], lexend:['Lexend','sans-serif'] } } }
+        }
+    </script>
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-mono, .tracking-widest { font-family: 'Lexend', sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f5f2ee; }
+        .font-lexend { font-family: 'Lexend', sans-serif; }
+
+        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
+        @keyframes spin    { to { transform:rotate(360deg); } }
+        @keyframes countUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+
+        .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
+        .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .13s both; }
+        .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .21s both; }
+        .anim-4 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .29s both; }
+        .ping   { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
+        .spin   { animation: spin 1s linear infinite; }
+        .count-in { animation: countUp .4s cubic-bezier(.16,1,.3,1) both; }
+
+        ::-webkit-scrollbar { width:5px; height:5px; }
+        ::-webkit-scrollbar-track { background:transparent; }
+        ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
+
+        /* ── Sidebar ── */
+        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
+        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
+        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
+        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
+
+        /* ── Panel ── */
+        .panel { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
+        .panel-hdr { padding:13px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
+
+        /* ── KPI card ── */
+        .kpi-card { background:white; border:1px solid #e8e0d6; border-radius:16px; padding:20px; position:relative; overflow:hidden; transition:transform .25s, box-shadow .25s; }
+        .kpi-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,35,48,.08); }
+        .kpi-watermark { position:absolute; bottom:-14px; right:-14px; opacity:.05; pointer-events:none; }
+
+        /* ── Mini bar ── */
+        .mini-bar-track { height:4px; border-radius:4px; background:#f0ece6; overflow:hidden; margin-top:12px; }
+        .mini-bar-fill  { height:4px; border-radius:4px; transition:width .8s cubic-bezier(.16,1,.3,1) .3s; }
+
+        /* ── Refresh btn ── */
+        .btn-refresh { display:flex; align-items:center; gap:6px; padding:7px 16px; border-radius:9px; background:#0D2330; border:none; font-size:11px; font-weight:600; color:white; cursor:pointer; font-family:'Lexend',sans-serif; transition:background .2s, transform .15s; box-shadow:0 3px 8px rgba(13,35,48,.2); }
+        .btn-refresh:hover { background:#122c3f; transform:translateY(-1px); }
+        .btn-refresh:active { transform:translateY(0); }
+
+        /* ── Status breakdown items ── */
+        .status-row { display:flex; align-items:center; justify-content:space-between; padding:10px 0; border-bottom:1px solid #f5f2ee; }
+        .status-row:last-child { border-bottom:none; }
+        .status-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+        /* ── Category row ── */
+        .cat-row { display:flex; align-items:center; gap:10px; padding:8px 0; }
+        .cat-bar-wrap { flex:1; height:6px; background:#f0ece6; border-radius:4px; overflow:hidden; }
+        .cat-bar-fill { height:6px; border-radius:4px; transition:width .8s cubic-bezier(.16,1,.3,1) .4s; }
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex overflow-hidden">
 
-    <aside class="w-64 glass-panel border-r border-slate-700 transition-all duration-300 flex flex-col z-20">
-        <div class="p-6 flex justify-between items-center border-b border-slate-700">
-            <h1 class="text-xl font-bold tracking-widest text-blue-400">NUVANA.EX</h1>
+<body class="min-h-screen flex overflow-hidden">
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
+    <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
+             style="filter:brightness(0) invert(1);"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;"><p class="font-lexend text-[15px] font-bold tracking-[.14em]" style="color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
+    </div>
+    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+        <a href="index.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
+        <div class="section-label mt-3">Logistics</div>
+        <div class="group">
+            <div class="nav-item justify-between">
+                <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div>
+                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="international.html" class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">International</a>
+                <a href="domestic.html"      class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
+            </div>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="index.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Dashboard</a>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>New Booking</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        <div class="group">
+            <div class="nav-item justify-between">
+                <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div>
+                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+            </div>
+            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
+                <a href="processing.html" class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
+                <a href="update.html"     class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
+            </div>
+        </div>
+        <div class="section-label mt-3">Finance & CRM</div>
+        <a href="accounts.html"  class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
+        <a href="customers.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
+        <!-- Analytics active -->
+        <a href="reports.html" class="nav-item" style="background:rgba(249,149,35,.13);border-left:3px solid #F99523;color:#F99523;font-weight:600;padding-left:9px;">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics
+        </a>
+        <div class="divider-h my-2"></div>
+        <a href="admin.html" id="navAdminLink" class="nav-item hidden"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+    </nav>
+    <div class="px-3 py-4" style="border-top:1px solid rgba(255,255,255,.06);">
+        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:rgba(255,255,255,.04);">
+            <div id="sidebarAvatar" class="w-7 h-7 rounded-[9px] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" style="background:#F99523;">A</div>
+            <div class="overflow-hidden flex-1">
+                <div id="sidebarName" class="text-[11px] font-semibold truncate" style="color:rgba(239,231,220,.9);">—</div>
+                <div id="sidebarRole" class="text-[9px]" style="color:rgba(239,231,220,.35);">—</div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+
+    <!-- Header -->
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
+            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                <svg class="w-4 h-4" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Analytics & Reports</h2>
+                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Live data pulled across all modules · Hit Refresh to recalculate</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
+                <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
+            </div>
+            <button id="generateReportsBtn" class="btn-refresh">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                Refresh Analytics
+            </button>
+            <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
+                 style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;">A</div>
+        </div>
+    </header>
+
+    <!-- Body -->
+    <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
+        <div class="max-w-7xl mx-auto flex flex-col gap-5">
+
+            <!-- ── KPI CARDS ── -->
+            <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
+
+                <!-- Income -->
+                <div class="kpi-card border-l-4" style="border-left-color:#10B981;">
+                    <div class="kpi-watermark"><svg class="w-20 h-20" viewBox="0 0 24 24" fill="#10B981"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg></div>
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(16,185,129,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-3.75H15a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <div id="statIncome" class="font-lexend text-2xl font-bold count-in" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Income</div>
+                    <div class="mini-bar-track"><div id="barIncome" class="mini-bar-fill" style="background:#10B981;width:0%;"></div></div>
                 </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="international.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">International</a>
-                    <a href="domestic.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Domestic</a>
+
+                <!-- Expenses -->
+                <div class="kpi-card border-l-4" style="border-left-color:#ef4444;">
+                    <div class="kpi-watermark"><svg class="w-20 h-20" viewBox="0 0 24 24" fill="#ef4444"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/></svg></div>
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(239,68,68,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#ef4444;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.75 12a.75.75 0 000 1.5h10.5a.75.75 0 000-1.5H6.75z" clip-rule="evenodd"/></svg>
+                        </div>
+                    </div>
+                    <div id="statExpense" class="font-lexend text-2xl font-bold count-in" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Total Expenses</div>
+                    <div class="mini-bar-track"><div id="barExpense" class="mini-bar-fill" style="background:#ef4444;width:0%;"></div></div>
+                </div>
+
+                <!-- Net Profit -->
+                <div class="kpi-card border-l-4" style="border-left-color:#F99523;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div id="profitBadge" class="flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold" style="background:rgba(16,185,129,.1);color:#059669;border:1px solid rgba(16,185,129,.2);">▲ Profit</div>
+                    </div>
+                    <div id="statProfit" class="font-lexend text-2xl font-bold count-in" style="color:#0D2330;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(2,115,133,.4);">Net Profit</div>
+                    <div class="mini-bar-track"><div id="barProfit" class="mini-bar-fill" style="background:#F99523;width:0%;"></div></div>
+                </div>
+
+                <!-- Shipments -->
+                <div class="kpi-card border-l-4" style="border-left-color:#0D2330;background:#0D2330;">
+                    <div class="flex justify-between items-start mb-3">
+                        <div class="w-9 h-9 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.18);">
+                            <svg class="w-[18px] h-[18px]" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">
+                            <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
+                            <span class="text-[9px] font-bold" style="color:#10B981;">LIVE</span>
+                        </div>
+                    </div>
+                    <div id="statShipments" class="font-lexend text-2xl font-bold" style="color:#EFE7DC;">—</div>
+                    <div class="text-[10px] font-semibold uppercase tracking-widest mt-1" style="color:rgba(239,231,220,.3);">Total Shipments</div>
+                    <div class="mini-bar-track" style="background:rgba(255,255,255,.08);"><div class="mini-bar-fill" id="barShipments" style="background:#F99523;width:70%;"></div></div>
                 </div>
             </div>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>Processing</span>
-                    <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="processing.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Manage Bookings</a>
-                    <a href="update.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Process Update</a>
-                </div>
-            </div>
 
-            <a href="accounts.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Accounts</a>
-            <a href="customers.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Customers</a>
-            <a href="reports.html" class="block px-4 py-2 rounded-lg bg-pink-600 bg-opacity-20 text-pink-400 border border-pink-500 border-opacity-30 transition font-bold">Reports</a>
-            <a href="admin.html" id="navAdminLink" class="hidden items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 dark:text-beige/60 dark:hover:text-beige dark:hover:bg-teal/10 rounded-[16px] transition">
-                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
-                 <span class="hidden md:block font-medium">Admin Panel</span>
-            </a>
-        </nav>
-    </aside>
+            <!-- ── CHARTS + BREAKDOWNS ── -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-5 anim-2">
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden" id="reportsDashboard">
-        <header class="h-16 glass-panel border-b border-slate-700 flex items-center justify-between px-8 z-10">
-            <h2 class="text-lg font-semibold text-slate-200">Analytics & Reports</h2>
-            <div class="flex items-center space-x-4">
-                <button id="generateReportsBtn" class="bg-pink-600 hover:bg-pink-500 text-white px-4 py-2 rounded-lg text-sm font-semibold transition flex items-center shadow-lg shadow-pink-500/30">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
-                    Refresh Analytics
-                </button>
-            </div>
-        </header>
-
-        <div class="flex-1 p-8 overflow-y-auto relative flex flex-col gap-8">
-            <div class="absolute top-0 right-1/2 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-[150px] opacity-20 pointer-events-none"></div>
-
-            <div id="loadingOverlay" class="hidden absolute inset-0 z-50 flex items-center justify-center bg-slate-900 bg-opacity-80 rounded-xl">
-                <div class="animate-pulse text-pink-400 font-bold text-xl tracking-widest">CRUNCHING DATA...</div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 z-10">
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600">
-                    <h3 class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Total Income</h3>
-                    <p class="text-2xl font-bold text-emerald-400" id="statIncome">$0.00</p>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600">
-                    <h3 class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Total Expenses</h3>
-                    <p class="text-2xl font-bold text-rose-400" id="statExpense">$0.00</p>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600">
-                    <h3 class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Net Profit</h3>
-                    <p class="text-2xl font-bold text-white" id="statProfit">$0.00</p>
-                </div>
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600">
-                    <h3 class="text-xs text-slate-400 font-semibold uppercase tracking-wider mb-1">Total Shipments</h3>
-                    <p class="text-2xl font-bold text-blue-400" id="statShipments">0</p>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 z-10">
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-white mb-4 w-full text-left">Cash Flow Distribution</h3>
-                    <div class="relative w-full max-w-[300px] aspect-square">
-                        <canvas id="financeChart"></canvas>
+                <!-- Cash Flow Donut -->
+                <div class="panel flex flex-col">
+                    <div class="panel-hdr">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(16,185,129,.1);">
+                                <svg class="w-3.5 h-3.5" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Cash Flow Distribution</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 flex items-center justify-center p-6">
+                        <div style="position:relative;width:200px;height:200px;">
+                            <canvas id="financeChart"></canvas>
+                            <div id="chartCenter" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;">
+                                <p class="font-lexend text-[11px] font-bold" style="color:rgba(2,115,133,.5);">NET</p>
+                                <p id="chartCenterVal" class="font-lexend text-[15px] font-bold" style="color:#0D2330;">—</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="px-5 pb-5 flex justify-center gap-6">
+                        <div class="flex items-center gap-2"><div style="width:10px;height:10px;border-radius:50%;background:#10B981;"></div><span class="text-[11px]" style="color:#374151;">Income</span></div>
+                        <div class="flex items-center gap-2"><div style="width:10px;height:10px;border-radius:50%;background:#ef4444;"></div><span class="text-[11px]" style="color:#374151;">Expenses</span></div>
                     </div>
                 </div>
 
-                <div class="glass-panel p-6 rounded-xl border-t border-l border-slate-600 flex flex-col items-center">
-                    <h3 class="text-sm font-semibold text-white mb-4 w-full text-left">Domestic Shipment Status</h3>
-                    <div class="relative w-full aspect-video">
-                        <canvas id="logisticsChart"></canvas>
+                <!-- Domestic Status Breakdown -->
+                <div class="panel flex flex-col anim-3">
+                    <div class="panel-hdr">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
+                                <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Domestic Status Breakdown</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-5">
+                        <div id="domStatusBreakdown" class="space-y-1">
+                            <p class="text-[12px] text-center py-6" style="color:rgba(2,115,133,.35);">Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Expense Categories -->
+                <div class="panel flex flex-col anim-4">
+                    <div class="panel-hdr">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                                <svg class="w-3.5 h-3.5" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>
+                            </div>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Expense Categories</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 p-5">
+                        <div id="expenseCatBreakdown" class="space-y-2">
+                            <p class="text-[12px] text-center py-6" style="color:rgba(2,115,133,.35);">Loading...</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-    </main>
+            <!-- ── SHIPMENTS CHART ── -->
+            <div class="panel anim-3">
+                <div class="panel-hdr">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(13,35,48,.08);">
+                            <svg class="w-3.5 h-3.5" style="color:#0D2330;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 6a3 3 0 013-3h12a3 3 0 013 3v12a3 3 0 01-3 3H6a3 3 0 01-3-3V6zm4.5 7.5a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0v-2.25a.75.75 0 01.75-.75zm3.75-1.5a.75.75 0 00-1.5 0v3.75a.75.75 0 001.5 0V12zm2.25-3a.75.75 0 01.75.75v6a.75.75 0 01-1.5 0v-6a.75.75 0 01.75-.75zm3.75 3a.75.75 0 00-1.5 0v3a.75.75 0 001.5 0v-3z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Domestic Shipment Volume — Status Distribution</span>
+                    </div>
+                    <span class="text-[10px] font-semibold px-2 py-1 rounded-lg" style="background:rgba(2,115,133,.08);color:#027385;">Domestic Only</span>
+                </div>
+                <div class="p-6" style="height:220px;">
+                    <canvas id="logisticsChart"></canvas>
+                </div>
+            </div>
 
-    <script src="app.js"></script>
+        </div>
+    </div>
+</main>
+
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+
+let finChart = null;
+let logChart = null;
+
+function fmtOMR(v) {
+    return 'OMR ' + (parseFloat(v)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,',');
+}
+
+const STATUS_COLORS = {
+    'Pending':           '#fbbf24',
+    'Dispatched to Hub': '#a78bfa',
+    'Arrived at Hub':    '#818cf8',
+    'In Transit':        '#60a5fa',
+    'Out for Delivery':  '#fb923c',
+    'Delivered':         '#34d399',
+    'Exception / Held':  '#f87171',
+};
+
+window.loadReports = async function() {
+    try {
+        const [domRes, ledRes, intRes] = await Promise.all([
+            fetch(`${SCRIPT_URL}?action=getDomestic`),
+            fetch(`${SCRIPT_URL}?action=getLedger`),
+            fetch(`${SCRIPT_URL}?action=getInternational`),
+        ]);
+        const [domJson, ledJson, intJson] = await Promise.all([domRes.json(), ledRes.json(), intJson => intJson.json()].map((fn,i) => [domRes,ledRes,intRes][i].json()));
+
+        const domRows = domJson.result === 'success' && domJson.data.length > 1 ? domJson.data.slice(1) : [];
+        const intRows = intJson.result === 'success' && intJson.data.length > 1 ? intJson.data.slice(1) : [];
+        const ledRows = ledJson.result === 'success' && ledJson.data.length > 1 ? ledJson.data.slice(1) : [];
+
+        /* ── KPIs ── */
+        let income = 0, expense = 0;
+        ledRows.forEach(r => {
+            const amt = parseFloat(r[3])||0;
+            if (r[1]==='Income')  income  += amt;
+            if (r[1]==='Expense') expense += amt;
+        });
+        const profit = income - expense;
+        const max = Math.max(income, expense, 1);
+        const totalShipments = domRows.length + intRows.length;
+
+        document.getElementById('statIncome').textContent    = fmtOMR(income);
+        document.getElementById('statExpense').textContent   = fmtOMR(expense);
+        document.getElementById('statProfit').textContent    = fmtOMR(Math.abs(profit));
+        document.getElementById('statShipments').textContent = totalShipments;
+
+        const badge = document.getElementById('profitBadge');
+        if (profit < 0) {
+            badge.style.background = 'rgba(239,68,68,.1)'; badge.style.color='#dc2626'; badge.style.border='1px solid rgba(239,68,68,.2)'; badge.textContent='▼ Loss';
+        } else {
+            badge.style.background = 'rgba(16,185,129,.1)'; badge.style.color='#059669'; badge.style.border='1px solid rgba(16,185,129,.2)'; badge.textContent='▲ Profit';
+        }
+
+        setTimeout(() => {
+            document.getElementById('barIncome').style.width  = (income/max*100)+'%';
+            document.getElementById('barExpense').style.width = (expense/max*100)+'%';
+            document.getElementById('barProfit').style.width  = (Math.abs(profit)/max*85)+'%';
+        }, 150);
+
+        document.getElementById('chartCenterVal').textContent = fmtOMR(Math.abs(profit));
+
+        /* ── Finance donut ── */
+        if (finChart) finChart.destroy();
+        const finCtx = document.getElementById('financeChart').getContext('2d');
+        finChart = new Chart(finCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Income', 'Expenses'],
+                datasets: [{ data: [income||0.1, expense||0.1], backgroundColor: ['#10B981','#ef4444'], borderWidth: 0, hoverOffset: 6 }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false, cutout: '72%',
+                plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx => ' '+fmtOMR(ctx.parsed) } } }
+            }
+        });
+
+        /* ── Domestic status breakdown ── */
+        const statusCounts = {};
+        domRows.forEach(r => { const s = r[9]||'Pending'; statusCounts[s] = (statusCounts[s]||0) + 1; });
+        const totalDom = domRows.length || 1;
+        const breakdownEl = document.getElementById('domStatusBreakdown');
+        breakdownEl.innerHTML = '';
+        if (Object.keys(statusCounts).length === 0) {
+            breakdownEl.innerHTML = '<p style="font-size:12px;text-align:center;color:rgba(2,115,133,.35);padding:24px 0;">No domestic shipments yet</p>';
+        } else {
+            Object.entries(statusCounts).sort((a,b) => b[1]-a[1]).forEach(([status, count]) => {
+                const pct = Math.round(count/totalDom*100);
+                const color = STATUS_COLORS[status] || '#94a3b8';
+                breakdownEl.innerHTML += `
+                <div class="status-row">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div class="status-dot" style="background:${color};"></div>
+                        <span style="font-size:11px;font-weight:500;color:#374151;">${status}</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <div style="width:60px;height:5px;border-radius:4px;background:#f0ece6;overflow:hidden;">
+                            <div style="height:5px;border-radius:4px;background:${color};width:${pct}%;"></div>
+                        </div>
+                        <span class="font-lexend" style="font-size:11px;font-weight:700;color:#0D2330;min-width:24px;text-align:right;">${count}</span>
+                        <span style="font-size:9px;color:rgba(2,115,133,.4);">${pct}%</span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        /* ── Expense categories ── */
+        const expCats = {};
+        ledRows.filter(r => r[1]==='Expense').forEach(r => { const c = r[2]||'Other'; expCats[c] = (expCats[c]||0) + (parseFloat(r[3])||0); });
+        const maxExpCat = Math.max(...Object.values(expCats), 1);
+        const expEl = document.getElementById('expenseCatBreakdown');
+        expEl.innerHTML = '';
+        if (Object.keys(expCats).length === 0) {
+            expEl.innerHTML = '<p style="font-size:12px;text-align:center;color:rgba(2,115,133,.35);padding:24px 0;">No expense records yet</p>';
+        } else {
+            Object.entries(expCats).sort((a,b)=>b[1]-a[1]).forEach(([cat,amt]) => {
+                const pct = Math.round(amt/maxExpCat*100);
+                expEl.innerHTML += `
+                <div class="cat-row">
+                    <span style="font-size:10px;font-weight:600;color:#374151;min-width:120px;flex-shrink:0;">${cat}</span>
+                    <div class="cat-bar-wrap"><div class="cat-bar-fill" style="background:#F99523;width:${pct}%;"></div></div>
+                    <span class="font-lexend" style="font-size:10px;font-weight:700;color:#c47b0a;min-width:80px;text-align:right;">${fmtOMR(amt)}</span>
+                </div>`;
+            });
+        }
+
+        /* ── Logistics bar chart ── */
+        const allStatuses = ['Pending','Dispatched to Hub','Arrived at Hub','In Transit','Out for Delivery','Delivered','Exception / Held'];
+        const barData = allStatuses.map(s => statusCounts[s]||0);
+        if (logChart) logChart.destroy();
+        const logCtx = document.getElementById('logisticsChart').getContext('2d');
+        logChart = new Chart(logCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Pending','To Hub','At Hub','In Transit','Out for Del.','Delivered','Exception'],
+                datasets: [{
+                    label: 'Shipments',
+                    data: barData,
+                    backgroundColor: allStatuses.map(s => STATUS_COLORS[s]+'99'),
+                    borderColor:     allStatuses.map(s => STATUS_COLORS[s]),
+                    borderWidth: 2, borderRadius: 6, borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend:{ display:false }, tooltip:{ callbacks:{ label: ctx => ` ${ctx.parsed.y} shipment${ctx.parsed.y!==1?'s':''}` } } },
+                scales: {
+                    x: { grid:{ display:false }, ticks:{ font:{ family:'Poppins', size:10 }, color:'rgba(2,115,133,.5)' } },
+                    y: { beginAtZero:true, grid:{ color:'rgba(2,115,133,.06)' }, ticks:{ font:{ family:'Poppins', size:10 }, color:'rgba(2,115,133,.4)', stepSize:1 } }
+                }
+            }
+        });
+
+    } catch(err) {
+        console.error('Reports load error:', err);
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const raw = sessionStorage.getItem('erp_user');
+    if (raw) {
+        const u = JSON.parse(raw);
+        const i = (u.name||'U').charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent = i;
+        document.getElementById('headerAvatar').textContent  = i;
+        document.getElementById('sidebarName').textContent   = u.name;
+        document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+        if (u.role==='Admin') { document.getElementById('navAdminLink').classList.remove('hidden'); document.getElementById('navAdminLink').classList.add('flex'); }
+    }
+    document.getElementById('generateReportsBtn').addEventListener('click', window.loadReports);
+    window.loadReports();
+});
+</script>
+<script src="app.js"></script>
 </body>
 </html>
