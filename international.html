@@ -63,13 +63,16 @@
         .ph-grp{display:flex;gap:6px;align-items:stretch;}
         .ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.62rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:60px;text-align:center;display:flex;align-items:center;justify-content:center;}
 
-        /* Box rows */
-        .box-row{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;}
+        /* Box rows - UPDATED FOR DELETE BUTTON */
+        .box-row{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1fr 1fr 36px;gap:6px;align-items:center;}
         .box-input{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.12);border-radius:8px;padding:.45rem .55rem;font-family:'Poppins',sans-serif;font-size:.75rem;color:#0D2330;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s;}
         .box-input:focus{border-color:#F99523;box-shadow:0 0 0 2px rgba(249,149,35,.1);}
         .box-input.cw{background:rgba(249,149,35,.07);border-color:rgba(249,149,35,.3);color:#c47b0a;font-weight:700;cursor:default;}
         .box-num{width:44px;height:34px;border-radius:8px;background:rgba(2,115,133,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#027385;font-family:'Lexend',sans-serif;}
         .col-hdr{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(2,115,133,.5);text-align:center;}
+        .del-btn{width:36px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,0.1);color:#ef4444;transition:all 0.2s;border:1px solid transparent;cursor:pointer;}
+        .del-btn:not(:disabled):hover{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.3);transform:scale(1.05);}
+        .del-btn:disabled{opacity:0.3;cursor:not-allowed;background:transparent;}
 
         /* Totals */
         .totals-bar{background:#0D2330;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:16px;}
@@ -101,66 +104,71 @@
         .val-banner li{font-size:12px;color:#b91c1c;line-height:1.7;}
 
         /* Success modal */
-        .modal-bg{position:fixed;inset:0;background:rgba(13,35,48,.6);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+        .modal-bg{position:fixed;inset:0;background:rgba(13,35,48,.7);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
         .modal-bg.open{opacity:1;pointer-events:all;}
-        .modal-card{background:white;border-radius:20px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(13,35,48,.22);transform:scale(.94) translateY(20px);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+        .modal-card{background:white;border-radius:24px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.4);transform:scale(.95) translateY(30px);transition:all .4s cubic-bezier(.16,1,.3,1); border: 1px solid rgba(255,255,255,0.2);}
         .modal-bg.open .modal-card{transform:scale(1) translateY(0);}
-        .modal-hdr{padding:28px 28px 18px;text-align:center;border-bottom:1px solid #f0ece6;}
-        .modal-icon{width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
-        .modal-title{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;color:#0D2330;}
-        .modal-sub{font-size:12px;color:rgba(2,115,133,.6);margin-top:4px;}
-        .awb-block{margin:18px 26px;background:#0D2330;border-radius:14px;padding:18px;text-align:center;}
-        .awb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.4);margin-bottom:6px;}
-        .awb-val{font-family:'Lexend',sans-serif;font-size:21px;font-weight:900;color:#EFE7DC;letter-spacing:.07em;}
-        .awb-sub{font-size:10px;color:rgba(239,231,220,.4);margin-top:4px;}
-        .child-list{margin:0 26px 16px;}
-        .child-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);margin-bottom:8px;}
-        .child-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-radius:8px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:4px;}
-        .cr-box{font-size:11px;color:#374151;}
-        .cr-awb{font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;}
-        .sum-grid{margin:0 26px 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-        .sum-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:10px;padding:10px 12px;}
-        .sum-item .sl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:3px;}
-        .sum-item .sv{font-size:12px;font-weight:600;color:#0D2330;}
-        .modal-btns{padding:0 26px 26px;display:flex;gap:10px;flex-wrap:wrap;}
-        .mbtn{flex:1;min-width:110px;padding:10px 14px;border-radius:11px;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
-        .mb-dark{background:#0D2330;color:white;box-shadow:0 3px 8px rgba(13,35,48,.2);}
-        .mb-dark:hover{background:#122c3f;}
-        .mb-teal{background:rgba(2,115,133,.08);color:#027385;border:1px solid rgba(2,115,133,.2);}
-        .mb-teal:hover{background:rgba(2,115,133,.15);}
-        .mb-ghost{background:rgba(13,35,48,.05);color:#374151;border:1px solid #e8e0d6;}
-        .mb-ghost:hover{background:rgba(13,35,48,.09);}
+        .modal-hdr{padding:32px 28px 20px;text-align:center;border-bottom:1px solid #f0ece6; background: linear-gradient(180deg, rgba(16,185,129,0.05) 0%, rgba(255,255,255,0) 100%);}
+        .modal-icon{width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px; animation: modalPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform: scale(0);}
+        
+        @keyframes modalPop { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        .modal-title{font-family:'Lexend',sans-serif;font-size:22px;font-weight:700;color:#0D2330;}
+        .modal-sub{font-size:13px;color:rgba(2,115,133,.7);margin-top:6px;}
+        .awb-block{margin:20px 28px;background:linear-gradient(135deg, #0D2330 0%, #122c3f 100%);border-radius:16px;padding:22px;text-align:center; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); position: relative; overflow: hidden;}
+        .awb-block::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(249,149,35,0.1) 0%, transparent 60%); pointer-events: none; }
+        
+        .awb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.5);margin-bottom:8px; position: relative; z-index: 1;}
+        .awb-val{font-family:'Lexend',sans-serif;font-size:24px;font-weight:900;color:#F99523;letter-spacing:.08em; position: relative; z-index: 1; text-shadow: 0 0 20px rgba(249,149,35,0.4);}
+        .awb-sub{font-size:11px;color:rgba(239,231,220,.5);margin-top:6px; position: relative; z-index: 1;}
+        
+        .child-list{margin:0 28px 20px;}
+        .child-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:10px;}
+        .child-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-radius:10px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:6px; transition: all 0.2s;}
+        .child-row:hover { border-color: rgba(249,149,35,0.3); background: #fff; }
+        .cr-box{font-size:12px;color:#374151; font-weight: 500;}
+        .cr-awb{font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;color:#027385;}
+        
+        .sum-grid{margin:0 28px 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+        .sum-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:12px;padding:12px 14px;}
+        .sum-item .sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:4px;}
+        .sum-item .sv{font-size:13px;font-weight:600;color:#0D2330;}
+        
+        .modal-btns{padding:0 28px 28px;display:flex;gap:12px;flex-wrap:wrap;}
+        .mbtn{flex:1;min-width:120px;padding:12px 16px;border-radius:12px;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+        .mb-dark{background:#0D2330;color:white;box-shadow:0 4px 12px rgba(13,35,48,.2);}
+        .mb-dark:hover{background:#122c3f; transform: translateY(-2px); box-shadow:0 6px 16px rgba(13,35,48,.3);}
+        .mb-teal{background:rgba(2,115,133,.1);color:#027385;border:1px solid rgba(2,115,133,.2);}
+        .mb-teal:hover{background:rgba(2,115,133,.15); transform: translateY(-2px);}
+        .mb-ghost{background:transparent;color:#6b7280;border:1px solid #e5e7eb;}
+        .mb-ghost:hover{background:#f3f4f6; color: #374151;}
     </style>
 </head>
 <body class="min-h-screen flex overflow-hidden">
 
-<!-- ═══════════════════ SUCCESS MODAL ═══════════════════ -->
 <div class="modal-bg" id="successModal">
     <div class="modal-card">
         <div class="modal-hdr">
             <div class="modal-icon">
-                <svg style="width:28px;height:28px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor">
+                <svg style="width:32px;height:32px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor">
                     <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/>
                 </svg>
             </div>
-            <div class="modal-title">Booking Submitted Successfully!</div>
-            <div class="modal-sub">International cargo booking has been recorded in the system.</div>
+            <div class="modal-title">Booking Successful</div>
+            <div class="modal-sub">International cargo booking has been securely recorded.</div>
         </div>
 
-        <!-- Master AWB -->
         <div class="awb-block">
             <div class="awb-lbl">Master Airway Bill Number</div>
             <div class="awb-val" id="mAwb">—</div>
             <div class="awb-sub" id="mAwbSub">—</div>
         </div>
 
-        <!-- Child AWBs -->
         <div class="child-list">
-            <div class="child-lbl">Per-Box AWB Numbers</div>
+            <div class="child-lbl">Per-Box Tracking Numbers</div>
             <div id="childAwbList"></div>
         </div>
 
-        <!-- Summary grid -->
         <div class="sum-grid">
             <div class="sum-item"><div class="sl">Shipper</div><div class="sv" id="mShipper">—</div></div>
             <div class="sum-item"><div class="sl">Consignee</div><div class="sv" id="mConsignee">—</div></div>
@@ -168,28 +176,26 @@
             <div class="sum-item"><div class="sl">Total Boxes</div><div class="sv" id="mBoxes">—</div></div>
             <div class="sum-item"><div class="sl">Actual Weight</div><div class="sv" id="mWeight">—</div></div>
             <div class="sum-item"><div class="sl">Chargeable Weight</div><div class="sv" id="mCW">—</div></div>
-            <div class="sum-item" style="grid-column:span 2;">
-                <div class="sl">Grand Total</div>
-                <div class="sv" style="font-size:16px;font-family:'Lexend',sans-serif;font-weight:700;color:#F99523;" id="mTotal">—</div>
+            <div class="sum-item" style="grid-column:span 2; background: rgba(249,149,35,0.05); border-color: rgba(249,149,35,0.2);">
+                <div class="sl" style="color: rgba(196, 123, 10, 0.8);">Grand Total</div>
+                <div class="sv" style="font-size:18px;font-family:'Lexend',sans-serif;font-weight:700;color:#F99523;" id="mTotal">—</div>
             </div>
         </div>
 
-        <!-- Buttons -->
         <div class="modal-btns">
             <button class="mbtn mb-dark" id="btnPrintLabel">
-                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25z" clip-rule="evenodd"/></svg>
+                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="8" rx="2" ry="2"></rect><rect x="4" y="14" width="16" height="8" rx="2" ry="2"></rect><path d="M6 14h12"></path><path d="M6 18h12"></path><path d="M6 22h12"></path></svg>
                 Print Labels
             </button>
             <button class="mbtn mb-teal" id="btnPrintInvoice">
-                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Print Invoice
             </button>
-            <button class="mbtn mb-ghost" id="btnCloseModal">Close &amp; New Booking</button>
+            <button class="mbtn mb-ghost" id="btnCloseModal">Done</button>
         </div>
     </div>
 </div>
 
-<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
 <aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
     <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
         <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex"
@@ -208,7 +214,6 @@
 
         <div class="section-label" style="margin-top:10px;">Logistics</div>
 
-        <!-- New Booking — active/expanded -->
         <div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
                 <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;">
@@ -222,7 +227,6 @@
             </div>
         </div>
 
-        <!-- Processing -->
         <div class="group" style="position:relative;">
             <div class="nav-item" style="justify-content:space-between;">
                 <div style="display:flex;align-items:center;gap:10px;">
@@ -259,10 +263,8 @@
     </div>
 </aside>
 
-<!-- ═══════════════════ MAIN ═══════════════════ -->
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
 
-    <!-- Header -->
     <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
@@ -285,11 +287,9 @@
         </div>
     </header>
 
-    <!-- Body -->
     <div style="flex:1;overflow-y:auto;padding:24px;background:#f5f2ee;">
         <form id="internationalForm" class="space-y-5 max-w-6xl mx-auto">
 
-            <!-- Validation banner — shown by JS when errors exist -->
             <div class="val-banner" id="valBanner">
                 <div class="val-banner-hdr">
                     <svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/></svg>
@@ -298,10 +298,8 @@
                 <ul id="valBannerList"></ul>
             </div>
 
-            <!-- ── ROW 1: Shipper + Consignee ── -->
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 anim-1">
 
-                <!-- SHIPPER -->
                 <div class="sp">
                     <div class="sp-hdr">
                         <div style="display:flex;align-items:center;gap:9px;">
@@ -353,7 +351,6 @@
                                 <option value="" disabled selected>Select country first…</option>
                             </select>
                         </div>
-                        <!-- Shipper ID -->
                         <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
                             <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
                         </div>
@@ -374,7 +371,6 @@
                     </div>
                 </div>
 
-                <!-- CONSIGNEE -->
                 <div class="sp">
                     <div class="sp-hdr">
                         <div style="display:flex;align-items:center;gap:9px;">
@@ -426,7 +422,6 @@
                                 <option value="" disabled selected>Select country first…</option>
                             </select>
                         </div>
-                        <!-- Consignee ID -->
                         <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
                             <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
                         </div>
@@ -448,7 +443,6 @@
                 </div>
             </div>
 
-            <!-- ── ROW 2: Shipment Details ── -->
             <div class="sp anim-2">
                 <div class="sp-hdr">
                     <div style="display:flex;align-items:center;gap:9px;">
@@ -467,7 +461,6 @@
                 </div>
             </div>
 
-            <!-- ── ROW 3: Box Dimensions ── -->
             <div class="sp anim-3">
                 <div class="sp-hdr">
                     <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
@@ -483,7 +476,6 @@
                     </button>
                 </div>
                 <div style="padding:18px;">
-                    <!-- Column headers -->
                     <div class="box-row" style="margin-bottom:8px;">
                         <div class="col-hdr">Box</div>
                         <div class="col-hdr">Actual Wt (kg)</div>
@@ -491,9 +483,11 @@
                         <div class="col-hdr">W (cm)</div>
                         <div class="col-hdr">H (cm)</div>
                         <div class="col-hdr">Chargeable (kg)</div>
+                        <div class="col-hdr">Del</div>
                     </div>
+                    
                     <div id="boxContainer" class="space-y-2"></div>
-                    <!-- Totals -->
+                    
                     <div class="totals-bar">
                         <div class="ti"><div class="lbl">Total Boxes</div><div class="val o" id="lblTotalBoxes">0</div></div>
                         <div style="width:1px;height:28px;background:rgba(255,255,255,.1);"></div>
@@ -504,7 +498,6 @@
                 </div>
             </div>
 
-            <!-- ── ROW 4: Pricing ── -->
             <div class="sp anim-4">
                 <div class="sp-hdr">
                     <div style="display:flex;align-items:center;gap:9px;">
@@ -516,16 +509,15 @@
                 </div>
                 <div style="padding:18px;">
                     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;">
-                        <div><label class="fl">Rate per kg (OMR)</label><input type="number" step="0.01" id="rate" placeholder="0.00" class="field"></div>
+                        <div><label class="fl">Rate per kg (INR)</label><input type="number" step="0.01" id="rate" placeholder="0.00" class="field"></div>
                         <div><label class="fl">Packing Charges</label><input type="number" step="0.01" id="packingCharges" placeholder="0.00" class="field"></div>
                         <div><label class="fl">Additional Charges</label><input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field"></div>
-                        <div><label class="fl">Grand Total (OMR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt"></div>
+                        <div><label class="fl">Grand Total (INR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt"></div>
                     </div>
                     <p style="font-size:10px;color:rgba(2,115,133,.45);">* Standard delivery: 5 days from dispatch. AWB is auto-generated on submission.</p>
                 </div>
             </div>
 
-            <!-- Submit -->
             <div class="anim-4">
                 <button type="submit" id="submitIntBtn" class="btn-sub">
                     <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v3.75H9a.75.75 0 000 1.5h3.75v3.75a.75.75 0 001.5 0v-3.75h3.75a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
@@ -541,10 +533,6 @@
     </div>
 </main>
 
-<!-- ═══════════════════════════════════════════════════════
-     ALL LOGIC INLINED — No external JS file dependencies
-     (Country data + booking module + event wiring)
-═══════════════════════════════════════════════════════ -->
 <script>
 // ─────────────────────────────────────────────────────────
 // 1. COUNTRY MASTER DATA
@@ -618,80 +606,40 @@ const ID_TYPES = [
 ];
 
 // ─────────────────────────────────────────────────────────
-// 2. COUNTRY HELPERS
-// ─────────────────────────────────────────────────────────
-function getAllCountries() {
-  return [...COUNTRY_MASTER].sort((a, b) => a.name.localeCompare(b.name));
-}
-function getPhoneCode(code) {
-  const c = COUNTRY_MASTER.find(c => c.code === code);
-  return c ? c.phoneCode : '';
-}
-function getStates(code) {
-  const c = COUNTRY_MASTER.find(c => c.code === code);
-  return c ? [...c.states].sort() : [];
-}
-
-// ─────────────────────────────────────────────────────────
-// 3. MODULE STATE
+// 2. STATE & HELPERS
 // ─────────────────────────────────────────────────────────
 const _state = {
-  boxCount: 0,
-  boxes:    [],    // { actual, l, w, h, cw }
+  boxes:    [],    // Holds actual box data
   totals:   { boxes:0, actual:0, cw:0, grand:0 },
   lastBooking: null,
-  scriptURL: '',
+  scriptURL: 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec'
 };
 
-// ─────────────────────────────────────────────────────────
-// 4. AWB GENERATION
-// ─────────────────────────────────────────────────────────
-function generateMasterAWB() {
-  const d    = new Date();
-  const date = d.toISOString().slice(0,10).replace(/-/g,'');
-  const rand = Math.floor(1000 + Math.random() * 8999);
-  const ts   = d.getTime().toString().slice(-4);
-  return `AWB-${date}-${ts}${rand}`;
-}
-function generateChildAWB(master, idx) {
-  return `${master}B${String(idx).padStart(2,'0')}`;
-}
-function generateAllAWBs(count) {
-  const master   = generateMasterAWB();
-  const children = [];
-  for (let i = 1; i <= count; i++) children.push(generateChildAWB(master, i));
-  return { master, children };
-}
+const MAX_BOXES = 20;
 
-// ─────────────────────────────────────────────────────────
-// 5. POPULATE DROPDOWNS
-// ─────────────────────────────────────────────────────────
+function getAllCountries() { return [...COUNTRY_MASTER].sort((a, b) => a.name.localeCompare(b.name)); }
+function getPhoneCode(code) { const c = COUNTRY_MASTER.find(c => c.code === code); return c ? c.phoneCode : ''; }
+function getStates(code) { const c = COUNTRY_MASTER.find(c => c.code === code); return c ? [...c.states].sort() : []; }
+
 function populateCountryDropdown(selectId) {
   const sel = document.getElementById(selectId);
   if (!sel) return;
   sel.innerHTML = '<option value="" disabled selected>Select country…</option>';
   getAllCountries().forEach(c => {
-    const o    = document.createElement('option');
-    o.value    = c.code;
-    o.textContent = c.name;
-    sel.appendChild(o);
+    const o = document.createElement('option'); o.value = c.code; o.textContent = c.name; sel.appendChild(o);
   });
 }
 
 function populateStateDropdown(selectId, countryCode) {
-  const sel    = document.getElementById(selectId);
+  const sel = document.getElementById(selectId);
   const states = getStates(countryCode);
   if (!sel) return;
   if (states.length === 0) {
-    sel.innerHTML = '<option value="">N/A</option>';
-    sel.value = 'N/A';
+    sel.innerHTML = '<option value="">N/A</option>'; sel.value = 'N/A';
   } else {
     sel.innerHTML = '<option value="" disabled selected>Select state/province…</option>';
     states.forEach(s => {
-      const o    = document.createElement('option');
-      o.value    = s;
-      o.textContent = s;
-      sel.appendChild(o);
+      const o = document.createElement('option'); o.value = s; o.textContent = s; sel.appendChild(o);
     });
   }
 }
@@ -702,15 +650,13 @@ function populateIdTypes() {
     if (!sel) return;
     sel.innerHTML = '<option value="">— None —</option>';
     ID_TYPES.forEach(t => {
-      const o = document.createElement('option');
-      o.value = t; o.textContent = t;
-      sel.appendChild(o);
+      const o = document.createElement('option'); o.value = t; o.textContent = t; sel.appendChild(o);
     });
   });
 }
 
 function updatePhoneCode(countryCode, displayId, hiddenId) {
-  const code    = getPhoneCode(countryCode);
+  const code = getPhoneCode(countryCode);
   const display = document.getElementById(displayId);
   const hidden  = document.getElementById(hiddenId);
   if (display) display.textContent = code || '—';
@@ -718,80 +664,116 @@ function updatePhoneCode(countryCode, displayId, hiddenId) {
 }
 
 // ─────────────────────────────────────────────────────────
-// 6. BOX MANAGEMENT
+// 3. BULLETPROOF BOX MANAGEMENT ENGINE
 // ─────────────────────────────────────────────────────────
-const MAX_BOXES = 20;
 
-function addBox() {
-  if (_state.boxCount >= MAX_BOXES) return;
-  _state.boxCount++;
-  const i = _state.boxCount;
-  _state.boxes.push({ actual:0, l:0, w:0, h:0, cw:0 });
+function renderBoxes() {
+    const container = document.getElementById('boxContainer');
+    container.innerHTML = ''; // Clear DOM
 
-  const row     = document.createElement('div');
-  row.id        = `boxRow${i}`;
-  row.className = 'box-row';
-  row.innerHTML = `
-    <div class="box-num">${i}</div>
-    <input type="number" step="0.01" min="0" id="b${i}W"  placeholder="0.00" class="box-input">
-    <input type="number" step="0.01" min="0" id="b${i}L"  placeholder="0"    class="box-input">
-    <input type="number" step="0.01" min="0" id="b${i}Wi" placeholder="0"    class="box-input">
-    <input type="number" step="0.01" min="0" id="b${i}H"  placeholder="0"    class="box-input">
-    <input type="number" step="0.01" min="0" id="b${i}CW" readonly placeholder="—" class="box-input cw">
-  `;
+    _state.boxes.forEach((box, idx) => {
+        const i = idx + 1; // 1-based index for UI
+        const row = document.createElement('div');
+        row.className = 'box-row mb-2';
+        
+        // Delete button disabled logic
+        const isDeleteDisabled = _state.boxes.length === 1;
+        const btnClass = isDeleteDisabled ? 'opacity-30 cursor-not-allowed' : 'hover:bg-red-100 dark:hover:bg-red-900/30';
+        
+        row.innerHTML = `
+            <div class="box-num">${i}</div>
+            <input type="number" step="0.01" min="0" id="b${i}W"  value="${box.actual || ''}" placeholder="0.00" class="box-input">
+            <input type="number" step="0.01" min="0" id="b${i}L"  value="${box.l || ''}" placeholder="L" class="box-input">
+            <input type="number" step="0.01" min="0" id="b${i}Wi" value="${box.w || ''}" placeholder="W" class="box-input">
+            <input type="number" step="0.01" min="0" id="b${i}H"  value="${box.h || ''}" placeholder="H" class="box-input">
+            <input type="number" step="0.01" min="0" id="b${i}CW" value="${box.cw || ''}" readonly placeholder="—" class="box-input cw">
+            <button type="button" class="del-btn ${btnClass}" ${isDeleteDisabled ? 'disabled' : ''} onclick="removeBox(${idx})">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            </button>
+        `;
+        container.appendChild(row);
 
-  ['W','L','Wi','H'].forEach(f => {
-    row.querySelector(`#b${i}${f}`).addEventListener('input', () => {
-      syncBox(i);
-      recalcAll();
+        // Attach listeners directly to inputs
+        ['W','L','Wi','H'].forEach(field => {
+            row.querySelector(`#b${i}${field}`).addEventListener('input', (e) => {
+                let val = parseFloat(e.target.value) || 0;
+                if (field === 'W') _state.boxes[idx].actual = val;
+                if (field === 'L') _state.boxes[idx].l = val;
+                if (field === 'Wi') _state.boxes[idx].w = val;
+                if (field === 'H') _state.boxes[idx].h = val;
+                recalcAll(); // Auto-calculate on type
+            });
+        });
     });
-  });
 
-  document.getElementById('boxContainer').appendChild(row);
-  if (_state.boxCount >= MAX_BOXES) {
-    document.getElementById('addBoxBtn').disabled = true;
-  }
+    document.getElementById('addBoxBtn').disabled = (_state.boxes.length >= MAX_BOXES);
+    recalcAll();
 }
 
-function syncBox(i) {
-  const idx          = i - 1;
-  _state.boxes[idx].actual = parseFloat(document.getElementById(`b${i}W`)?.value)  || 0;
-  _state.boxes[idx].l      = parseFloat(document.getElementById(`b${i}L`)?.value)  || 0;
-  _state.boxes[idx].w      = parseFloat(document.getElementById(`b${i}Wi`)?.value) || 0;
-  _state.boxes[idx].h      = parseFloat(document.getElementById(`b${i}H`)?.value)  || 0;
+function addBox() {
+    if (_state.boxes.length >= MAX_BOXES) return;
+    _state.boxes.push({ actual: 0, l: 0, w: 0, h: 0, cw: 0 });
+    renderBoxes();
+}
+
+window.removeBox = function(idx) {
+    if (_state.boxes.length <= 1) return; // Must have at least 1
+    _state.boxes.splice(idx, 1);
+    renderBoxes();
 }
 
 function recalcAll() {
-  let totalActual = 0, totalCW = 0;
-  _state.boxes.forEach((box, idx) => {
-    const vol = (box.l * box.w * box.h) / 5000;
-    const cw  = Math.max(box.actual, vol);
-    _state.boxes[idx].cw = cw;
-    totalActual += box.actual;
-    totalCW     += cw;
-    const cwEl = document.getElementById(`b${idx+1}CW`);
-    if (cwEl) cwEl.value = cw > 0 ? cw.toFixed(2) : '';
-  });
+    let totalActual = 0, totalCW = 0;
+    
+    _state.boxes.forEach((box, idx) => {
+        const vol = (box.l * box.w * box.h) / 5000;
+        const cw  = Math.max(box.actual, vol);
+        _state.boxes[idx].cw = cw;
+        totalActual += box.actual;
+        totalCW += cw;
+        
+        const cwEl = document.getElementById(`b${idx+1}CW`);
+        if (cwEl) cwEl.value = cw > 0 ? cw.toFixed(2) : '';
+    });
 
-  const rate    = parseFloat(document.getElementById('rate')?.value)              || 0;
-  const packing = parseFloat(document.getElementById('packingCharges')?.value)    || 0;
-  const extra   = parseFloat(document.getElementById('additionalCharges')?.value) || 0;
-  const grand   = rate > 0 ? (totalCW * rate) + packing + extra : 0;
+    const rate    = parseFloat(document.getElementById('rate')?.value) || 0;
+    const packing = parseFloat(document.getElementById('packingCharges')?.value) || 0;
+    const extra   = parseFloat(document.getElementById('additionalCharges')?.value) || 0;
+    const grand   = rate > 0 ? (totalCW * rate) + packing + extra : 0;
 
-  _state.totals = { boxes:_state.boxes.length, actual:totalActual, cw:totalCW, grand };
+    _state.totals = { boxes: _state.boxes.length, actual: totalActual, cw: totalCW, grand: grand };
 
-  document.getElementById('lblTotalBoxes').textContent  = _state.boxes.length;
-  document.getElementById('lblTotalActual').textContent = totalActual.toFixed(2) + ' kg';
-  document.getElementById('lblTotalCW').textContent     = totalCW.toFixed(2) + ' kg';
-  const gtEl = document.getElementById('grandTotal');
-  if (gtEl) gtEl.value = grand > 0 ? grand.toFixed(2) : '';
+    document.getElementById('lblTotalBoxes').textContent  = _state.boxes.length;
+    document.getElementById('lblTotalActual').textContent = totalActual.toFixed(2) + ' kg';
+    document.getElementById('lblTotalCW').textContent     = totalCW.toFixed(2) + ' kg';
+    
+    const gtEl = document.getElementById('grandTotal');
+    if (gtEl) gtEl.value = grand > 0 ? grand.toFixed(2) : '';
 }
 
 // ─────────────────────────────────────────────────────────
-// 7. VALIDATION
+// 4. AWB GENERATION & UTILS
 // ─────────────────────────────────────────────────────────
+function generateMasterAWB() {
+  const d    = new Date();
+  const date = d.toISOString().slice(0,10).replace(/-/g,'');
+  const rand = Math.floor(1000 + Math.random() * 8999);
+  const ts   = d.getTime().toString().slice(-4);
+  return `AWB-${date}-${ts}${rand}`;
+}
+function generateChildAWB(master, idx) { return `${master}B${String(idx).padStart(2,'0')}`; }
+function generateAllAWBs(count) {
+  const master = generateMasterAWB();
+  const children = [];
+  for (let i = 1; i <= count; i++) children.push(generateChildAWB(master, i));
+  return { master, children };
+}
+
 function val(id) { return (document.getElementById(id)?.value || '').trim(); }
 
+// ─────────────────────────────────────────────────────────
+// 5. VALIDATION & SUBMISSION
+// ─────────────────────────────────────────────────────────
 function validateForm() {
   const errors = [];
   const req = [
@@ -808,7 +790,6 @@ function validateForm() {
   ];
   req.forEach(([id, label]) => { if (!val(id)) errors.push(`${label} is required.`); });
 
-  // ID expiry dates must be future if filled
   ['shipperIdExpiry','consigneeIdExpiry'].forEach(id => {
     const v = val(id);
     if (v) {
@@ -822,101 +803,82 @@ function validateForm() {
   _state.boxes.forEach((box, i) => {
     if (!box.actual || box.actual <= 0) errors.push(`Box ${i+1}: Actual weight is required.`);
   });
-
   return errors;
 }
 
 function showErrors(errors) {
   const banner = document.getElementById('valBanner');
   const list   = document.getElementById('valBannerList');
-  const title  = document.getElementById('valBannerTitle');
-  title.textContent = `Please fix ${errors.length} error${errors.length!==1?'s':''} before submitting`;
-  list.innerHTML    = errors.map(e => `<li>${e}</li>`).join('');
+  document.getElementById('valBannerTitle').textContent = `Please fix ${errors.length} error${errors.length!==1?'s':''} before submitting`;
+  list.innerHTML = errors.map(e => `<li>${e}</li>`).join('');
   banner.style.display = 'block';
   banner.scrollIntoView({ behavior:'smooth', block:'start' });
 }
+function hideErrors() { document.getElementById('valBanner').style.display = 'none'; }
 
-function hideErrors() {
-  document.getElementById('valBanner').style.display = 'none';
-}
-
-// ─────────────────────────────────────────────────────────
-// 8. BUILD PAYLOAD
-// ─────────────────────────────────────────────────────────
 function buildPayload(awbs) {
-  // Get country name text from select
   const originSel = document.getElementById('originCountry');
   const destSel   = document.getElementById('destCountry');
   const originName = originSel.options[originSel.selectedIndex]?.text || val('originCountry');
   const destName   = destSel.options[destSel.selectedIndex]?.text     || val('destCountry');
 
   const boxData = _state.boxes.map((box, i) => ({
-    boxNumber: i+1,
-    childAWB:  awbs.children[i],
-    actualWeight: box.actual,
-    length:    box.l,
-    width:     box.w,
-    height:    box.h,
-    cw:        box.cw,
+    boxNumber: i+1, childAWB: awbs.children[i], actualWeight: box.actual,
+    length: box.l, width: box.w, height: box.h, cw: box.cw,
   }));
 
+  // Match GAS expected flat payload logic (b1W, b1CW, etc.) for backwards compatibility
+  const legacyBoxMapping = {};
+  boxData.forEach((b, i) => {
+      legacyBoxMapping[`b${i+1}W`] = b.actualWeight;
+      legacyBoxMapping[`b${i+1}D`] = `${b.length}x${b.width}x${b.height}`;
+      legacyBoxMapping[`b${i+1}CW`] = b.cw;
+  });
+
   return {
-    formType:          'internationalBooking',
-    masterAWB:         awbs.master,
-    childAWBs:         JSON.stringify(awbs.children),
+    formType: 'international', // Trigger GAS backend
+    ...legacyBoxMapping,       // Spread legacy boxes for GAS sheet
+    masterAWB: awbs.master,
+    shipperName: val('shipperName'),
+    contactNumber: (val('shipperPhoneCode') + val('contactNumber')).trim(),
+    altNumber: val('altNumber'),
+    shipperAddress: val('shipperAddress'),
+    shipperCity: val('shipperCity'),
+    shipperState: val('shipperState'),
+    originCountry: originName,
+    postalCode: val('postalCode'),
+    
+    receiverNameInt: val('receiverNameInt'),
+    receiverPhoneInt: (val('consigneePhoneCode') + val('receiverPhoneInt')).trim(),
+    receiverAlt: val('receiverAltInt'),
+    receiverAddress: val('receiverAddress'),
+    city: val('consigneeCity'),
+    receiverState: val('consigneeState'),
+    destCountry: destName,
+    zipCode: val('zipCode'),
+    
+    shipmentType: val('shipmentType'),
+    cargoType: val('cargoType'),
+    commodity: val('commodity'),
+    shipmentValue: val('shipmentValue'),
+    description: val('description'),
 
-    // Shipper
-    shipperName:       val('shipperName'),
-    contactNumber:     (val('shipperPhoneCode') + val('contactNumber')).trim(),
-    altNumber:         val('altNumber'),
-    shipperAddress:    val('shipperAddress'),
-    shipperCity:       val('shipperCity'),
-    shipperState:      val('shipperState'),
-    originCountry:     originName,
-    postalCode:        val('postalCode'),
-    shipperIdType:     val('shipperIdType'),
-    shipperIdNumber:   val('shipperIdNumber'),
-    shipperIdExpiry:   val('shipperIdExpiry'),
-
-    // Consignee
-    receiverNameInt:   val('receiverNameInt'),
-    receiverPhoneInt:  (val('consigneePhoneCode') + val('receiverPhoneInt')).trim(),
-    receiverAltInt:    val('receiverAltInt'),
-    receiverAddress:   val('receiverAddress'),
-    consigneeCity:     val('consigneeCity'),
-    consigneeState:    val('consigneeState'),
-    destCountry:       destName,
-    zipCode:           val('zipCode'),
-    consigneeIdType:   val('consigneeIdType'),
-    consigneeIdNumber: val('consigneeIdNumber'),
-    consigneeIdExpiry: val('consigneeIdExpiry'),
-
-    // Shipment
-    shipmentType:      val('shipmentType'),
-    cargoType:         val('cargoType'),
-    commodity:         val('commodity'),
-    shipmentValue:     val('shipmentValue'),
-    description:       val('description'),
-
-    // Pricing
-    rate:              val('rate'),
-    packingCharges:    val('packingCharges'),
+    rate: val('rate'),
+    packingCharges: val('packingCharges'),
     additionalCharges: val('additionalCharges'),
-    grandTotal:        _state.totals.grand.toFixed(2),
+    grandTotal: _state.totals.grand.toFixed(2),
 
-    // Boxes
-    totalBoxes:        _state.totals.boxes,
-    totalActualWeight: _state.totals.actual.toFixed(2),
-    totalCW:           _state.totals.cw.toFixed(2),
-    boxes:             JSON.stringify(boxData),
+    totalBoxes: _state.totals.boxes,
+    totalWeight: _state.totals.actual.toFixed(2),
+    totalChargeableWeight: _state.totals.cw.toFixed(2)
   };
 }
 
 // ─────────────────────────────────────────────────────────
-// 9. SUCCESS MODAL
+// 6. SUCCESS MODAL & PRINTING
 // ─────────────────────────────────────────────────────────
 function showSuccessModal(payload, awbs) {
-  _state.lastBooking = { ...payload, masterAWB: awbs.master, childAWBs: awbs.children };
+  _state.lastBooking = { ...payload, childAWBs: awbs.children };
 
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('mAwb',      awbs.master);
@@ -926,17 +888,13 @@ function showSuccessModal(payload, awbs) {
   set('mOrigin',   payload.originCountry);
   set('mDest',     payload.destCountry);
   set('mBoxes',    payload.totalBoxes);
-  set('mWeight',   payload.totalActualWeight + ' kg');
-  set('mCW',       payload.totalCW + ' kg');
-  set('mTotal',    'OMR ' + payload.grandTotal);
+  set('mWeight',   payload.totalWeight + ' kg');
+  set('mCW',       payload.totalChargeableWeight + ' kg');
+  set('mTotal',    'INR ' + payload.grandTotal); // Updated to INR
 
-  // Child AWB list
   const list = document.getElementById('childAwbList');
   list.innerHTML = awbs.children.map((awb, i) =>
-    `<div class="child-row">
-       <span class="cr-box">Box ${i+1}</span>
-       <span class="cr-awb">${awb}</span>
-     </div>`
+    `<div class="child-row"><span class="cr-box">Box ${i+1}</span><span class="cr-awb">${awb}</span></div>`
   ).join('');
 
   document.getElementById('successModal').classList.add('open');
@@ -944,228 +902,108 @@ function showSuccessModal(payload, awbs) {
 
 function closeModal() {
   document.getElementById('successModal').classList.remove('open');
-  resetForm();
-}
-
-function resetForm() {
   document.getElementById('internationalForm').reset();
-  document.getElementById('boxContainer').innerHTML = '';
-  _state.boxCount = 0;
-  _state.boxes    = [];
-  _state.totals   = { boxes:0, actual:0, cw:0, grand:0 };
-  _state.lastBooking = null;
-  document.getElementById('addBoxBtn').disabled = false;
-  document.getElementById('lblTotalBoxes').textContent  = '0';
-  document.getElementById('lblTotalActual').textContent = '0.00 kg';
-  document.getElementById('lblTotalCW').textContent     = '0.00 kg';
-  document.getElementById('grandTotal').value = '';
-  // Re-set phone code displays
-  document.getElementById('shipperPhoneCodeDisplay').textContent  = '—';
-  document.getElementById('consigneePhoneCodeDisplay').textContent = '—';
+  _state.boxes = [];
+  addBox(); // resets to 1 box
   hideErrors();
-  addBox(); // start with one box
 }
 
-// ─────────────────────────────────────────────────────────
-// 10. WAYBILL LABEL PRINT
-// ─────────────────────────────────────────────────────────
 function printLabels() {
   const b = _state.lastBooking;
   if (!b) return;
 
   const labels = b.childAWBs.map((awb, i) => {
-    const boxes  = JSON.parse(b.boxes || '[]');
-    const box    = boxes[i] || {};
+    // Extract dimensions safely based on legacy format payload mapping
+    let weight = b[`b${i+1}W`] || 0;
+    let cw = b[`b${i+1}CW`] || 0;
+    let dims = b[`b${i+1}D`] || "0x0x0";
+    
     return `
     <div class="label">
-      <div class="lhdr">
-        <span class="lbrand">NUVANA EXPRESS</span>
-        <span class="lsvc">${b.shipmentType || 'INTL'}</span>
-      </div>
-      <div class="lawb">
-        <div class="lawb-lbl">AWB</div>
-        <div class="lawb-val">${awb}</div>
-        <div class="lawb-sub">Box ${i+1} of ${b.childAWBs.length} · Master: ${b.masterAWB}</div>
-      </div>
+      <div class="lhdr"><span class="lbrand">NUVANA EXPRESS</span><span class="lsvc">${b.shipmentType || 'INTL'}</span></div>
+      <div class="lawb"><div class="lawb-lbl">AWB</div><div class="lawb-val">${awb}</div><div class="lawb-sub">Box ${i+1} of ${b.childAWBs.length} · Master: ${b.masterAWB}</div></div>
       <div class="lparties">
-        <div class="lparty">
-          <div class="lparty-t">▲ FROM</div>
-          <div class="lparty-n">${b.shipperName}</div>
-          <div class="lparty-a">${b.shipperAddress||''}, ${b.shipperCity||''}, ${b.shipperState||''}</div>
-          <div class="lparty-a">${b.originCountry||''} ${b.postalCode||''}</div>
-          <div class="lparty-p">${b.contactNumber||''}</div>
-        </div>
-        <div class="lparty lparty-to">
-          <div class="lparty-t">▼ TO</div>
-          <div class="lparty-n">${b.receiverNameInt}</div>
-          <div class="lparty-a">${b.receiverAddress||''}, ${b.consigneeCity||''}, ${b.consigneeState||''}</div>
-          <div class="lparty-a">${b.destCountry||''} ${b.zipCode||''}</div>
-          <div class="lparty-p">${b.receiverPhoneInt||''}</div>
-        </div>
+        <div class="lparty"><div class="lparty-t">▲ FROM</div><div class="lparty-n">${b.shipperName}</div><div class="lparty-a">${b.shipperAddress||''}, ${b.shipperCity||''}, ${b.shipperState||''}</div><div class="lparty-a">${b.originCountry||''} ${b.postalCode||''}</div><div class="lparty-p">${b.contactNumber||''}</div></div>
+        <div class="lparty lparty-to"><div class="lparty-t">▼ TO</div><div class="lparty-n">${b.receiverNameInt}</div><div class="lparty-a">${b.receiverAddress||''}, ${b.city||''}, ${b.receiverState||''}</div><div class="lparty-a">${b.destCountry||''} ${b.zipCode||''}</div><div class="lparty-p">${b.receiverPhoneInt||''}</div></div>
       </div>
       <div class="ldetails">
-        <div class="ldr"><span>Weight:</span><strong>${box.actualWeight||0} kg act / ${box.cw||0} kg cw</strong></div>
-        <div class="ldr"><span>Dims:</span><strong>${box.length||0}×${box.width||0}×${box.height||0} cm</strong></div>
+        <div class="ldr"><span>Weight:</span><strong>${weight} kg act / ${cw} kg cw</strong></div>
+        <div class="ldr"><span>Dims:</span><strong>${dims} cm</strong></div>
         <div class="ldr"><span>Commodity:</span><strong>${b.commodity||'—'}</strong></div>
         <div class="ldr"><span>Declared:</span><strong>USD ${b.shipmentValue||'0'}</strong></div>
       </div>
-      <div class="lftr">
-        <span class="ldest">${b.destCountry||'DESTINATION'}</span>
-        <span class="ldate">${new Date().toLocaleDateString('en-GB')}</span>
-      </div>
+      <div class="lftr"><span class="ldest">${b.destCountry||'DESTINATION'}</span><span class="ldate">${new Date().toLocaleDateString('en-GB')}</span></div>
     </div>`;
   }).join('');
 
   const w = window.open('','_blank','width=500,height=750');
-  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Labels</title>
-  <style>
-    @page{size:4in 6in;margin:0;}
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:Arial Narrow,Arial,sans-serif;background:#fff;}
-    .label{width:4in;height:6in;padding:.18in .2in;border:2px solid #000;display:flex;flex-direction:column;gap:.07in;overflow:hidden;page-break-after:always;}
-    .label:last-child{page-break-after:auto;}
-    .lhdr{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding-bottom:.06in;}
-    .lbrand{font-size:14pt;font-weight:900;letter-spacing:.04em;}
-    .lsvc{font-size:7.5pt;font-weight:700;text-transform:uppercase;background:#000;color:#fff;padding:2px 7px;border-radius:3px;}
-    .lawb{text-align:center;padding:.07in 0;border-bottom:1.5px solid #000;background:#f7f7f7;border-radius:3px;}
-    .lawb-lbl{font-size:6.5pt;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:3px;}
-    .lawb-val{font-size:17pt;font-weight:900;font-family:'Courier New',monospace;letter-spacing:.06em;}
-    .lawb-sub{font-size:6pt;color:#555;margin-top:3px;}
-    .lparties{display:flex;flex-direction:column;gap:.05in;flex:1;}
-    .lparty{padding:.05in .07in;border:1px solid #999;border-radius:3px;}
-    .lparty-to{border:1.5px solid #000;}
-    .lparty-t{font-size:6pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:2px;}
-    .lparty-n{font-size:10pt;font-weight:800;line-height:1.2;}
-    .lparty-a{font-size:7.5pt;line-height:1.35;color:#222;}
-    .lparty-p{font-size:7.5pt;font-family:'Courier New',monospace;margin-top:2px;}
-    .ldetails{border-top:1.5px solid #000;padding-top:.05in;}
-    .ldr{display:flex;justify-content:space-between;font-size:7.5pt;line-height:1.55;}
-    .ldr span{color:#555;}.ldr strong{font-weight:700;}
-    .lftr{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #000;padding-top:.05in;margin-top:auto;}
-    .ldest{font-size:12pt;font-weight:900;background:#000;color:#fff;padding:2px 10px;border-radius:3px;text-transform:uppercase;}
-    .ldate{font-size:7pt;color:#555;}
-    @media screen{body{background:#e5e5e5;padding:20px;}.label{margin:0 auto 20px;box-shadow:0 4px 16px rgba(0,0,0,.2);}}
-  </style></head><body>${labels}</body></html>`);
-  w.document.close();
-  w.focus();
-  setTimeout(() => w.print(), 400);
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Labels</title><style>@page{size:4in 6in;margin:0;}*{box-sizing:border-box;margin:0;padding:0;}body{font-family:Arial Narrow,Arial,sans-serif;background:#fff;}.label{width:4in;height:6in;padding:.18in .2in;border:2px solid #000;display:flex;flex-direction:column;gap:.07in;overflow:hidden;page-break-after:always;}.label:last-child{page-break-after:auto;}.lhdr{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding-bottom:.06in;}.lbrand{font-size:14pt;font-weight:900;letter-spacing:.04em;}.lsvc{font-size:7.5pt;font-weight:700;text-transform:uppercase;background:#000;color:#fff;padding:2px 7px;border-radius:3px;}.lawb{text-align:center;padding:.07in 0;border-bottom:1.5px solid #000;background:#f7f7f7;border-radius:3px;}.lawb-lbl{font-size:6.5pt;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:3px;}.lawb-val{font-size:17pt;font-weight:900;font-family:'Courier New',monospace;letter-spacing:.06em;}.lawb-sub{font-size:6pt;color:#555;margin-top:3px;}.lparties{display:flex;flex-direction:column;gap:.05in;flex:1;}.lparty{padding:.05in .07in;border:1px solid #999;border-radius:3px;}.lparty-to{border:1.5px solid #000;}.lparty-t{font-size:6pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:2px;}.lparty-n{font-size:10pt;font-weight:800;line-height:1.2;}.lparty-a{font-size:7.5pt;line-height:1.35;color:#222;}.lparty-p{font-size:7.5pt;font-family:'Courier New',monospace;margin-top:2px;}.ldetails{border-top:1.5px solid #000;padding-top:.05in;}.ldr{display:flex;justify-content:space-between;font-size:7.5pt;line-height:1.55;}.ldr span{color:#555;}.ldr strong{font-weight:700;}.lftr{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #000;padding-top:.05in;margin-top:auto;}.ldest{font-size:12pt;font-weight:900;background:#000;color:#fff;padding:2px 10px;border-radius:3px;text-transform:uppercase;}.ldate{font-size:7pt;color:#555;}@media screen{body{background:#e5e5e5;padding:20px;}.label{margin:0 auto 20px;box-shadow:0 4px 16px rgba(0,0,0,.2);}}</style></head><body>${labels}</body></html>`);
+  w.document.close(); w.focus(); setTimeout(() => w.print(), 400);
 }
 
 // ─────────────────────────────────────────────────────────
-// 11. FORM SUBMISSION
-// ─────────────────────────────────────────────────────────
-async function handleSubmit(e) {
-  e.preventDefault();
-
-  // Sync all box states from DOM
-  for (let i = 1; i <= _state.boxCount; i++) syncBox(i);
-  recalcAll();
-
-  const errors = validateForm();
-  if (errors.length > 0) { showErrors(errors); return; }
-  hideErrors();
-
-  const awbs    = generateAllAWBs(_state.boxes.length);
-  const payload = buildPayload(awbs);
-
-  // Loading state
-  const btn     = document.getElementById('submitIntBtn');
-  const btnTxt  = document.getElementById('btnTextInt');
-  const spinner = document.getElementById('loadingIconInt');
-  btn.disabled      = true;
-  btnTxt.textContent = 'Transmitting…';
-  spinner.classList.remove('hidden');
-
-  try {
-    const res    = await fetch(_state.scriptURL, {
-      method:  'POST',
-      body:    JSON.stringify(payload),
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    });
-    const result = await res.json();
-
-    if (result.result === 'success') {
-      showSuccessModal(payload, awbs);
-    } else {
-      alert('Booking failed: ' + (result.error || 'Unknown error from server.'));
-    }
-  } catch (err) {
-    console.error('Submit error:', err);
-    alert('Connection failed. Please check your network and try again.');
-  } finally {
-    btn.disabled       = false;
-    btnTxt.textContent = 'Transmit International Booking';
-    spinner.classList.add('hidden');
-  }
-}
-
-// ─────────────────────────────────────────────────────────
-// 12. INIT — runs when DOM is ready
+// 7. INITIALIZATION & LISTENERS
 // ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ── User info from session ──
   const raw = sessionStorage.getItem('erp_user');
   if (raw) {
     try {
       const u = JSON.parse(raw);
       const i = (u.name || 'U').charAt(0).toUpperCase();
-      document.getElementById('sidebarAvatar').textContent = i;
-      document.getElementById('headerAvatar').textContent  = i;
-      document.getElementById('sidebarName').textContent   = u.name;
-      document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+      if(document.getElementById('sidebarAvatar')) document.getElementById('sidebarAvatar').textContent = i;
+      if(document.getElementById('headerAvatar')) document.getElementById('headerAvatar').textContent = i;
+      if(document.getElementById('sidebarName')) document.getElementById('sidebarName').textContent = u.name;
+      if(document.getElementById('sidebarRole')) document.getElementById('sidebarRole').textContent = `${u.role} · ${u.branchId}`;
       if (u.role === 'Admin') {
-        const al = document.getElementById('navAdminLink');
-        if (al) { al.style.display = 'flex'; }
+        const al = document.getElementById('navAdminLink'); if (al) al.style.display = 'flex';
       }
     } catch(_) {}
   }
 
-  // ── Populate dropdowns ──
-  populateCountryDropdown('originCountry');
-  populateCountryDropdown('destCountry');
-  populateIdTypes();
+  populateCountryDropdown('originCountry'); populateCountryDropdown('destCountry'); populateIdTypes();
 
-  // ── Country change → phone code + states ──
   document.getElementById('originCountry')?.addEventListener('change', e => {
-    const code = e.target.value;
-    updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode');
-    populateStateDropdown('shipperState', code);
+    const code = e.target.value; updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode'); populateStateDropdown('shipperState', code);
   });
   document.getElementById('destCountry')?.addEventListener('change', e => {
-    const code = e.target.value;
-    updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode');
-    populateStateDropdown('consigneeState', code);
+    const code = e.target.value; updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode'); populateStateDropdown('consigneeState', code);
   });
 
-  // ── Pricing change → grand total ──
-  ['rate','packingCharges','additionalCharges'].forEach(id => {
-    document.getElementById(id)?.addEventListener('input', recalcAll);
-  });
+  ['rate','packingCharges','additionalCharges'].forEach(id => { document.getElementById(id)?.addEventListener('input', recalcAll); });
 
-  // ── Add box button ──
   document.getElementById('addBoxBtn')?.addEventListener('click', addBox);
+  
+  // Custom Form Submit Handler
+  document.getElementById('internationalForm')?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const errors = validateForm();
+      if (errors.length > 0) return showErrors(errors);
+      hideErrors();
 
-  // ── Form submit ──
-  document.getElementById('internationalForm')?.addEventListener('submit', handleSubmit);
+      const awbs = generateAllAWBs(_state.boxes.length);
+      const payload = buildPayload(awbs);
 
-  // ── Modal buttons ──
+      const btn = document.getElementById('submitIntBtn'); const btnTxt = document.getElementById('btnTextInt'); const spinner = document.getElementById('loadingIconInt');
+      btn.disabled = true; btnTxt.textContent = 'Transmitting…'; spinner.classList.remove('hidden');
+
+      try {
+        const res = await fetch(_state.scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+        const result = await res.json();
+        if (result.result === 'success') { showSuccessModal(payload, awbs); } 
+        else { alert('Booking failed: ' + (result.error || 'Unknown error.')); }
+      } catch (err) { alert('Connection failed. Please check your network and try again.'); } 
+      finally { btn.disabled = false; btnTxt.textContent = 'Transmit International Booking'; spinner.classList.add('hidden'); }
+  });
+
   document.getElementById('btnCloseModal')?.addEventListener('click', closeModal);
   document.getElementById('btnPrintLabel')?.addEventListener('click', printLabels);
   document.getElementById('btnPrintInvoice')?.addEventListener('click', () => window.print());
-  document.getElementById('successModal')?.addEventListener('click', e => {
-    if (e.target.id === 'successModal') closeModal();
-  });
 
-  // ── Start with one box ──
+  // Start with 1 Box
   addBox();
 });
 </script>
-
-<!-- app.js last — it calls InternationalBookingModule.init() which
-     we no longer need since everything is inlined above.
-     app.js handles auth guard and other shared logic. -->
-<script src="app.js"></script>
 
 </body>
 </html>
