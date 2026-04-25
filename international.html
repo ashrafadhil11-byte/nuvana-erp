@@ -464,7 +464,8 @@
                             <option value="Air Freight (Standard)">Air Freight (Standard)</option>
                             <option value="Sea Freight (LCL)">Sea Freight (LCL)</option>
                             <option value="Sea Freight (FCL)">Sea Freight (FCL)</option>
-                            <option value="Land Transport">Land Transport</option>
+                            <option value="Land Transport (LTL)">Land Transport (LTL)</option>
+                            <option value="Land Transport (FTL)">Land Transport (FTL)</option>
                         </select>
                     </div>
                     <div><label class="fl">Cargo Type</label><input type="text" id="cargoType" placeholder="e.g. General" class="field"></div>
@@ -1204,6 +1205,62 @@ document.addEventListener('DOMContentLoaded', () => {
   // Start with 1 Box
   addBox();
 });
+
+// ─────────────────────────────────────────────────────────
+// 10. WAYBILL LABEL PRINT (Redirects to waybill-label.html)
+// ─────────────────────────────────────────────────────────
+function printLabels() {
+  const b = _state.lastBooking;
+  if (!b) return;
+
+  const serviceCodes = {
+    "Express D2D": "EXP-D2D", "Document": "DOC", "Excess Baggage": "BAG",
+    "Air Freight (Express)": "AIR-EXP", "Air Freight (Standard)": "AIR-STD",
+    "Sea Freight (LCL)": "SEA-LCL", "Sea Freight (FCL)": "SEA-FCL",
+    "Land Transport (LTL)": "LND-LTL", "Land Transport (FTL)": "LND-FTL"
+  };
+  const printSvcCode = serviceCodes[b.shipmentType] || b.shipmentType || 'INTL';
+
+  // We will open the waybill window. For multiple boxes, it's best to print them one by one, 
+  // or we can pass the data for the FIRST box as a test.
+  // To handle multiple boxes cleanly with the new HTML file, we loop through them.
+  
+  b.childAWBs.forEach((childAwb, index) => {
+      // Save data for this specific box to memory
+      const printData = {
+          service: printSvcCode,
+          masterAwb: b.masterAWB,
+          childAwb: childAwb,
+          currentBox: index + 1,
+          totalBoxes: b.childAWBs.length,
+          
+          shipperName: b.shipperName,
+          shipperAddress: b.shipperAddress || '',
+          shipperCity: b.shipperCity || '',
+          shipperState: b.shipperState || '',
+          originCountry: b.originCountry || '',
+          postalCode: b.postalCode || '',
+          shipperPhone: b.contactNumber || '',
+          
+          consigneeName: b.receiverNameInt,
+          receiverAddress: b.receiverAddress || '',
+          consigneeCity: b.city || '',
+          consigneeState: b.receiverState || '',
+          destCountry: b.destCountry || '',
+          zipCode: b.zipCode || '',
+          consigneePhone: b.receiverPhoneInt || '',
+          
+          boxWeight: b[`b${index+1}W`] || 0,
+          boxCw: b[`b${index+1}CW`] || 0,
+          boxDims: b[`b${index+1}D`] || "0x0x0",
+          commodity: b.commodity || 'General'
+      };
+
+      // Set the data, then open the label file
+      localStorage.setItem('nuvana_print_data', JSON.stringify(printData));
+      window.open('waybill-label.html', '_blank', 'width=500,height=750');
+  });
+}
 </script>
 
 </body>

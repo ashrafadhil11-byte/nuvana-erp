@@ -2,360 +2,157 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Waybill Label — Nuvana Express</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuvana Express - Waybill Label</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
     <style>
-        /* ────────────────────────────────────────
-           4 × 6 inch thermal waybill label
-           Compatible with Zebra / Dymo / Brother
-           thermal printers at 203 dpi or higher.
-        ──────────────────────────────────────── */
-
-        @page {
-            size: 4in 6in;
-            margin: 0;
-        }
-
+        /* Strict 4x6 inch Thermal Label formatting */
+        @page { size: 4in 6in; margin: 0; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            font-family: 'Arial Narrow', Arial, Helvetica, sans-serif;
-            background: #fff;
-            color: #000;
-        }
-
-        /* ── Each label is exactly 4×6 inches ── */
-        .waybill-label {
-            width: 4in;
-            height: 6in;
-            padding: 0.18in 0.2in;
-            border: 2px solid #000;
-            display: flex;
-            flex-direction: column;
-            gap: 0.09in;
-            overflow: hidden;
+        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background: #e5e5e5; display: flex; justify-content: center; padding: 20px; }
+        
+        .label-container {
+            width: 4in; height: 6in; background: #fff; padding: 0.15in; border: 2px solid #000;
+            display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
             page-break-after: always;
         }
-        .waybill-label:last-child {
-            page-break-after: auto;
-        }
 
-        /* ── Header: Brand + Service type ── */
-        .wl-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2.5px solid #000;
-            padding-bottom: 0.07in;
-        }
-        .wl-brand {
-            font-size: 15pt;
-            font-weight: 900;
-            letter-spacing: 0.04em;
-            line-height: 1;
-        }
-        .wl-service {
-            font-size: 8pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            background: #000;
-            color: #fff;
-            padding: 2px 7px;
-            border-radius: 3px;
-            letter-spacing: 0.05em;
-        }
+        /* 1. Header (Brand & Service) */
+        .header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 3px solid #000; padding-bottom: 0.05in; margin-bottom: 0.05in; }
+        .brand { font-size: 16pt; font-weight: 900; letter-spacing: -0.02em; }
+        .service-code { font-size: 10pt; font-weight: bold; background: #000; color: #fff; padding: 2px 8px; border-radius: 4px; }
 
-        /* ── AWB block: most prominent section ── */
-        .wl-awb {
-            text-align: center;
-            padding: 0.08in 0;
-            border-bottom: 2px solid #000;
-            background: #f7f7f7;
-            border-radius: 4px;
-        }
-        .wl-awb-label {
-            font-size: 6.5pt;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: #555;
-            margin-bottom: 3px;
-        }
-        .wl-awb-value {
-            font-size: 20pt;
-            font-weight: 900;
-            letter-spacing: 0.07em;
-            font-family: 'Courier New', Courier, monospace;
-            line-height: 1.1;
-            color: #000;
-        }
-        .wl-awb-sub {
-            font-size: 6.5pt;
-            color: #555;
-            margin-top: 3px;
-        }
+        /* 2. Master Barcode Zone (Large) */
+        .master-zone { text-align: center; border-bottom: 2px dashed #000; padding-bottom: 0.05in; margin-bottom: 0.05in; }
+        .zone-title { font-size: 7pt; font-weight: bold; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 2px; }
+        .master-barcode { width: 100%; height: auto; max-height: 0.8in; }
 
-        /* ── Barcode placeholder (text-based fallback) ── */
-        .wl-barcode {
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            font-size: 28pt;
-            letter-spacing: -2px;
-            line-height: 1;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 0.04in;
-            /* Real barcode would be generated via canvas or barcode font */
-        }
-        .wl-barcode-num {
-            font-family: Arial, sans-serif;
-            font-size: 7pt;
-            letter-spacing: 0.08em;
-            margin-top: 2px;
-            color: #333;
-        }
+        /* 3. Routing (From / To) */
+        .routing-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; flex: 1; border-bottom: 2px solid #000; padding-bottom: 0.05in; margin-bottom: 0.05in; }
+        .address-block { display: flex; flex-direction: column; gap: 2px; }
+        .block-title { font-size: 8pt; font-weight: 900; background: #000; color: #fff; padding: 2px 4px; display: inline-block; width: max-content; margin-bottom: 2px; }
+        .name { font-size: 10pt; font-weight: bold; line-height: 1.1; }
+        .address { font-size: 8pt; line-height: 1.2; }
+        .phone { font-size: 8pt; font-weight: bold; margin-top: auto; }
 
-        /* ── Parties (from / to) ── */
-        .wl-parties {
-            display: flex;
-            flex-direction: column;
-            gap: 0.06in;
-            flex: 1;
-        }
-        .wl-party {
-            padding: 0.06in 0.08in;
-            border: 1px solid #999;
-            border-radius: 3px;
-        }
-        .wl-party-title {
-            font-size: 6pt;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.06em;
-            color: #555;
-            margin-bottom: 3px;
-        }
-        .wl-party-name {
-            font-size: 11pt;
-            font-weight: 800;
-            line-height: 1.2;
-        }
-        .wl-party-addr {
-            font-size: 7.5pt;
-            line-height: 1.4;
-            color: #222;
-            margin-top: 2px;
-        }
-        .wl-party-phone {
-            font-size: 7.5pt;
-            color: #333;
-            margin-top: 2px;
-            font-family: 'Courier New', monospace;
-        }
+        /* 4. Details & Child Barcode (Bottom Split) */
+        .details-zone { display: grid; grid-template-columns: 1fr 1fr; gap: 0.1in; align-items: center; margin-bottom: 0.05in; }
+        .shipment-details { font-size: 8pt; line-height: 1.4; }
+        .detail-row { display: flex; justify-content: space-between; border-bottom: 1px solid #ccc; }
+        .detail-row span { color: #333; }
+        .detail-row strong { font-weight: bold; }
+        
+        .child-zone { text-align: center; border-left: 2px dashed #000; padding-left: 0.1in; }
+        .child-barcode { width: 100%; height: auto; max-height: 0.5in; }
 
-        /* ── Shipment details row ── */
-        .wl-details {
-            border-top: 1.5px solid #000;
-            padding-top: 0.06in;
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        .wl-detail-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            font-size: 7.5pt;
-        }
-        .wl-detail-row span { color: #555; }
-        .wl-detail-row strong { font-weight: 700; color: #000; }
+        /* 5. Footer (Destination & Date) */
+        .footer { display: flex; justify-content: space-between; align-items: center; border-top: 3px solid #000; padding-top: 0.05in; margin-top: auto; }
+        .dest-code { font-size: 22pt; font-weight: 900; letter-spacing: 0.05em; }
+        .date-code { font-size: 8pt; font-weight: bold; text-align: right; }
 
-        /* ── Footer row ── */
-        .wl-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 2px solid #000;
-            padding-top: 0.06in;
-            margin-top: auto;
-        }
-        .wl-dest-badge {
-            font-size: 14pt;
-            font-weight: 900;
-            background: #000;
-            color: #fff;
-            padding: 3px 12px;
-            border-radius: 4px;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-        }
-        .wl-footer-meta {
-            text-align: right;
-        }
-        .wl-date {
-            font-size: 7pt;
-            color: #555;
-        }
-        .wl-pieces {
-            font-size: 8pt;
-            font-weight: 700;
-            color: #000;
-        }
-
-        /* ── Print: hide everything except labels ── */
-        @media screen {
-            body { background: #e5e5e5; padding: 20px; }
-            .waybill-label {
-                margin: 0 auto 20px;
-                box-shadow: 0 4px 16px rgba(0,0,0,.2);
-            }
-            .print-controls {
-                background: #0D2330;
-                color: white;
-                padding: 16px 24px;
-                border-radius: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                margin-bottom: 24px;
-                max-width: 4in;
-                margin-left: auto;
-                margin-right: auto;
-                font-family: 'Lexend', sans-serif;
-                font-size: 13px;
-            }
-            .print-btn {
-                background: #F99523;
-                color: white;
-                border: none;
-                padding: 8px 20px;
-                border-radius: 8px;
-                font-weight: 700;
-                cursor: pointer;
-                font-size: 12px;
-                font-family: 'Lexend', sans-serif;
-            }
-        }
-        @media print {
-            .print-controls { display: none !important; }
-        }
+        /* Hide body background when printing */
+        @media print { body { background: none; padding: 0; } .label-container { box-shadow: none; border: none; } }
     </style>
 </head>
 <body>
 
-    <!-- Screen-only print controls -->
-    <div class="print-controls">
-        <div>
-            <div style="font-weight:700;">Waybill Label Preview</div>
-            <div style="font-size:11px;opacity:.6;">4 × 6 inch · Thermal print format</div>
+    <div class="label-container" id="labelTemplate">
+        <div class="header">
+            <div class="brand">NUVANA EXPRESS</div>
+            <div class="service-code" id="lblService">AIR-EXP</div>
         </div>
-        <button class="print-btn" onclick="window.print()">🖨 Print Labels</button>
+
+        <div class="master-zone">
+            <div class="zone-title">Master Airway Bill</div>
+            <svg class="master-barcode" id="masterBarcode"></svg>
+        </div>
+
+        <div class="routing-zone">
+            <div class="address-block">
+                <div class="block-title">FROM</div>
+                <div class="name" id="lblShipperName">Shipper Name</div>
+                <div class="address" id="lblShipperAddress">Address Line 1<br>City, State<br>Country, Zip</div>
+                <div class="phone" id="lblShipperPhone">+971 50 123 4567</div>
+            </div>
+            <div class="address-block">
+                <div class="block-title">TO</div>
+                <div class="name" id="lblConsigneeName">Consignee Name</div>
+                <div class="address" id="lblConsigneeAddress">Address Line 1<br>City, State<br>Country, Zip</div>
+                <div class="phone" id="lblConsigneePhone">+91 987 654 3210</div>
+            </div>
+        </div>
+
+        <div class="details-zone">
+            <div class="shipment-details">
+                <div class="detail-row"><span>Weight:</span> <strong id="lblWeight">15.5 kg</strong></div>
+                <div class="detail-row"><span>Chargeable:</span> <strong id="lblCW">16.0 kg</strong></div>
+                <div class="detail-row"><span>Dims:</span> <strong id="lblDims">40x40x50</strong></div>
+                <div class="detail-row"><span>Item:</span> <strong id="lblCommodity">Electronics</strong></div>
+            </div>
+            <div class="child-zone">
+                <div class="zone-title" id="lblBoxCount">Box 1 of 3</div>
+                <svg class="child-barcode" id="childBarcode"></svg>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="dest-code" id="lblDestCode">IND</div>
+            <div class="date-code" id="lblDate">25-APR-2026<br>HQ-01</div>
+        </div>
     </div>
 
-    <!--
-    ════════════════════════════════════════════════════════════════
-    SAMPLE LABEL — In production, this template is populated
-    dynamically by WaybillLabel.printAll() in internationalBooking.js
-    ════════════════════════════════════════════════════════════════
-    -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            // Fetch the label data temporarily saved by international.html
+            const printDataRaw = localStorage.getItem('nuvana_print_data');
+            
+            if (printDataRaw) {
+                const data = JSON.parse(printDataRaw);
+                
+                // Set text fields
+                document.getElementById('lblService').innerText = data.service;
+                document.getElementById('lblShipperName').innerText = data.shipperName;
+                document.getElementById('lblShipperAddress').innerHTML = `${data.shipperAddress}<br>${data.shipperCity}, ${data.shipperState}<br>${data.originCountry} ${data.postalCode}`;
+                document.getElementById('lblShipperPhone').innerText = data.shipperPhone;
+                
+                document.getElementById('lblConsigneeName').innerText = data.consigneeName;
+                document.getElementById('lblConsigneeAddress').innerHTML = `${data.receiverAddress}<br>${data.consigneeCity}, ${data.consigneeState}<br>${data.destCountry} ${data.zipCode}`;
+                document.getElementById('lblConsigneePhone').innerText = data.consigneePhone;
+                
+                document.getElementById('lblWeight').innerText = `${data.boxWeight} kg`;
+                document.getElementById('lblCW').innerText = `${data.boxCw} kg`;
+                document.getElementById('lblDims').innerText = `${data.boxDims} cm`;
+                document.getElementById('lblCommodity').innerText = data.commodity;
+                document.getElementById('lblBoxCount').innerText = `Box ${data.currentBox} of ${data.totalBoxes}`;
+                document.getElementById('lblDestCode').innerText = data.destCountry.substring(0, 3).toUpperCase();
+                document.getElementById('lblDate').innerHTML = `${new Date().toLocaleDateString('en-GB').replace(/\//g, '-')}<br>NUVEX`;
 
-    <div class="waybill-label">
+                // 🚀 GENERATE THE BARCODES
+                // Master Barcode: Thick, large, highly readable
+                JsBarcode("#masterBarcode", data.masterAwb, {
+                    format: "CODE128",
+                    width: 2.5,
+                    height: 70,
+                    displayValue: true,
+                    fontSize: 16,
+                    fontOptions: "bold",
+                    margin: 0
+                });
 
-        <!-- Header -->
-        <div class="wl-header">
-            <div class="wl-brand">NUVANA EXPRESS</div>
-            <div class="wl-service">Air Freight</div>
-        </div>
+                // Child Barcode: Thinner, compact, focused on the specific box
+                JsBarcode("#childBarcode", data.childAwb, {
+                    format: "CODE128",
+                    width: 1.5,
+                    height: 40,
+                    displayValue: true,
+                    fontSize: 12,
+                    margin: 0
+                });
 
-        <!-- AWB & barcode -->
-        <div class="wl-awb">
-            <div class="wl-awb-label">Airway Bill Number (AWB)</div>
-            <div class="wl-awb-value">AWB-20250424-1234B01</div>
-            <div class="wl-awb-sub">Box 1 of 3 &nbsp;|&nbsp; Master: AWB-20250424-1234</div>
-        </div>
-
-        <!-- Visual barcode (simulated with pipe chars — use barcode font in production) -->
-        <div class="wl-barcode" aria-hidden="true">
-            ||||| |||| ||| ||||| |||| ||| ||||||
-        </div>
-        <div class="wl-barcode-num">AWB-20250424-1234B01</div>
-
-        <!-- Shipper / Consignee -->
-        <div class="wl-parties">
-            <div class="wl-party">
-                <div class="wl-party-title">▲ FROM (Shipper)</div>
-                <div class="wl-party-name">Ahmed Al-Rashdi</div>
-                <div class="wl-party-addr">Al Khuwair, Building 14<br>Muscat, Oman 130</div>
-                <div class="wl-party-phone">+968 9876 5432</div>
-            </div>
-            <div class="wl-party" style="border:1.5px solid #000;">
-                <div class="wl-party-title">▼ TO (Consignee)</div>
-                <div class="wl-party-name">Raj Kumar Sharma</div>
-                <div class="wl-party-addr">47 Oxford Street, Westminster<br>London, England W1D 2DZ</div>
-                <div class="wl-party-phone">+44 7700 900123</div>
-            </div>
-        </div>
-
-        <!-- Shipment details -->
-        <div class="wl-details">
-            <div class="wl-detail-row">
-                <span>Actual Weight:</span>
-                <strong>4.50 kg</strong>
-            </div>
-            <div class="wl-detail-row">
-                <span>Chargeable Weight:</span>
-                <strong>4.50 kg</strong>
-            </div>
-            <div class="wl-detail-row">
-                <span>Dimensions:</span>
-                <strong>30 × 25 × 20 cm</strong>
-            </div>
-            <div class="wl-detail-row">
-                <span>Commodity:</span>
-                <strong>Electronics</strong>
-            </div>
-            <div class="wl-detail-row">
-                <span>Declared Value:</span>
-                <strong>USD 250.00</strong>
-            </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="wl-footer">
-            <div class="wl-dest-badge">United Kingdom</div>
-            <div class="wl-footer-meta">
-                <div class="wl-pieces">Box 1 / 3</div>
-                <div class="wl-date">24 Apr 2025</div>
-                <div class="wl-date">nuvana-express.com</div>
-            </div>
-        </div>
-
-    </div><!-- /.waybill-label -->
-
-    <!--
-    ═══════════════════════════════════════════
-    HOW THIS TEMPLATE IS USED IN PRODUCTION:
-    ═══════════════════════════════════════════
-
-    The WaybillLabel.printAll(booking) function in
-    modules/internationalBooking.js dynamically generates
-    one label per box, then opens a new window with
-    all labels and triggers window.print().
-
-    Each label is identical to the structure above but
-    populated with real booking data:
-    - booking.masterAWB
-    - awbs.children[i] (child AWB per box)
-    - booking.shipperName, shipperAddress, etc.
-    - booking.receiverNameInt, receiverAddress, etc.
-    - box.actualWeight, box.cw, box dimensions
-    - booking.commodity, shipmentValue
-    - booking.destCountry
-
-    For real barcode generation in production, use:
-    - JsBarcode library (add via CDN)
-    - Or Code128 barcode font (Libre Barcode 128)
-    - Example: <svg id="barcode"></svg>
-               JsBarcode("#barcode", childAWB, { format:"CODE128" })
-    ═══════════════════════════════════════════
-    -->
-
+                // Automatically trigger print dialog once loaded
+                setTimeout(() => { window.print(); }, 500);
+            }
+        });
+    </script>
 </body>
 </html>
