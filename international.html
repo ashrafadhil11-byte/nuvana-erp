@@ -7,224 +7,458 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script>document.documentElement.classList.remove('dark');</script>
-    <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{orange:'#F99523',teal:'#027385',beige:'#EFE7DC',charcoal:'#0D2330',success:'#10B981'},fontFamily:{poppins:['Poppins','sans-serif'],lexend:['Lexend','sans-serif']}}}}</script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: { orange:'#F99523', teal:'#027385', beige:'#EFE7DC', charcoal:'#0D2330', success:'#10B981' },
+                    fontFamily: { poppins:['Poppins','sans-serif'], lexend:['Lexend','sans-serif'] }
+                }
+            }
+        }
+    </script>
+
     <style>
-        *{box-sizing:border-box;}body{font-family:'Poppins',sans-serif;background:#f5f2ee;}.font-lexend{font-family:'Lexend',sans-serif;}
-        @keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+        *{box-sizing:border-box;}
+        body{font-family:'Poppins',sans-serif;background:#f5f2ee;}
+        .font-lexend{font-family:'Lexend',sans-serif;}
+
+        @keyframes slideUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
         @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}}
         @keyframes spin{to{transform:rotate(360deg);}}
-        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}.anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .12s both;}.anim-3{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .19s both;}.anim-4{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .26s both;}
-        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}.spin{animation:spin 1s linear infinite;}
-        ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}::-webkit-scrollbar-thumb:hover{background:#F99523;}
-        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}.nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
-        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}.divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
+
+        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}
+        .anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .12s both;}
+        .anim-3{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .19s both;}
+        .anim-4{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .26s both;}
+        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}
+        .spin{animation:spin 1s linear infinite;}
+
+        ::-webkit-scrollbar{width:5px;height:5px;}
+        ::-webkit-scrollbar-track{background:transparent;}
+        ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
+        ::-webkit-scrollbar-thumb:hover{background:#F99523;}
+
+        /* Sidebar */
+        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}
+        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
+        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
+        .divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
+
+        /* Panels */
         .sp{background:white;border:1px solid #e8e0d6;border-radius:14px;overflow:hidden;}
         .sp-hdr{padding:12px 18px;border-bottom:1px solid #f0ece6;display:flex;align-items:center;justify-content:space-between;gap:9px;background:#faf8f5;}
-        .field{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.15);border-radius:10px;padding:.6rem .85rem;font-family:'Poppins',sans-serif;font-size:.8125rem;color:#0D2330;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;}
-        .field::placeholder{color:rgba(2,115,133,.3);}.field:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);background:#fff;}
+
+        /* Fields */
+        .field{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.15);border-radius:10px;padding:.62rem .85rem;font-family:'Poppins',sans-serif;font-size:.8125rem;color:#0D2330;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;}
+        .field::placeholder{color:rgba(2,115,133,.3);}
+        .field:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);background:#fff;}
+        .field[readonly]{background:rgba(2,115,133,.04);color:#027385;font-weight:600;cursor:default;}
+        select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;background-size:14px;padding-right:2rem;}
         .fl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:5px;}
         .fl-opt{font-size:8px;color:rgba(2,115,133,.35);text-transform:none;letter-spacing:0;font-weight:400;}
-        select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;background-size:14px;padding-right:2rem;}
-        .ph-grp{display:flex;gap:6px;align-items:center;}.ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.6rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:56px;text-align:center;}
-        .box-row{display:grid;grid-template-columns:48px 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;}
-        .box-input{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.12);border-radius:8px;padding:.45rem .6rem;font-family:'Poppins',sans-serif;font-size:.75rem;color:#0D2330;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s;}
+
+        /* Phone group */
+        .ph-grp{display:flex;gap:6px;align-items:stretch;}
+        .ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.62rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:60px;text-align:center;display:flex;align-items:center;justify-content:center;}
+
+        /* Box rows */
+        .box-row{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;}
+        .box-input{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.12);border-radius:8px;padding:.45rem .55rem;font-family:'Poppins',sans-serif;font-size:.75rem;color:#0D2330;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s;}
         .box-input:focus{border-color:#F99523;box-shadow:0 0 0 2px rgba(249,149,35,.1);}
-        .readonly-cw{background:rgba(249,149,35,.06);border-color:rgba(249,149,35,.25);color:#c47b0a;font-weight:700;cursor:default;}
-        .box-num{width:48px;height:34px;border-radius:8px;background:rgba(2,115,133,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#027385;font-family:'Lexend',sans-serif;}
-        .col-hdr{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);text-align:center;}
-        .totals-bar{background:#0D2330;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
-        .total-item .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(239,231,220,.35);margin-bottom:3px;}
-        .total-item .val{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:#EFE7DC;}.total-item .val.orange{color:#F99523;}
-        .gt-field{width:100%;background:rgba(249,149,35,.08);border:2px solid rgba(249,149,35,.35);border-radius:10px;padding:.65rem 1rem;font-family:'Lexend',sans-serif;font-size:1rem;font-weight:700;color:#c47b0a;outline:none;text-align:center;cursor:default;}
-        .btn-add-box{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(2,115,133,.1);border:1px solid rgba(2,115,133,.2);color:#027385;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;}.btn-add-box:hover{background:rgba(2,115,133,.18);}.btn-add-box:disabled{opacity:.45;cursor:not-allowed;}
-        .btn-submit{width:100%;padding:.9rem 1rem;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(13,35,48,.2);position:relative;overflow:hidden;}
-        .btn-submit::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;}.btn-submit>*{position:relative;z-index:1;}
-        .btn-submit:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);}.btn-submit:hover::after{width:100%;}.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-        .validation-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:20px;display:none;}
-        .val-header{display:flex;align-items:center;gap:8px;color:#dc2626;font-size:13px;font-weight:600;margin-bottom:8px;}
-        .validation-banner ul{margin:0;padding-left:18px;}.validation-banner ul li{font-size:12px;color:#b91c1c;line-height:1.7;}
-        /* ── SUCCESS MODAL ── */
-        .modal-overlay{position:fixed;inset:0;background:rgba(13,35,48,.6);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
-        .modal-overlay.active{opacity:1;pointer-events:all;}
-        .modal-box{background:white;border-radius:20px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(13,35,48,.2);transform:scale(.94) translateY(20px);transition:transform .4s cubic-bezier(.16,1,.3,1);}
-        .modal-overlay.active .modal-box{transform:scale(1) translateY(0);}
-        .modal-hdr{padding:28px 28px 20px;text-align:center;border-bottom:1px solid #f0ece6;}
-        .modal-success-icon{width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
-        .modal-title{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;color:#0D2330;}.modal-sub{font-size:12px;color:rgba(2,115,133,.6);margin-top:4px;}
-        .modal-awb-block{margin:20px 28px;background:#0D2330;border-radius:14px;padding:18px;text-align:center;}
-        .modal-awb-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.4);margin-bottom:6px;}
-        .modal-awb-number{font-family:'Lexend',sans-serif;font-size:22px;font-weight:900;color:#EFE7DC;letter-spacing:.08em;}
-        .child-awb-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-radius:8px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:4px;}
-        .child-awb-label{font-size:11px;color:#374151;}.child-awb-val{font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;}
-        .modal-summary{margin:0 28px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-        .modal-summary-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:10px;padding:10px 12px;}
-        .msi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:3px;}.msi-value{font-size:12px;font-weight:600;color:#0D2330;}
-        .modal-actions{padding:0 28px 28px;display:flex;gap:10px;flex-wrap:wrap;}
-        .modal-btn{flex:1;min-width:120px;padding:10px 16px;border-radius:11px;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
-        .mbp{background:#0D2330;color:white;box-shadow:0 3px 8px rgba(13,35,48,.2);}.mbp:hover{background:#122c3f;}
-        .mbs{background:rgba(2,115,133,.08);color:#027385;border:1px solid rgba(2,115,133,.2);}.mbs:hover{background:rgba(2,115,133,.14);}
-        .mbg{background:rgba(13,35,48,.05);color:#374151;border:1px solid #e8e0d6;}.mbg:hover{background:rgba(13,35,48,.08);}
+        .box-input.cw{background:rgba(249,149,35,.07);border-color:rgba(249,149,35,.3);color:#c47b0a;font-weight:700;cursor:default;}
+        .box-num{width:44px;height:34px;border-radius:8px;background:rgba(2,115,133,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#027385;font-family:'Lexend',sans-serif;}
+        .col-hdr{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(2,115,133,.5);text-align:center;}
+
+        /* Totals */
+        .totals-bar{background:#0D2330;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:16px;}
+        .ti .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(239,231,220,.35);margin-bottom:3px;}
+        .ti .val{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:#EFE7DC;}
+        .ti .val.o{color:#F99523;}
+
+        /* Grand total */
+        .gt{width:100%;background:rgba(249,149,35,.08);border:2px solid rgba(249,149,35,.3);border-radius:10px;padding:.65rem 1rem;font-family:'Lexend',sans-serif;font-size:1rem;font-weight:700;color:#c47b0a;outline:none;text-align:center;cursor:default;}
+
+        /* Add box btn */
+        .btn-add{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(2,115,133,.1);border:1px solid rgba(2,115,133,.2);color:#027385;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;}
+        .btn-add:hover{background:rgba(2,115,133,.18);}
+        .btn-add:disabled{opacity:.4;cursor:not-allowed;}
+
+        /* Submit */
+        .btn-sub{width:100%;padding:.9rem 1rem;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(13,35,48,.2);position:relative;overflow:hidden;}
+        .btn-sub::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;}
+        .btn-sub>*{position:relative;z-index:1;}
+        .btn-sub:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);}
+        .btn-sub:hover::after{width:100%;}
+        .btn-sub:active{transform:translateY(0);}
+        .btn-sub:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+
+        /* Validation banner */
+        .val-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:none;}
+        .val-banner-hdr{display:flex;align-items:center;gap:8px;color:#dc2626;font-size:13px;font-weight:600;margin-bottom:8px;}
+        .val-banner ul{margin:0;padding-left:18px;}
+        .val-banner li{font-size:12px;color:#b91c1c;line-height:1.7;}
+
+        /* Success modal */
+        .modal-bg{position:fixed;inset:0;background:rgba(13,35,48,.6);backdrop-filter:blur(6px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+        .modal-bg.open{opacity:1;pointer-events:all;}
+        .modal-card{background:white;border-radius:20px;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;box-shadow:0 24px 60px rgba(13,35,48,.22);transform:scale(.94) translateY(20px);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+        .modal-bg.open .modal-card{transform:scale(1) translateY(0);}
+        .modal-hdr{padding:28px 28px 18px;text-align:center;border-bottom:1px solid #f0ece6;}
+        .modal-icon{width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+        .modal-title{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;color:#0D2330;}
+        .modal-sub{font-size:12px;color:rgba(2,115,133,.6);margin-top:4px;}
+        .awb-block{margin:18px 26px;background:#0D2330;border-radius:14px;padding:18px;text-align:center;}
+        .awb-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.4);margin-bottom:6px;}
+        .awb-val{font-family:'Lexend',sans-serif;font-size:21px;font-weight:900;color:#EFE7DC;letter-spacing:.07em;}
+        .awb-sub{font-size:10px;color:rgba(239,231,220,.4);margin-top:4px;}
+        .child-list{margin:0 26px 16px;}
+        .child-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);margin-bottom:8px;}
+        .child-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-radius:8px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:4px;}
+        .cr-box{font-size:11px;color:#374151;}
+        .cr-awb{font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;}
+        .sum-grid{margin:0 26px 18px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+        .sum-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:10px;padding:10px 12px;}
+        .sum-item .sl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:3px;}
+        .sum-item .sv{font-size:12px;font-weight:600;color:#0D2330;}
+        .modal-btns{padding:0 26px 26px;display:flex;gap:10px;flex-wrap:wrap;}
+        .mbtn{flex:1;min-width:110px;padding:10px 14px;border-radius:11px;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+        .mb-dark{background:#0D2330;color:white;box-shadow:0 3px 8px rgba(13,35,48,.2);}
+        .mb-dark:hover{background:#122c3f;}
+        .mb-teal{background:rgba(2,115,133,.08);color:#027385;border:1px solid rgba(2,115,133,.2);}
+        .mb-teal:hover{background:rgba(2,115,133,.15);}
+        .mb-ghost{background:rgba(13,35,48,.05);color:#374151;border:1px solid #e8e0d6;}
+        .mb-ghost:hover{background:rgba(13,35,48,.09);}
     </style>
 </head>
 <body class="min-h-screen flex overflow-hidden">
 
-<!-- SUCCESS MODAL -->
-<div class="modal-overlay" id="successModal">
-  <div class="modal-box">
-    <div class="modal-hdr">
-      <div class="modal-success-icon">
-        <svg style="width:28px;height:28px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
-      </div>
-      <h2 class="modal-title">Booking Submitted Successfully!</h2>
-      <p class="modal-sub">Your international cargo booking has been recorded in the system.</p>
-    </div>
-    <div class="modal-awb-block">
-      <div class="modal-awb-label">Master Airway Bill Number</div>
-      <div class="modal-awb-number" id="modalMasterAWB">—</div>
-    </div>
-    <div style="margin:0 28px 16px;">
-      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);margin-bottom:8px;">Box AWB Numbers</div>
-      <div id="modalChildAWBs"></div>
-    </div>
-    <div class="modal-summary">
-      <div class="modal-summary-item"><div class="msi-label">Shipper</div><div class="msi-value" id="modalShipper">—</div></div>
-      <div class="modal-summary-item"><div class="msi-label">Consignee</div><div class="msi-value" id="modalConsignee">—</div></div>
-      <div class="modal-summary-item"><div class="msi-label">Route</div><div class="msi-value"><span id="modalOrigin">—</span> → <span id="modalDest">—</span></div></div>
-      <div class="modal-summary-item"><div class="msi-label">Total Boxes</div><div class="msi-value" id="modalTotalBoxes">—</div></div>
-      <div class="modal-summary-item"><div class="msi-label">Total Weight</div><div class="msi-value" id="modalTotalWeight">—</div></div>
-      <div class="modal-summary-item"><div class="msi-label">Chargeable Weight</div><div class="msi-value" id="modalCW">—</div></div>
-      <div class="modal-summary-item" style="grid-column:span 2;"><div class="msi-label">Grand Total</div><div class="msi-value" style="font-size:16px;color:#F99523;font-family:'Lexend',sans-serif;font-weight:700;" id="modalGrandTotal">—</div></div>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-btn mbp" id="modalPrintLabelBtn">
-        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25z" clip-rule="evenodd"/></svg>
-        Print Labels
-      </button>
-      <button class="modal-btn mbs" id="modalPrintInvoiceBtn">
-        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
-        Print Invoice
-      </button>
-      <button class="modal-btn mbg" id="modalCloseBtn">Close &amp; New Booking</button>
-    </div>
-  </div>
-</div>
-
-<!-- SIDEBAR -->
-<aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
-    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
-        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div style="display:none;"><p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
-    </div>
-    <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
-        <a href="index.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
-        <div class="section-label" style="margin-top:12px;">Logistics</div>
-        <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
-                <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div>
+<!-- ═══════════════════ SUCCESS MODAL ═══════════════════ -->
+<div class="modal-bg" id="successModal">
+    <div class="modal-card">
+        <div class="modal-hdr">
+            <div class="modal-icon">
+                <svg style="width:28px;height:28px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor">
+                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/>
+                </svg>
             </div>
-            <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
-                <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">International</a>
-                <a href="domestic.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
+            <div class="modal-title">Booking Submitted Successfully!</div>
+            <div class="modal-sub">International cargo booking has been recorded in the system.</div>
+        </div>
+
+        <!-- Master AWB -->
+        <div class="awb-block">
+            <div class="awb-lbl">Master Airway Bill Number</div>
+            <div class="awb-val" id="mAwb">—</div>
+            <div class="awb-sub" id="mAwbSub">—</div>
+        </div>
+
+        <!-- Child AWBs -->
+        <div class="child-list">
+            <div class="child-lbl">Per-Box AWB Numbers</div>
+            <div id="childAwbList"></div>
+        </div>
+
+        <!-- Summary grid -->
+        <div class="sum-grid">
+            <div class="sum-item"><div class="sl">Shipper</div><div class="sv" id="mShipper">—</div></div>
+            <div class="sum-item"><div class="sl">Consignee</div><div class="sv" id="mConsignee">—</div></div>
+            <div class="sum-item"><div class="sl">Route</div><div class="sv"><span id="mOrigin">—</span> → <span id="mDest">—</span></div></div>
+            <div class="sum-item"><div class="sl">Total Boxes</div><div class="sv" id="mBoxes">—</div></div>
+            <div class="sum-item"><div class="sl">Actual Weight</div><div class="sv" id="mWeight">—</div></div>
+            <div class="sum-item"><div class="sl">Chargeable Weight</div><div class="sv" id="mCW">—</div></div>
+            <div class="sum-item" style="grid-column:span 2;">
+                <div class="sl">Grand Total</div>
+                <div class="sv" style="font-size:16px;font-family:'Lexend',sans-serif;font-weight:700;color:#F99523;" id="mTotal">—</div>
             </div>
         </div>
+
+        <!-- Buttons -->
+        <div class="modal-btns">
+            <button class="mbtn mb-dark" id="btnPrintLabel">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25z" clip-rule="evenodd"/></svg>
+                Print Labels
+            </button>
+            <button class="mbtn mb-teal" id="btnPrintInvoice">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                Print Invoice
+            </button>
+            <button class="mbtn mb-ghost" id="btnCloseModal">Close &amp; New Booking</button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ SIDEBAR ═══════════════════ -->
+<aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex"
+             style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;">
+            <p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p>
+        </div>
+    </div>
+
+    <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
+        <a href="index.html" class="nav-item">
+            <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
+            Command Center
+        </a>
+
+        <div class="section-label" style="margin-top:10px;">Logistics</div>
+
+        <!-- New Booking — active/expanded -->
+        <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
+                <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;">
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                    New Booking
+                </div>
+            </div>
+            <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
+                <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">✈ International</a>
+                <a href="domestic.html"      style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
+            </div>
+        </div>
+
+        <!-- Processing -->
         <div class="group" style="position:relative;">
-            <div class="nav-item" style="justify-content:space-between;"><div style="display:flex;align-items:center;gap:10px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div><svg style="width:12px;height:12px;" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg></div>
+            <div class="nav-item" style="justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                    Processing
+                </div>
+                <svg style="width:12px;height:12px;" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+            </div>
             <div class="hidden group-hover:flex" style="flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;gap:2px;">
                 <a href="processing.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
                 <a href="update.html"     style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
             </div>
         </div>
-        <div class="section-label" style="margin-top:12px;">Finance &amp; CRM</div>
+
+        <div class="section-label" style="margin-top:10px;">Finance &amp; CRM</div>
         <a href="accounts.html"  class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
         <a href="customers.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
         <a href="reports.html"   class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
         <div class="divider-h" style="margin:8px 0;"></div>
-        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;">
+            <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
+            Master Control
+        </a>
     </nav>
+
     <div style="padding:12px;border-top:1px solid rgba(255,255,255,.06);">
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);">
             <div id="sidebarAvatar" style="width:28px;height:28px;border-radius:9px;background:#F99523;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
-            <div style="overflow:hidden;flex:1;"><div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div><div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div></div>
+            <div style="overflow:hidden;flex:1;">
+                <div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
+                <div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div>
+            </div>
         </div>
     </div>
 </aside>
 
-<!-- MAIN -->
+<!-- ═══════════════════ MAIN ═══════════════════ -->
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
+
+    <!-- Header -->
     <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:16px;height:16px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg></div>
-            <div><h2 class="font-lexend" style="font-size:14px;font-weight:600;color:#0D2330;">International Cargo Booking</h2><p style="font-size:10px;color:rgba(2,115,133,.6);">NUVEX GLOBAL · AWB auto-generated on submit</p></div>
+            <div style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
+                <svg style="width:16px;height:16px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg>
+            </div>
+            <div>
+                <h2 class="font-lexend" style="font-size:14px;font-weight:600;color:#0D2330;">International Cargo Booking</h2>
+                <p style="font-size:10px;color:rgba(2,115,133,.6);">NUVEX GLOBAL · AWB auto-generated on submit</p>
+            </div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;">
-            <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;"><span style="position:relative;display:flex;width:6px;height:6px;"><span class="ping" style="position:absolute;display:inline-flex;width:100%;height:100%;border-radius:50%;background:#10B981;opacity:.75;"></span><span style="position:relative;display:inline-flex;width:6px;height:6px;border-radius:50%;background:#10B981;"></span></span><span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span></div>
+            <div style="display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;">
+                <span style="position:relative;display:flex;width:6px;height:6px;">
+                    <span class="ping" style="position:absolute;display:inline-flex;width:100%;height:100%;border-radius:50%;background:#10B981;opacity:.75;"></span>
+                    <span style="position:relative;display:inline-flex;width:6px;height:6px;border-radius:50%;background:#10B981;"></span>
+                </span>
+                <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span>
+            </div>
             <div id="headerAvatar" style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#F99523;">A</div>
         </div>
     </header>
 
+    <!-- Body -->
     <div style="flex:1;overflow-y:auto;padding:24px;background:#f5f2ee;">
         <form id="internationalForm" class="space-y-5 max-w-6xl mx-auto">
 
-            <!-- ROW 1: Shipper + Consignee -->
+            <!-- Validation banner — shown by JS when errors exist -->
+            <div class="val-banner" id="valBanner">
+                <div class="val-banner-hdr">
+                    <svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/></svg>
+                    <span id="valBannerTitle">Please fix errors before submitting</span>
+                </div>
+                <ul id="valBannerList"></ul>
+            </div>
+
+            <!-- ── ROW 1: Shipper + Consignee ── -->
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 anim-1">
 
                 <!-- SHIPPER -->
                 <div class="sp">
                     <div class="sp-hdr">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div style="width:28px;height:28px;border-radius:8px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></div>
+                        <div style="display:flex;align-items:center;gap:9px;">
+                            <div style="width:27px;height:27px;border-radius:8px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
+                                <svg style="width:13px;height:13px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                            </div>
                             <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipper Details</span>
                         </div>
                         <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(2,115,133,.1);color:#027385;text-transform:uppercase;letter-spacing:.04em;">Origin</span>
                     </div>
-                    <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                        <div style="grid-column:span 2;"><label class="fl">Shipper Full Name *</label><input type="text" id="shipperName" required placeholder="Full name" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl">Origin Country *</label><select id="originCountry" required class="field"><option value="" disabled selected>Select origin country…</option></select></div>
-                        <div style="grid-column:span 2;"><label class="fl">Primary Phone *</label><div class="ph-grp"><div class="ph-code" id="shipperPhoneCodeDisplay">—</div><input type="hidden" id="shipperPhoneCode"><input type="tel" id="contactNumber" required placeholder="Phone number" class="field" style="flex:1;"></div></div>
-                        <div><label class="fl">Alternate Phone</label><input type="tel" id="altNumber" placeholder="Optional" class="field"></div>
-                        <div><label class="fl">Postal Code</label><input type="text" id="postalCode" placeholder="123" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl">Street Address</label><input type="text" id="shipperAddress" placeholder="Street, area" class="field"></div>
-                        <div><label class="fl">City *</label><input type="text" id="shipperCity" required placeholder="City name" class="field"></div>
-                        <div><label class="fl">State / Province *</label><select id="shipperState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
-                        <!-- ID fields -->
-                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:12px;margin-top:4px;"><label class="fl">ID Document <span class="fl-opt">(optional — customs)</span></label></div>
-                        <div><label class="fl" style="font-size:8px;">ID Type</label><select id="shipperIdType" class="field"><option value="" disabled selected>Select…</option></select></div>
-                        <div><label class="fl" style="font-size:8px;">ID Number</label><input type="text" id="shipperIdNumber" placeholder="Passport / ID number" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl" style="font-size:8px;">ID Expiry Date</label><input type="date" id="shipperIdExpiry" class="field"></div>
+                    <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Shipper Full Name *</label>
+                            <input type="text" id="shipperName" required placeholder="Full name" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Origin Country *</label>
+                            <select id="originCountry" required class="field">
+                                <option value="" disabled selected>Loading countries…</option>
+                            </select>
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Primary Phone *</label>
+                            <div class="ph-grp">
+                                <div class="ph-code" id="shipperPhoneCodeDisplay">—</div>
+                                <input type="hidden" id="shipperPhoneCode">
+                                <input type="tel" id="contactNumber" required placeholder="Phone number" class="field" style="flex:1;">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="fl">Alternate Phone</label>
+                            <input type="tel" id="altNumber" placeholder="Optional" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">Postal Code</label>
+                            <input type="text" id="postalCode" placeholder="123" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Street Address</label>
+                            <input type="text" id="shipperAddress" placeholder="Street, area" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">City *</label>
+                            <input type="text" id="shipperCity" required placeholder="City name" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">State / Province *</label>
+                            <select id="shipperState" required class="field">
+                                <option value="" disabled selected>Select country first…</option>
+                            </select>
+                        </div>
+                        <!-- Shipper ID -->
+                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
+                            <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
+                        </div>
+                        <div>
+                            <label class="fl" style="font-size:8px;">ID Type</label>
+                            <select id="shipperIdType" class="field">
+                                <option value="">— None —</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="fl" style="font-size:8px;">ID Number</label>
+                            <input type="text" id="shipperIdNumber" placeholder="Passport / ID number" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl" style="font-size:8px;">ID Expiry Date</label>
+                            <input type="date" id="shipperIdExpiry" class="field">
+                        </div>
                     </div>
                 </div>
 
                 <!-- CONSIGNEE -->
                 <div class="sp">
                     <div class="sp-hdr">
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <div style="width:28px;height:28px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></div>
+                        <div style="display:flex;align-items:center;gap:9px;">
+                            <div style="width:27px;height:27px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
+                                <svg style="width:13px;height:13px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                            </div>
                             <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Consignee Details</span>
                         </div>
                         <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(249,149,35,.1);color:#c47b0a;text-transform:uppercase;letter-spacing:.04em;">Destination</span>
                     </div>
-                    <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-                        <div style="grid-column:span 2;"><label class="fl">Receiver Full Name *</label><input type="text" id="receiverNameInt" required placeholder="Full name" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl">Destination Country *</label><select id="destCountry" required class="field"><option value="" disabled selected>Select destination country…</option></select></div>
-                        <div style="grid-column:span 2;"><label class="fl">Primary Phone *</label><div class="ph-grp"><div class="ph-code" id="consigneePhoneCodeDisplay">—</div><input type="hidden" id="consigneePhoneCode"><input type="tel" id="receiverPhoneInt" required placeholder="Phone number" class="field" style="flex:1;"></div></div>
-                        <div><label class="fl">Alternate Phone</label><input type="tel" id="receiverAltInt" placeholder="Optional" class="field"></div>
-                        <div><label class="fl">Zip / Postal Code</label><input type="text" id="zipCode" placeholder="SW1A 1AA" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl">Delivery Address</label><input type="text" id="receiverAddress" placeholder="Street, area" class="field"></div>
-                        <div><label class="fl">City *</label><input type="text" id="consigneeCity" required placeholder="City name" class="field"></div>
-                        <div><label class="fl">State / Province *</label><select id="consigneeState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
+                    <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Receiver Full Name *</label>
+                            <input type="text" id="receiverNameInt" required placeholder="Full name" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Destination Country *</label>
+                            <select id="destCountry" required class="field">
+                                <option value="" disabled selected>Loading countries…</option>
+                            </select>
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Primary Phone *</label>
+                            <div class="ph-grp">
+                                <div class="ph-code" id="consigneePhoneCodeDisplay">—</div>
+                                <input type="hidden" id="consigneePhoneCode">
+                                <input type="tel" id="receiverPhoneInt" required placeholder="Phone number" class="field" style="flex:1;">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="fl">Alternate Phone</label>
+                            <input type="tel" id="receiverAltInt" placeholder="Optional" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">Zip / Postal Code</label>
+                            <input type="text" id="zipCode" placeholder="SW1A 1AA" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Delivery Address</label>
+                            <input type="text" id="receiverAddress" placeholder="Street, area" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">City *</label>
+                            <input type="text" id="consigneeCity" required placeholder="City name" class="field">
+                        </div>
+                        <div>
+                            <label class="fl">State / Province *</label>
+                            <select id="consigneeState" required class="field">
+                                <option value="" disabled selected>Select country first…</option>
+                            </select>
+                        </div>
                         <!-- Consignee ID -->
-                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:12px;margin-top:4px;"><label class="fl">ID Document <span class="fl-opt">(optional — customs)</span></label></div>
-                        <div><label class="fl" style="font-size:8px;">ID Type</label><select id="consigneeIdType" class="field"><option value="" disabled selected>Select…</option></select></div>
-                        <div><label class="fl" style="font-size:8px;">ID Number</label><input type="text" id="consigneeIdNumber" placeholder="Passport / ID number" class="field"></div>
-                        <div style="grid-column:span 2;"><label class="fl" style="font-size:8px;">ID Expiry Date</label><input type="date" id="consigneeIdExpiry" class="field"></div>
+                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
+                            <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
+                        </div>
+                        <div>
+                            <label class="fl" style="font-size:8px;">ID Type</label>
+                            <select id="consigneeIdType" class="field">
+                                <option value="">— None —</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="fl" style="font-size:8px;">ID Number</label>
+                            <input type="text" id="consigneeIdNumber" placeholder="Passport / ID number" class="field">
+                        </div>
+                        <div style="grid-column:span 2;">
+                            <label class="fl" style="font-size:8px;">ID Expiry Date</label>
+                            <input type="date" id="consigneeIdExpiry" class="field">
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- ROW 2: Shipment Details -->
+            <!-- ── ROW 2: Shipment Details ── -->
             <div class="sp anim-2">
-                <div class="sp-hdr"><div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;border-radius:8px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg></div><span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipment Details</span></div></div>
-                <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                <div class="sp-hdr">
+                    <div style="display:flex;align-items:center;gap:9px;">
+                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:13px;height:13px;color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipment Details</span>
+                    </div>
+                </div>
+                <div style="padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
                     <div><label class="fl">Shipment Type</label><input type="text" id="shipmentType" placeholder="e.g. Air Freight" class="field"></div>
                     <div><label class="fl">Cargo Type</label><input type="text" id="cargoType" placeholder="e.g. General" class="field"></div>
                     <div><label class="fl">Commodity</label><input type="text" id="commodity" placeholder="e.g. Electronics" class="field"></div>
@@ -233,54 +467,73 @@
                 </div>
             </div>
 
-            <!-- ROW 3: Box Dimensions -->
+            <!-- ── ROW 3: Box Dimensions ── -->
             <div class="sp anim-3">
                 <div class="sp-hdr">
-                    <div style="display:flex;align-items:center;gap:10px;">
-                        <div style="width:28px;height:28px;border-radius:8px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg></div>
+                    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
+                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:13px;height:13px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
+                        </div>
                         <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Box Dimensions &amp; Weights</span>
                         <span style="font-size:10px;color:rgba(2,115,133,.45);">Chargeable = max(actual, L×W×H÷5000)</span>
                     </div>
-                    <button type="button" id="addBoxBtn" class="btn-add-box">
+                    <button type="button" id="addBoxBtn" class="btn-add">
                         <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
                         Add Box
                     </button>
                 </div>
-                <div style="padding:20px;">
-                    <div class="box-row" style="margin-bottom:8px;padding:0 4px;">
-                        <div class="col-hdr">Box</div><div class="col-hdr">Actual Wt (kg)</div><div class="col-hdr">L (cm)</div><div class="col-hdr">W (cm)</div><div class="col-hdr">H (cm)</div><div class="col-hdr">Chargeable (kg)</div>
+                <div style="padding:18px;">
+                    <!-- Column headers -->
+                    <div class="box-row" style="margin-bottom:8px;">
+                        <div class="col-hdr">Box</div>
+                        <div class="col-hdr">Actual Wt (kg)</div>
+                        <div class="col-hdr">L (cm)</div>
+                        <div class="col-hdr">W (cm)</div>
+                        <div class="col-hdr">H (cm)</div>
+                        <div class="col-hdr">Chargeable (kg)</div>
                     </div>
                     <div id="boxContainer" class="space-y-2"></div>
-                    <div class="totals-bar" style="margin-top:20px;">
-                        <div class="total-item"><div class="lbl">Total Boxes</div><div class="val orange" id="lblTotalBoxes">0</div></div>
-                        <div style="width:1px;height:32px;background:rgba(255,255,255,.1);"></div>
-                        <div class="total-item"><div class="lbl">Total Actual Weight</div><div class="val" id="lblTotalActual">0.00 kg</div></div>
-                        <div style="width:1px;height:32px;background:rgba(255,255,255,.1);"></div>
-                        <div class="total-item"><div class="lbl">Total Chargeable</div><div class="val orange" id="lblTotalCW">0.00 kg</div></div>
+                    <!-- Totals -->
+                    <div class="totals-bar">
+                        <div class="ti"><div class="lbl">Total Boxes</div><div class="val o" id="lblTotalBoxes">0</div></div>
+                        <div style="width:1px;height:28px;background:rgba(255,255,255,.1);"></div>
+                        <div class="ti"><div class="lbl">Total Actual Weight</div><div class="val" id="lblTotalActual">0.00 kg</div></div>
+                        <div style="width:1px;height:28px;background:rgba(255,255,255,.1);"></div>
+                        <div class="ti"><div class="lbl">Total Chargeable</div><div class="val o" id="lblTotalCW">0.00 kg</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ROW 4: Pricing -->
+            <!-- ── ROW 4: Pricing ── -->
             <div class="sp anim-4">
-                <div class="sp-hdr"><div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg></div><span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Pricing &amp; Charges</span></div></div>
-                <div style="padding:20px;">
-                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:12px;">
+                <div class="sp-hdr">
+                    <div style="display:flex;align-items:center;gap:9px;">
+                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:13px;height:13px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Pricing &amp; Charges</span>
+                    </div>
+                </div>
+                <div style="padding:18px;">
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;">
                         <div><label class="fl">Rate per kg (OMR)</label><input type="number" step="0.01" id="rate" placeholder="0.00" class="field"></div>
                         <div><label class="fl">Packing Charges</label><input type="number" step="0.01" id="packingCharges" placeholder="0.00" class="field"></div>
                         <div><label class="fl">Additional Charges</label><input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field"></div>
-                        <div><label class="fl">Grand Total (OMR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt-field"></div>
+                        <div><label class="fl">Grand Total (OMR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt"></div>
                     </div>
                     <p style="font-size:10px;color:rgba(2,115,133,.45);">* Standard delivery: 5 days from dispatch. AWB is auto-generated on submission.</p>
                 </div>
             </div>
 
-            <!-- SUBMIT -->
+            <!-- Submit -->
             <div class="anim-4">
-                <button type="submit" id="submitIntBtn" class="btn-submit">
+                <button type="submit" id="submitIntBtn" class="btn-sub">
                     <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v3.75H9a.75.75 0 000 1.5h3.75v3.75a.75.75 0 001.5 0v-3.75h3.75a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
                     <span id="btnTextInt">Transmit International Booking</span>
-                    <svg id="loadingIconInt" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                    <svg id="loadingIconInt" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                        <path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+                    </svg>
                 </button>
             </div>
 
@@ -288,21 +541,631 @@
     </div>
 </main>
 
-<script src="data/countryMaster.js"></script>
-<script src="modules/internationalBooking.js"></script>
-<script src="app.js"></script>
+<!-- ═══════════════════════════════════════════════════════
+     ALL LOGIC INLINED — No external JS file dependencies
+     (Country data + booking module + event wiring)
+═══════════════════════════════════════════════════════ -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const raw = sessionStorage.getItem('erp_user');
-    if (raw) {
-        const u=JSON.parse(raw),i=(u.name||'U').charAt(0).toUpperCase();
-        document.getElementById('sidebarAvatar').textContent=i;
-        document.getElementById('headerAvatar').textContent=i;
-        document.getElementById('sidebarName').textContent=u.name;
-        document.getElementById('sidebarRole').textContent=`${u.role} · ${u.branchId}`;
-        if(u.role==='Admin'){const l=document.getElementById('navAdminLink');l.style.display='flex';}
+// ─────────────────────────────────────────────────────────
+// 1. COUNTRY MASTER DATA
+// ─────────────────────────────────────────────────────────
+const COUNTRY_MASTER = [
+  {code:'OM',name:'Oman',phoneCode:'+968',states:['Muscat','Dhofar','Musandam','Al Buraymi','Al Dakhiliyah','Al Batinah North','Al Batinah South','Al Sharqiyah North','Al Sharqiyah South','Al Dhahirah','Al Wusta']},
+  {code:'IN',name:'India',phoneCode:'+91',states:['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Jammu and Kashmir','Ladakh','Puducherry']},
+  {code:'US',name:'United States',phoneCode:'+1',states:['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming']},
+  {code:'GB',name:'United Kingdom',phoneCode:'+44',states:['England','Scotland','Wales','Northern Ireland']},
+  {code:'AE',name:'United Arab Emirates',phoneCode:'+971',states:['Abu Dhabi','Dubai','Sharjah','Ajman','Umm Al Quwain','Ras Al Khaimah','Fujairah']},
+  {code:'SA',name:'Saudi Arabia',phoneCode:'+966',states:['Riyadh','Makkah','Madinah','Eastern Province','Asir','Tabuk','Hail','Northern Borders','Jizan','Najran','Al Bahah','Al Jawf','Qassim']},
+  {code:'KW',name:'Kuwait',phoneCode:'+965',states:['Al Asimah','Hawalli','Farwaniyah','Mubarak Al-Kabeer','Ahmadi','Jahra']},
+  {code:'QA',name:'Qatar',phoneCode:'+974',states:['Doha','Al Rayyan','Al Wakrah','Al Khor','Umm Salal','Al Shamal','Al Daayen','Al Shahaniya']},
+  {code:'BH',name:'Bahrain',phoneCode:'+973',states:['Capital','Muharraq','Northern','Southern']},
+  {code:'YE',name:'Yemen',phoneCode:'+967',states:['Aden','Sana\'a','Taiz','Al Hudaydah','Hadhramaut','Ibb','Al Mahrah','Dhamar','Shabwah','Al Jawf','Marib','Lahij','Abyan','Al Bayda']},
+  {code:'CA',name:'Canada',phoneCode:'+1',states:['Alberta','British Columbia','Manitoba','New Brunswick','Newfoundland and Labrador','Nova Scotia','Ontario','Prince Edward Island','Quebec','Saskatchewan','Northwest Territories','Nunavut','Yukon']},
+  {code:'AU',name:'Australia',phoneCode:'+61',states:['New South Wales','Victoria','Queensland','Western Australia','South Australia','Tasmania','Australian Capital Territory','Northern Territory']},
+  {code:'DE',name:'Germany',phoneCode:'+49',states:['Baden-Württemberg','Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Lower Saxony','Mecklenburg-Vorpommern','North Rhine-Westphalia','Rhineland-Palatinate','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia']},
+  {code:'FR',name:'France',phoneCode:'+33',states:['Île-de-France','Provence-Alpes-Côte d\'Azur','Auvergne-Rhône-Alpes','Nouvelle-Aquitaine','Occitanie','Hauts-de-France','Grand Est','Pays de la Loire','Normandy','Brittany','Bourgogne-Franche-Comté','Centre-Val de Loire','Corsica']},
+  {code:'IT',name:'Italy',phoneCode:'+39',states:['Lombardy','Lazio','Campania','Sicily','Veneto','Piedmont','Puglia','Tuscany','Calabria','Sardinia','Emilia-Romagna','Liguria','Marche','Abruzzo','Friuli-Venezia Giulia','Umbria','Basilicata','Molise','Trentino-South Tyrol','Aosta Valley']},
+  {code:'ES',name:'Spain',phoneCode:'+34',states:['Andalusia','Catalonia','Madrid','Valencia','Galicia','Castile and León','Basque Country','Castilla-La Mancha','Canary Islands','Murcia','Aragon','Extremadura','Asturias','Balearic Islands','Navarre','La Rioja','Cantabria']},
+  {code:'PK',name:'Pakistan',phoneCode:'+92',states:['Balochistan','Khyber Pakhtunkhwa','Punjab','Sindh','Azad Kashmir','Gilgit-Baltistan','Islamabad Capital Territory']},
+  {code:'BD',name:'Bangladesh',phoneCode:'+880',states:['Dhaka','Chittagong','Rajshahi','Khulna','Barisal','Sylhet','Rangpur','Mymensingh']},
+  {code:'LK',name:'Sri Lanka',phoneCode:'+94',states:['Western','Central','Southern','Northern','Eastern','North Western','North Central','Uva','Sabaragamuwa']},
+  {code:'NP',name:'Nepal',phoneCode:'+977',states:['Province No. 1','Madhesh','Bagmati','Gandaki','Lumbini','Karnali','Sudurpashchim']},
+  {code:'MY',name:'Malaysia',phoneCode:'+60',states:['Johor','Kedah','Kelantan','Kuala Lumpur','Labuan','Malacca','Negeri Sembilan','Pahang','Penang','Perak','Perlis','Putrajaya','Sabah','Sarawak','Selangor','Terengganu']},
+  {code:'SG',name:'Singapore',phoneCode:'+65',states:['Central Region','East Region','North Region','North-East Region','West Region']},
+  {code:'PH',name:'Philippines',phoneCode:'+63',states:['NCR','CAR','Ilocos Region','Cagayan Valley','Central Luzon','CALABARZON','MIMAROPA','Bicol Region','Western Visayas','Central Visayas','Eastern Visayas','Zamboanga Peninsula','Northern Mindanao','Davao Region','SOCCSKSARGEN','CARAGA','BARMM']},
+  {code:'ID',name:'Indonesia',phoneCode:'+62',states:['Aceh','Bali','Bangka Belitung','Banten','Bengkulu','Central Java','Central Kalimantan','East Java','East Kalimantan','East Nusa Tenggara','Jakarta','Jambi','Lampung','Maluku','North Sumatra','Papua','Riau','South Kalimantan','South Sulawesi','South Sumatra','West Java','West Kalimantan','West Papua','Yogyakarta']},
+  {code:'TH',name:'Thailand',phoneCode:'+66',states:['Bangkok','Chiang Mai','Chiang Rai','Chon Buri','Khon Kaen','Nakhon Ratchasima','Phuket','Rayong','Songkhla','Surat Thani','Udon Thani']},
+  {code:'CN',name:'China',phoneCode:'+86',states:['Anhui','Beijing','Chongqing','Fujian','Guangdong','Guangxi','Guizhou','Hainan','Hebei','Henan','Hubei','Hunan','Jiangsu','Jiangxi','Jilin','Liaoning','Ningxia','Qinghai','Shaanxi','Shandong','Shanghai','Shanxi','Sichuan','Tianjin','Tibet','Xinjiang','Yunnan','Zhejiang']},
+  {code:'JP',name:'Japan',phoneCode:'+81',states:['Tokyo','Osaka','Kanagawa','Aichi','Saitama','Chiba','Hyogo','Hokkaido','Fukuoka','Shizuoka','Ibaraki','Hiroshima','Kyoto','Miyagi','Niigata','Nagano','Gifu','Tochigi','Gunma','Okayama','Fukushima','Mie','Kumamoto','Kagoshima','Okinawa','Nara','Ehime','Nagasaki','Yamaguchi','Shiga']},
+  {code:'KR',name:'South Korea',phoneCode:'+82',states:['Seoul','Busan','Daegu','Incheon','Gwangju','Daejeon','Ulsan','Sejong','Gyeonggi','Gangwon','North Chungcheong','South Chungcheong','North Jeolla','South Jeolla','North Gyeongsang','South Gyeongsang','Jeju']},
+  {code:'NZ',name:'New Zealand',phoneCode:'+64',states:['Auckland','Wellington','Canterbury','Waikato','Bay of Plenty','Otago','Manawatu-Wanganui','Northland','Hawke\'s Bay','Southland','Taranaki','Nelson','Marlborough','Tasman','West Coast','Gisborne']},
+  {code:'ZA',name:'South Africa',phoneCode:'+27',states:['Gauteng','Western Cape','KwaZulu-Natal','Eastern Cape','Limpopo','Mpumalanga','Free State','Northern Cape','North West']},
+  {code:'NG',name:'Nigeria',phoneCode:'+234',states:['Lagos','Kano','Abuja','Rivers','Oyo','Kaduna','Enugu','Delta','Anambra','Edo','Imo','Ogun','Ondo','Kwara','Niger','Kogi','Bauchi','Borno','Adamawa','Cross River','Akwa Ibom']},
+  {code:'EG',name:'Egypt',phoneCode:'+20',states:['Cairo','Alexandria','Giza','Sharkia','Dakahlia','Qalyubia','Kafr El Sheikh','Gharbia','Monufia','Beheira','Ismailia','Port Said','Suez','Luxor','Aswan','Qena','Sohag','Minya','Beni Suef','Faiyum','Asyut']},
+  {code:'KE',name:'Kenya',phoneCode:'+254',states:['Nairobi','Mombasa','Kisumu','Nakuru','Eldoret','Thika','Malindi','Kitale','Garissa','Nyeri','Machakos','Meru','Kakamega','Kisii','Kilifi']},
+  {code:'BR',name:'Brazil',phoneCode:'+55',states:['São Paulo','Rio de Janeiro','Minas Gerais','Bahia','Paraná','Rio Grande do Sul','Pernambuco','Ceará','Pará','Goiás','Maranhão','Santa Catarina','Amazonas','Mato Grosso','Espírito Santo','Paraíba','Alagoas','Piauí','Rio Grande do Norte','Rondônia']},
+  {code:'MX',name:'Mexico',phoneCode:'+52',states:['Mexico City','Jalisco','Nuevo León','Veracruz','Puebla','Guanajuato','Chiapas','Michoacán','State of Mexico','Oaxaca','Guerrero','Tamaulipas','Baja California','Sonora','Sinaloa','Coahuila','Hidalgo','San Luis Potosí','Querétaro','Tabasco']},
+  {code:'AR',name:'Argentina',phoneCode:'+54',states:['Buenos Aires','Córdoba','Santa Fe','Mendoza','Tucumán','Entre Ríos','Salta','Misiones','Chaco','Corrientes','Santiago del Estero','San Juan','Jujuy','Río Negro','Formosa','Neuquén','Chubut','San Luis','Catamarca','La Rioja']},
+  {code:'TR',name:'Turkey',phoneCode:'+90',states:['Istanbul','Ankara','Izmir','Bursa','Adana','Gaziantep','Konya','Antalya','Kayseri','Mersin','Diyarbakır','Hatay','Manisa','Şanlıurfa','Trabzon']},
+  {code:'IR',name:'Iran',phoneCode:'+98',states:['Tehran','Isfahan','Khorasan Razavi','Fars','Khuzestan','East Azerbaijan','Mazandaran','Alborz','Gilan','Kerman','Hormozgan','Hamadan','Lorestan','Golestan','Semnan']},
+  {code:'IQ',name:'Iraq',phoneCode:'+964',states:['Baghdad','Basra','Nineveh','Erbil','Sulaymaniyah','Duhok','Kirkuk','Anbar','Diyala','Karbala','Najaf','Babel','Wasit','Saladin','Muthanna']},
+  {code:'JO',name:'Jordan',phoneCode:'+962',states:['Amman','Zarqa','Irbid','Aqaba','Mafraq','Balqa','Madaba','Karak','Jerash','Ajloun','Tafilah','Ma\'an']},
+  {code:'LB',name:'Lebanon',phoneCode:'+961',states:['Beirut','Mount Lebanon','North Lebanon','South Lebanon','Bekaa','Nabatieh','Akkar','Baalbek-Hermel']},
+  {code:'NL',name:'Netherlands',phoneCode:'+31',states:['North Holland','South Holland','Utrecht','North Brabant','Gelderland','Overijssel','Groningen','Friesland','Limburg','Zeeland','Drenthe','Flevoland']},
+  {code:'BE',name:'Belgium',phoneCode:'+32',states:['Antwerp','East Flanders','West Flanders','Flemish Brabant','Liège','Hainaut','Namur','Luxembourg','Walloon Brabant','Brussels']},
+  {code:'CH',name:'Switzerland',phoneCode:'+41',states:['Zurich','Bern','Vaud','Aargau','St. Gallen','Geneva','Lucerne','Ticino','Valais','Basel-City','Thurgau','Graubünden','Solothurn','Fribourg','Zug']},
+  {code:'SE',name:'Sweden',phoneCode:'+46',states:['Stockholm','Västra Götaland','Skåne','Östergötland','Uppsala','Jönköping','Örebro','Halland','Norrbotten','Dalarna','Gävleborg','Västerbotten','Värmland','Södermanland','Västmanland']},
+  {code:'NO',name:'Norway',phoneCode:'+47',states:['Oslo','Viken','Vestland','Rogaland','Trøndelag','Innlandet','Agder','Vestfold og Telemark','Nordland','Troms og Finnmark','Møre og Romsdal']},
+  {code:'DK',name:'Denmark',phoneCode:'+45',states:['Capital Region','Central Denmark','North Denmark','Region Zealand','Southern Denmark']},
+  {code:'PL',name:'Poland',phoneCode:'+48',states:['Masovian','Silesian','Greater Poland','Lesser Poland','Lodz','Lower Silesian','Pomeranian','Kuyavian-Pomeranian','Lublin','Subcarpathian','Warmian-Masurian','West Pomeranian','Lubusz','Swietokrzyskie','Podlaskie','Opole']},
+  {code:'RU',name:'Russia',phoneCode:'+7',states:['Moscow','Saint Petersburg','Krasnodar Krai','Sverdlovsk Oblast','Novosibirsk Oblast','Tatarstan','Chelyabinsk Oblast','Bashkortostan','Samara Oblast','Rostov Oblast']},
+  {code:'VN',name:'Vietnam',phoneCode:'+84',states:['Ho Chi Minh City','Hanoi','Da Nang','Hai Phong','Can Tho','Binh Duong','Dong Nai','Khanh Hoa','Dak Lak','Long An','Tien Giang','Bac Ninh','Thai Nguyen','Nghe An','Thanh Hoa']},
+  {code:'GH',name:'Ghana',phoneCode:'+233',states:['Greater Accra','Ashanti','Western','Eastern','Central','Volta','Northern','Brong-Ahafo','Upper East','Upper West','Oti','Bono','Ahafo','Bono East','Savannah','North East','Western North']},
+  {code:'ET',name:'Ethiopia',phoneCode:'+251',states:['Addis Ababa','Oromia','Amhara','Southern Nations','Tigray','Somali','Afar','Gambela','Harari','Benishangul-Gumuz','Dire Dawa','Sidama']},
+  {code:'TZ',name:'Tanzania',phoneCode:'+255',states:['Dar es Salaam','Mwanza','Arusha','Dodoma','Mbeya','Morogoro','Tanga','Kilimanjaro','Kigoma','Shinyanga','Kagera','Mara','Tabora','Ruvuma','Iringa','Mtwara','Pwani','Singida','Lindi','Rukwa']},
+];
+
+const ID_TYPES = [
+  'Passport',
+  'National ID',
+  'Driving License',
+  'PAN Card',
+  'AADHAR Card',
+  'Voter ID',
+  'Residence Permit',
+  'Military ID',
+  'Other'
+];
+
+// ─────────────────────────────────────────────────────────
+// 2. COUNTRY HELPERS
+// ─────────────────────────────────────────────────────────
+function getAllCountries() {
+  return [...COUNTRY_MASTER].sort((a, b) => a.name.localeCompare(b.name));
+}
+function getPhoneCode(code) {
+  const c = COUNTRY_MASTER.find(c => c.code === code);
+  return c ? c.phoneCode : '';
+}
+function getStates(code) {
+  const c = COUNTRY_MASTER.find(c => c.code === code);
+  return c ? [...c.states].sort() : [];
+}
+
+// ─────────────────────────────────────────────────────────
+// 3. MODULE STATE
+// ─────────────────────────────────────────────────────────
+const _state = {
+  boxCount: 0,
+  boxes:    [],    // { actual, l, w, h, cw }
+  totals:   { boxes:0, actual:0, cw:0, grand:0 },
+  lastBooking: null,
+  scriptURL: '',
+};
+
+// ─────────────────────────────────────────────────────────
+// 4. AWB GENERATION
+// ─────────────────────────────────────────────────────────
+function generateMasterAWB() {
+  const d    = new Date();
+  const date = d.toISOString().slice(0,10).replace(/-/g,'');
+  const rand = Math.floor(1000 + Math.random() * 8999);
+  const ts   = d.getTime().toString().slice(-4);
+  return `AWB-${date}-${ts}${rand}`;
+}
+function generateChildAWB(master, idx) {
+  return `${master}B${String(idx).padStart(2,'0')}`;
+}
+function generateAllAWBs(count) {
+  const master   = generateMasterAWB();
+  const children = [];
+  for (let i = 1; i <= count; i++) children.push(generateChildAWB(master, i));
+  return { master, children };
+}
+
+// ─────────────────────────────────────────────────────────
+// 5. POPULATE DROPDOWNS
+// ─────────────────────────────────────────────────────────
+function populateCountryDropdown(selectId) {
+  const sel = document.getElementById(selectId);
+  if (!sel) return;
+  sel.innerHTML = '<option value="" disabled selected>Select country…</option>';
+  getAllCountries().forEach(c => {
+    const o    = document.createElement('option');
+    o.value    = c.code;
+    o.textContent = c.name;
+    sel.appendChild(o);
+  });
+}
+
+function populateStateDropdown(selectId, countryCode) {
+  const sel    = document.getElementById(selectId);
+  const states = getStates(countryCode);
+  if (!sel) return;
+  if (states.length === 0) {
+    sel.innerHTML = '<option value="">N/A</option>';
+    sel.value = 'N/A';
+  } else {
+    sel.innerHTML = '<option value="" disabled selected>Select state/province…</option>';
+    states.forEach(s => {
+      const o    = document.createElement('option');
+      o.value    = s;
+      o.textContent = s;
+      sel.appendChild(o);
+    });
+  }
+}
+
+function populateIdTypes() {
+  ['shipperIdType','consigneeIdType'].forEach(id => {
+    const sel = document.getElementById(id);
+    if (!sel) return;
+    sel.innerHTML = '<option value="">— None —</option>';
+    ID_TYPES.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t; o.textContent = t;
+      sel.appendChild(o);
+    });
+  });
+}
+
+function updatePhoneCode(countryCode, displayId, hiddenId) {
+  const code    = getPhoneCode(countryCode);
+  const display = document.getElementById(displayId);
+  const hidden  = document.getElementById(hiddenId);
+  if (display) display.textContent = code || '—';
+  if (hidden)  hidden.value        = code;
+}
+
+// ─────────────────────────────────────────────────────────
+// 6. BOX MANAGEMENT
+// ─────────────────────────────────────────────────────────
+const MAX_BOXES = 20;
+
+function addBox() {
+  if (_state.boxCount >= MAX_BOXES) return;
+  _state.boxCount++;
+  const i = _state.boxCount;
+  _state.boxes.push({ actual:0, l:0, w:0, h:0, cw:0 });
+
+  const row     = document.createElement('div');
+  row.id        = `boxRow${i}`;
+  row.className = 'box-row';
+  row.innerHTML = `
+    <div class="box-num">${i}</div>
+    <input type="number" step="0.01" min="0" id="b${i}W"  placeholder="0.00" class="box-input">
+    <input type="number" step="0.01" min="0" id="b${i}L"  placeholder="0"    class="box-input">
+    <input type="number" step="0.01" min="0" id="b${i}Wi" placeholder="0"    class="box-input">
+    <input type="number" step="0.01" min="0" id="b${i}H"  placeholder="0"    class="box-input">
+    <input type="number" step="0.01" min="0" id="b${i}CW" readonly placeholder="—" class="box-input cw">
+  `;
+
+  ['W','L','Wi','H'].forEach(f => {
+    row.querySelector(`#b${i}${f}`).addEventListener('input', () => {
+      syncBox(i);
+      recalcAll();
+    });
+  });
+
+  document.getElementById('boxContainer').appendChild(row);
+  if (_state.boxCount >= MAX_BOXES) {
+    document.getElementById('addBoxBtn').disabled = true;
+  }
+}
+
+function syncBox(i) {
+  const idx          = i - 1;
+  _state.boxes[idx].actual = parseFloat(document.getElementById(`b${i}W`)?.value)  || 0;
+  _state.boxes[idx].l      = parseFloat(document.getElementById(`b${i}L`)?.value)  || 0;
+  _state.boxes[idx].w      = parseFloat(document.getElementById(`b${i}Wi`)?.value) || 0;
+  _state.boxes[idx].h      = parseFloat(document.getElementById(`b${i}H`)?.value)  || 0;
+}
+
+function recalcAll() {
+  let totalActual = 0, totalCW = 0;
+  _state.boxes.forEach((box, idx) => {
+    const vol = (box.l * box.w * box.h) / 5000;
+    const cw  = Math.max(box.actual, vol);
+    _state.boxes[idx].cw = cw;
+    totalActual += box.actual;
+    totalCW     += cw;
+    const cwEl = document.getElementById(`b${idx+1}CW`);
+    if (cwEl) cwEl.value = cw > 0 ? cw.toFixed(2) : '';
+  });
+
+  const rate    = parseFloat(document.getElementById('rate')?.value)              || 0;
+  const packing = parseFloat(document.getElementById('packingCharges')?.value)    || 0;
+  const extra   = parseFloat(document.getElementById('additionalCharges')?.value) || 0;
+  const grand   = rate > 0 ? (totalCW * rate) + packing + extra : 0;
+
+  _state.totals = { boxes:_state.boxes.length, actual:totalActual, cw:totalCW, grand };
+
+  document.getElementById('lblTotalBoxes').textContent  = _state.boxes.length;
+  document.getElementById('lblTotalActual').textContent = totalActual.toFixed(2) + ' kg';
+  document.getElementById('lblTotalCW').textContent     = totalCW.toFixed(2) + ' kg';
+  const gtEl = document.getElementById('grandTotal');
+  if (gtEl) gtEl.value = grand > 0 ? grand.toFixed(2) : '';
+}
+
+// ─────────────────────────────────────────────────────────
+// 7. VALIDATION
+// ─────────────────────────────────────────────────────────
+function val(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function validateForm() {
+  const errors = [];
+  const req = [
+    ['shipperName',    'Shipper Name'],
+    ['originCountry',  'Origin Country'],
+    ['contactNumber',  'Shipper Phone'],
+    ['shipperCity',    'Shipper City'],
+    ['shipperState',   'Shipper State/Province'],
+    ['receiverNameInt','Consignee Name'],
+    ['destCountry',    'Destination Country'],
+    ['receiverPhoneInt','Consignee Phone'],
+    ['consigneeCity',  'Consignee City'],
+    ['consigneeState', 'Consignee State/Province'],
+  ];
+  req.forEach(([id, label]) => { if (!val(id)) errors.push(`${label} is required.`); });
+
+  // ID expiry dates must be future if filled
+  ['shipperIdExpiry','consigneeIdExpiry'].forEach(id => {
+    const v = val(id);
+    if (v) {
+      const d = new Date(v);
+      if (isNaN(d.getTime())) errors.push(`${id === 'shipperIdExpiry' ? 'Shipper' : 'Consignee'} ID Expiry is not a valid date.`);
+      else if (d < new Date()) errors.push(`${id === 'shipperIdExpiry' ? 'Shipper' : 'Consignee'} ID Expiry must be a future date.`);
     }
+  });
+
+  if (_state.boxes.length === 0) errors.push('At least one box must be added.');
+  _state.boxes.forEach((box, i) => {
+    if (!box.actual || box.actual <= 0) errors.push(`Box ${i+1}: Actual weight is required.`);
+  });
+
+  return errors;
+}
+
+function showErrors(errors) {
+  const banner = document.getElementById('valBanner');
+  const list   = document.getElementById('valBannerList');
+  const title  = document.getElementById('valBannerTitle');
+  title.textContent = `Please fix ${errors.length} error${errors.length!==1?'s':''} before submitting`;
+  list.innerHTML    = errors.map(e => `<li>${e}</li>`).join('');
+  banner.style.display = 'block';
+  banner.scrollIntoView({ behavior:'smooth', block:'start' });
+}
+
+function hideErrors() {
+  document.getElementById('valBanner').style.display = 'none';
+}
+
+// ─────────────────────────────────────────────────────────
+// 8. BUILD PAYLOAD
+// ─────────────────────────────────────────────────────────
+function buildPayload(awbs) {
+  // Get country name text from select
+  const originSel = document.getElementById('originCountry');
+  const destSel   = document.getElementById('destCountry');
+  const originName = originSel.options[originSel.selectedIndex]?.text || val('originCountry');
+  const destName   = destSel.options[destSel.selectedIndex]?.text     || val('destCountry');
+
+  const boxData = _state.boxes.map((box, i) => ({
+    boxNumber: i+1,
+    childAWB:  awbs.children[i],
+    actualWeight: box.actual,
+    length:    box.l,
+    width:     box.w,
+    height:    box.h,
+    cw:        box.cw,
+  }));
+
+  return {
+    formType:          'internationalBooking',
+    masterAWB:         awbs.master,
+    childAWBs:         JSON.stringify(awbs.children),
+
+    // Shipper
+    shipperName:       val('shipperName'),
+    contactNumber:     (val('shipperPhoneCode') + val('contactNumber')).trim(),
+    altNumber:         val('altNumber'),
+    shipperAddress:    val('shipperAddress'),
+    shipperCity:       val('shipperCity'),
+    shipperState:      val('shipperState'),
+    originCountry:     originName,
+    postalCode:        val('postalCode'),
+    shipperIdType:     val('shipperIdType'),
+    shipperIdNumber:   val('shipperIdNumber'),
+    shipperIdExpiry:   val('shipperIdExpiry'),
+
+    // Consignee
+    receiverNameInt:   val('receiverNameInt'),
+    receiverPhoneInt:  (val('consigneePhoneCode') + val('receiverPhoneInt')).trim(),
+    receiverAltInt:    val('receiverAltInt'),
+    receiverAddress:   val('receiverAddress'),
+    consigneeCity:     val('consigneeCity'),
+    consigneeState:    val('consigneeState'),
+    destCountry:       destName,
+    zipCode:           val('zipCode'),
+    consigneeIdType:   val('consigneeIdType'),
+    consigneeIdNumber: val('consigneeIdNumber'),
+    consigneeIdExpiry: val('consigneeIdExpiry'),
+
+    // Shipment
+    shipmentType:      val('shipmentType'),
+    cargoType:         val('cargoType'),
+    commodity:         val('commodity'),
+    shipmentValue:     val('shipmentValue'),
+    description:       val('description'),
+
+    // Pricing
+    rate:              val('rate'),
+    packingCharges:    val('packingCharges'),
+    additionalCharges: val('additionalCharges'),
+    grandTotal:        _state.totals.grand.toFixed(2),
+
+    // Boxes
+    totalBoxes:        _state.totals.boxes,
+    totalActualWeight: _state.totals.actual.toFixed(2),
+    totalCW:           _state.totals.cw.toFixed(2),
+    boxes:             JSON.stringify(boxData),
+  };
+}
+
+// ─────────────────────────────────────────────────────────
+// 9. SUCCESS MODAL
+// ─────────────────────────────────────────────────────────
+function showSuccessModal(payload, awbs) {
+  _state.lastBooking = { ...payload, masterAWB: awbs.master, childAWBs: awbs.children };
+
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('mAwb',      awbs.master);
+  set('mAwbSub',   `${awbs.children.length} box${awbs.children.length!==1?'es':''} · ${new Date().toLocaleDateString('en-GB')}`);
+  set('mShipper',  payload.shipperName);
+  set('mConsignee',payload.receiverNameInt);
+  set('mOrigin',   payload.originCountry);
+  set('mDest',     payload.destCountry);
+  set('mBoxes',    payload.totalBoxes);
+  set('mWeight',   payload.totalActualWeight + ' kg');
+  set('mCW',       payload.totalCW + ' kg');
+  set('mTotal',    'OMR ' + payload.grandTotal);
+
+  // Child AWB list
+  const list = document.getElementById('childAwbList');
+  list.innerHTML = awbs.children.map((awb, i) =>
+    `<div class="child-row">
+       <span class="cr-box">Box ${i+1}</span>
+       <span class="cr-awb">${awb}</span>
+     </div>`
+  ).join('');
+
+  document.getElementById('successModal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('successModal').classList.remove('open');
+  resetForm();
+}
+
+function resetForm() {
+  document.getElementById('internationalForm').reset();
+  document.getElementById('boxContainer').innerHTML = '';
+  _state.boxCount = 0;
+  _state.boxes    = [];
+  _state.totals   = { boxes:0, actual:0, cw:0, grand:0 };
+  _state.lastBooking = null;
+  document.getElementById('addBoxBtn').disabled = false;
+  document.getElementById('lblTotalBoxes').textContent  = '0';
+  document.getElementById('lblTotalActual').textContent = '0.00 kg';
+  document.getElementById('lblTotalCW').textContent     = '0.00 kg';
+  document.getElementById('grandTotal').value = '';
+  // Re-set phone code displays
+  document.getElementById('shipperPhoneCodeDisplay').textContent  = '—';
+  document.getElementById('consigneePhoneCodeDisplay').textContent = '—';
+  hideErrors();
+  addBox(); // start with one box
+}
+
+// ─────────────────────────────────────────────────────────
+// 10. WAYBILL LABEL PRINT
+// ─────────────────────────────────────────────────────────
+function printLabels() {
+  const b = _state.lastBooking;
+  if (!b) return;
+
+  const labels = b.childAWBs.map((awb, i) => {
+    const boxes  = JSON.parse(b.boxes || '[]');
+    const box    = boxes[i] || {};
+    return `
+    <div class="label">
+      <div class="lhdr">
+        <span class="lbrand">NUVANA EXPRESS</span>
+        <span class="lsvc">${b.shipmentType || 'INTL'}</span>
+      </div>
+      <div class="lawb">
+        <div class="lawb-lbl">AWB</div>
+        <div class="lawb-val">${awb}</div>
+        <div class="lawb-sub">Box ${i+1} of ${b.childAWBs.length} · Master: ${b.masterAWB}</div>
+      </div>
+      <div class="lparties">
+        <div class="lparty">
+          <div class="lparty-t">▲ FROM</div>
+          <div class="lparty-n">${b.shipperName}</div>
+          <div class="lparty-a">${b.shipperAddress||''}, ${b.shipperCity||''}, ${b.shipperState||''}</div>
+          <div class="lparty-a">${b.originCountry||''} ${b.postalCode||''}</div>
+          <div class="lparty-p">${b.contactNumber||''}</div>
+        </div>
+        <div class="lparty lparty-to">
+          <div class="lparty-t">▼ TO</div>
+          <div class="lparty-n">${b.receiverNameInt}</div>
+          <div class="lparty-a">${b.receiverAddress||''}, ${b.consigneeCity||''}, ${b.consigneeState||''}</div>
+          <div class="lparty-a">${b.destCountry||''} ${b.zipCode||''}</div>
+          <div class="lparty-p">${b.receiverPhoneInt||''}</div>
+        </div>
+      </div>
+      <div class="ldetails">
+        <div class="ldr"><span>Weight:</span><strong>${box.actualWeight||0} kg act / ${box.cw||0} kg cw</strong></div>
+        <div class="ldr"><span>Dims:</span><strong>${box.length||0}×${box.width||0}×${box.height||0} cm</strong></div>
+        <div class="ldr"><span>Commodity:</span><strong>${b.commodity||'—'}</strong></div>
+        <div class="ldr"><span>Declared:</span><strong>USD ${b.shipmentValue||'0'}</strong></div>
+      </div>
+      <div class="lftr">
+        <span class="ldest">${b.destCountry||'DESTINATION'}</span>
+        <span class="ldate">${new Date().toLocaleDateString('en-GB')}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const w = window.open('','_blank','width=500,height=750');
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Labels</title>
+  <style>
+    @page{size:4in 6in;margin:0;}
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:Arial Narrow,Arial,sans-serif;background:#fff;}
+    .label{width:4in;height:6in;padding:.18in .2in;border:2px solid #000;display:flex;flex-direction:column;gap:.07in;overflow:hidden;page-break-after:always;}
+    .label:last-child{page-break-after:auto;}
+    .lhdr{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #000;padding-bottom:.06in;}
+    .lbrand{font-size:14pt;font-weight:900;letter-spacing:.04em;}
+    .lsvc{font-size:7.5pt;font-weight:700;text-transform:uppercase;background:#000;color:#fff;padding:2px 7px;border-radius:3px;}
+    .lawb{text-align:center;padding:.07in 0;border-bottom:1.5px solid #000;background:#f7f7f7;border-radius:3px;}
+    .lawb-lbl{font-size:6.5pt;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:3px;}
+    .lawb-val{font-size:17pt;font-weight:900;font-family:'Courier New',monospace;letter-spacing:.06em;}
+    .lawb-sub{font-size:6pt;color:#555;margin-top:3px;}
+    .lparties{display:flex;flex-direction:column;gap:.05in;flex:1;}
+    .lparty{padding:.05in .07in;border:1px solid #999;border-radius:3px;}
+    .lparty-to{border:1.5px solid #000;}
+    .lparty-t{font-size:6pt;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#555;margin-bottom:2px;}
+    .lparty-n{font-size:10pt;font-weight:800;line-height:1.2;}
+    .lparty-a{font-size:7.5pt;line-height:1.35;color:#222;}
+    .lparty-p{font-size:7.5pt;font-family:'Courier New',monospace;margin-top:2px;}
+    .ldetails{border-top:1.5px solid #000;padding-top:.05in;}
+    .ldr{display:flex;justify-content:space-between;font-size:7.5pt;line-height:1.55;}
+    .ldr span{color:#555;}.ldr strong{font-weight:700;}
+    .lftr{display:flex;justify-content:space-between;align-items:center;border-top:2px solid #000;padding-top:.05in;margin-top:auto;}
+    .ldest{font-size:12pt;font-weight:900;background:#000;color:#fff;padding:2px 10px;border-radius:3px;text-transform:uppercase;}
+    .ldate{font-size:7pt;color:#555;}
+    @media screen{body{background:#e5e5e5;padding:20px;}.label{margin:0 auto 20px;box-shadow:0 4px 16px rgba(0,0,0,.2);}}
+  </style></head><body>${labels}</body></html>`);
+  w.document.close();
+  w.focus();
+  setTimeout(() => w.print(), 400);
+}
+
+// ─────────────────────────────────────────────────────────
+// 11. FORM SUBMISSION
+// ─────────────────────────────────────────────────────────
+async function handleSubmit(e) {
+  e.preventDefault();
+
+  // Sync all box states from DOM
+  for (let i = 1; i <= _state.boxCount; i++) syncBox(i);
+  recalcAll();
+
+  const errors = validateForm();
+  if (errors.length > 0) { showErrors(errors); return; }
+  hideErrors();
+
+  const awbs    = generateAllAWBs(_state.boxes.length);
+  const payload = buildPayload(awbs);
+
+  // Loading state
+  const btn     = document.getElementById('submitIntBtn');
+  const btnTxt  = document.getElementById('btnTextInt');
+  const spinner = document.getElementById('loadingIconInt');
+  btn.disabled      = true;
+  btnTxt.textContent = 'Transmitting…';
+  spinner.classList.remove('hidden');
+
+  try {
+    const res    = await fetch(_state.scriptURL, {
+      method:  'POST',
+      body:    JSON.stringify(payload),
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    });
+    const result = await res.json();
+
+    if (result.result === 'success') {
+      showSuccessModal(payload, awbs);
+    } else {
+      alert('Booking failed: ' + (result.error || 'Unknown error from server.'));
+    }
+  } catch (err) {
+    console.error('Submit error:', err);
+    alert('Connection failed. Please check your network and try again.');
+  } finally {
+    btn.disabled       = false;
+    btnTxt.textContent = 'Transmit International Booking';
+    spinner.classList.add('hidden');
+  }
+}
+
+// ─────────────────────────────────────────────────────────
+// 12. INIT — runs when DOM is ready
+// ─────────────────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ── User info from session ──
+  const raw = sessionStorage.getItem('erp_user');
+  if (raw) {
+    try {
+      const u = JSON.parse(raw);
+      const i = (u.name || 'U').charAt(0).toUpperCase();
+      document.getElementById('sidebarAvatar').textContent = i;
+      document.getElementById('headerAvatar').textContent  = i;
+      document.getElementById('sidebarName').textContent   = u.name;
+      document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+      if (u.role === 'Admin') {
+        const al = document.getElementById('navAdminLink');
+        if (al) { al.style.display = 'flex'; }
+      }
+    } catch(_) {}
+  }
+
+  // ── Populate dropdowns ──
+  populateCountryDropdown('originCountry');
+  populateCountryDropdown('destCountry');
+  populateIdTypes();
+
+  // ── Country change → phone code + states ──
+  document.getElementById('originCountry')?.addEventListener('change', e => {
+    const code = e.target.value;
+    updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode');
+    populateStateDropdown('shipperState', code);
+  });
+  document.getElementById('destCountry')?.addEventListener('change', e => {
+    const code = e.target.value;
+    updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode');
+    populateStateDropdown('consigneeState', code);
+  });
+
+  // ── Pricing change → grand total ──
+  ['rate','packingCharges','additionalCharges'].forEach(id => {
+    document.getElementById(id)?.addEventListener('input', recalcAll);
+  });
+
+  // ── Add box button ──
+  document.getElementById('addBoxBtn')?.addEventListener('click', addBox);
+
+  // ── Form submit ──
+  document.getElementById('internationalForm')?.addEventListener('submit', handleSubmit);
+
+  // ── Modal buttons ──
+  document.getElementById('btnCloseModal')?.addEventListener('click', closeModal);
+  document.getElementById('btnPrintLabel')?.addEventListener('click', printLabels);
+  document.getElementById('btnPrintInvoice')?.addEventListener('click', () => window.print());
+  document.getElementById('successModal')?.addEventListener('click', e => {
+    if (e.target.id === 'successModal') closeModal();
+  });
+
+  // ── Start with one box ──
+  addBox();
 });
 </script>
+
+<!-- app.js last — it calls InternationalBookingModule.init() which
+     we no longer need since everything is inlined above.
+     app.js handles auth guard and other shared logic. -->
+<script src="app.js"></script>
+
 </body>
 </html>
