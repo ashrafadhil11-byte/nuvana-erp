@@ -1207,7 +1207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ─────────────────────────────────────────────────────────
-// 10. WAYBILL LABEL PRINT (Redirects to waybill-label.html)
+// 10. WAYBILL LABEL PRINT (Redirects to templates/waybill-label.html)
 // ─────────────────────────────────────────────────────────
 function printLabels() {
   const b = _state.lastBooking;
@@ -1220,13 +1220,8 @@ function printLabels() {
     "Land Transport (LTL)": "LND-LTL", "Land Transport (FTL)": "LND-FTL"
   };
   const printSvcCode = serviceCodes[b.shipmentType] || b.shipmentType || 'INTL';
-
-  // We will open the waybill window. For multiple boxes, it's best to print them one by one, 
-  // or we can pass the data for the FIRST box as a test.
-  // To handle multiple boxes cleanly with the new HTML file, we loop through them.
   
   b.childAWBs.forEach((childAwb, index) => {
-      // Save data for this specific box to memory
       const printData = {
           service: printSvcCode,
           masterAwb: b.masterAWB,
@@ -1256,9 +1251,10 @@ function printLabels() {
           commodity: b.commodity || 'General'
       };
 
-      // Set the data, then open the label file
       localStorage.setItem('nuvana_print_data', JSON.stringify(printData));
-      window.open('waybill-label.html', '_blank', 'width=500,height=750');
+      
+      // THE FIX IS HERE: Added 'templates/' to the file path
+      window.open('templates/waybill-label.html', '_blank', 'width=500,height=750');
   });
 }
 </script>
