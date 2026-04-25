@@ -453,7 +453,19 @@
                     </div>
                 </div>
                 <div style="padding:18px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;">
-                    <div><label class="fl">Shipment Type</label><input type="text" id="shipmentType" placeholder="e.g. Air Freight" class="field"></div>
+                    <div>
+                        <label class="fl">Shipment Type *</label>
+                        <select id="shipmentType" required class="field">
+                            <option value="" disabled selected>Select Type…</option>
+                            <option value="Door-to-Door">Door-to-Door Courier</option>
+                            <option value="Excess Baggage">Excess Baggage</option>
+                            <option value="Air Freight (Express)">Air Freight (Express)</option>
+                            <option value="Air Freight (Standard)">Air Freight (Standard)</option>
+                            <option value="Sea Freight (LCL)">Sea Freight (LCL)</option>
+                            <option value="Sea Freight (FCL)">Sea Freight (FCL)</option>
+                            <option value="Land Transport">Land Transport</option>
+                        </select>
+                    </div>
                     <div><label class="fl">Cargo Type</label><input type="text" id="cargoType" placeholder="e.g. General" class="field"></div>
                     <div><label class="fl">Commodity</label><input type="text" id="commodity" placeholder="e.g. Electronics" class="field"></div>
                     <div><label class="fl">Declared Value (USD)</label><input type="text" id="shipmentValue" placeholder="0.00" class="field"></div>
