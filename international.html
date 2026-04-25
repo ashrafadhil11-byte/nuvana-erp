@@ -1018,18 +1018,19 @@ function showErrors(errors) {
 }
 function hideErrors() { document.getElementById('valBanner').style.display = 'none'; }
 
-function buildPayload(awbs) {
+function buildPayload() {
   const originSel = document.getElementById('originCountry');
   const destSel   = document.getElementById('destCountry');
+  
   const originName = originSel.options[originSel.selectedIndex]?.text || val('originCountry');
   const destName   = destSel.options[destSel.selectedIndex]?.text     || val('destCountry');
+  const originCode = originSel.value || 'XX'; // Gets the 'OM', 'IN', 'AE' code
 
   const boxData = _state.boxes.map((box, i) => ({
-    boxNumber: i+1, childAWB: awbs.children[i], actualWeight: box.actual,
+    boxNumber: i+1, actualWeight: box.actual,
     length: box.l, width: box.w, height: box.h, cw: box.cw,
   }));
 
-  // Match GAS expected flat payload logic (b1W, b1CW, etc.) for backwards compatibility
   const legacyBoxMapping = {};
   boxData.forEach((b, i) => {
       legacyBoxMapping[`b${i+1}W`] = b.actualWeight;
@@ -1038,9 +1039,12 @@ function buildPayload(awbs) {
   });
 
   return {
-    formType: 'international', // Trigger GAS backend
-    ...legacyBoxMapping,       // Spread legacy boxes for GAS sheet
-    masterAWB: awbs.master,
+    formType: 'international', 
+    ...legacyBoxMapping,       
+    
+    // Pass the code so the backend can generate 'NVCOM000001'
+    originCountryCode: originCode, 
+    
     shipperName: val('shipperName'),
     contactNumber: (val('shipperPhoneCode') + val('contactNumber')).trim(),
     altNumber: val('altNumber'),
@@ -1148,6 +1152,16 @@ function printLabels() {
 // ─────────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
 
+    // ── Auto-Capitalize All Text Inputs ──
+  document.addEventListener('input', function(e) {
+      if (e.target.tagName === 'INPUT' && e.target.type === 'text' || e.target.tagName === 'TEXTAREA') {
+          // Store cursor position to prevent jumping
+          const start = e.target.selectionStart;
+          const end = e.target.selectionEnd;
+          e.target.value = e.target.value.toUpperCase();
+          e.target.setSelectionRange(start, end);
+      }
+  });
   const raw = sessionStorage.getItem('erp_user');
   if (raw) {
     try {
@@ -1183,8 +1197,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (errors.length > 0) return showErrors(errors);
       hideErrors();
 
-      const awbs = generateAllAWBs(_state.boxes.length);
-      const payload = buildPayload(awbs);
+      // We no longer generate AWBs here. The server does it!
+      const payload = buildPayload();
 
       const btn = document.getElementById('submitIntBtn'); const btnTxt = document.getElementById('btnTextInt'); const spinner = document.getElementById('loadingIconInt');
       btn.disabled = true; btnTxt.textContent = 'Transmitting…'; spinner.classList.remove('hidden');
@@ -1192,7 +1206,15 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const res = await fetch(_state.scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
         const result = await res.json();
-        if (result.result === 'success') { showSuccessModal(payload, awbs); } 
+        
+        if (result.result === 'success') { 
+            // Receive the master and child AWBs directly from your database
+            const serverAwbs = {
+                master: result.masterAWB,
+                children: result.childAWBs
+            };
+            showSuccessModal(payload, serverAwbs); 
+        } 
         else { alert('Booking failed: ' + (result.error || 'Unknown error.')); }
       } catch (err) { alert('Connection failed. Please check your network and try again.'); } 
       finally { btn.disabled = false; btnTxt.textContent = 'Transmit International Booking'; spinner.classList.add('hidden'); }
