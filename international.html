@@ -929,7 +929,11 @@ function recalcAll() {
     
     _state.boxes.forEach((box, idx) => {
         const vol = (box.l * box.w * box.h) / 5000;
-        const cw  = Math.max(box.actual, vol);
+        let rawCw = Math.max(box.actual, vol);
+        
+        // Round up to the nearest 0.5 kg step
+        let cw = Math.ceil(rawCw * 2) / 2;
+        
         _state.boxes[idx].cw = cw;
         totalActual += box.actual;
         totalCW += cw;
@@ -941,7 +945,12 @@ function recalcAll() {
     const rate    = parseFloat(document.getElementById('rate')?.value) || 0;
     const packing = parseFloat(document.getElementById('packingCharges')?.value) || 0;
     const extra   = parseFloat(document.getElementById('additionalCharges')?.value) || 0;
-    const grand   = rate > 0 ? (totalCW * rate) + packing + extra : 0;
+    
+    // IF the Total Chargeable Weight is less than 1, force the billing weight to be 1.0
+    const billingWeight = Math.max(totalCW, 1.0);
+    
+    // Calculate Grand Total using the enforced Billing Weight
+    const grand   = rate > 0 ? (billingWeight * rate) + packing + extra : 0;
 
     _state.totals = { boxes: _state.boxes.length, actual: totalActual, cw: totalCW, grand: grand };
 
@@ -1024,7 +1033,9 @@ function buildPayload() {
   
   const originName = originSel.options[originSel.selectedIndex]?.text || val('originCountry');
   const destName   = destSel.options[destSel.selectedIndex]?.text     || val('destCountry');
-  const originCode = originSel.value || 'XX'; // Gets the 'OM', 'IN', 'AE' code
+  
+  // Grab the 2-letter Destination Code (e.g. 'IN', 'AE') to send to the backend
+  const destCode = destSel.value || 'XX'; 
 
   const boxData = _state.boxes.map((box, i) => ({
     boxNumber: i+1, actualWeight: box.actual,
@@ -1042,8 +1053,7 @@ function buildPayload() {
     formType: 'international', 
     ...legacyBoxMapping,       
     
-    // Pass the code so the backend can generate 'NVCOM000001'
-    originCountryCode: originCode, 
+    destCountryCode: destCode, // Passing destination code to script
     
     shipperName: val('shipperName'),
     contactNumber: (val('shipperPhoneCode') + val('contactNumber')).trim(),
