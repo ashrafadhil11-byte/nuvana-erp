@@ -3,106 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuvana.ex ERP</title>
+    <title>Nuvana.ex ERP — Process Update</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>document.documentElement.classList.remove('dark');</script>
+    <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{orange:'#F99523',teal:'#027385',beige:'#EFE7DC',charcoal:'#0D2330',success:'#10B981'},fontFamily:{poppins:['Poppins','sans-serif'],lexend:['Lexend','sans-serif']}}}}</script>
     <style>
-        body { font-family: 'Poppins', sans-serif; }
-        h1, h2, h3, h4, h5, h6, .font-mono, .tracking-widest { font-family: 'Lexend', sans-serif; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        *{box-sizing:border-box;}body{font-family:'Poppins',sans-serif;background:#f5f2ee;}.font-lexend{font-family:'Lexend',sans-serif;}
+        @keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+        @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}}
+        @keyframes spin{to{transform:rotate(360deg);}}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}
+        .anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .13s both;}
+        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}
+        .spin{animation:spin 1s linear infinite;}
+        ::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}
+        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
+        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
+        .divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
+        .awb-input{width:100%;background:rgba(13,35,48,.03);border:2px solid rgba(13,35,48,.12);border-radius:14px;padding:1rem 1.2rem 1rem 3.2rem;font-family:'Lexend',sans-serif;font-size:1.05rem;font-weight:600;letter-spacing:.1em;color:#0D2330;outline:none;text-transform:uppercase;transition:border-color .2s,box-shadow .2s,background .2s;}
+        .awb-input::placeholder{color:rgba(13,35,48,.2);font-weight:400;letter-spacing:0;text-transform:none;font-family:'Poppins',sans-serif;font-size:.82rem;}
+        .awb-input:focus{border-color:#F99523;box-shadow:0 0 0 4px rgba(249,149,35,.12);background:white;}
+        .status-select{width:100%;background:white;border:1px solid #e8e0d6;border-radius:12px;padding:.75rem 2.5rem .75rem 1rem;font-family:'Poppins',sans-serif;font-size:.875rem;color:#0D2330;outline:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.5'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .75rem center;background-size:16px;transition:border-color .2s,box-shadow .2s;}
+        .status-select:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);}
+        .btn-submit{width:100%;padding:.9rem 1rem;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(13,35,48,.2);position:relative;overflow:hidden;}
+        .btn-submit::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;}
+        .btn-submit>*{position:relative;z-index:1;}
+        .btn-submit:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);}
+        .btn-submit:hover::after{width:100%;}
+        .btn-submit:active{transform:translateY(0);}
+        .btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+        .status-opt{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:10px;border:1px solid #f0ece6;background:white;cursor:pointer;transition:all .18s;}
+        .status-opt:hover{border-color:#ddd5c8;background:#faf8f5;transform:translateX(3px);}
+        .status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+        .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:#0D2330;color:white;padding:12px 24px;border-radius:14px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;font-family:'Lexend',sans-serif;box-shadow:0 8px 24px rgba(13,35,48,.25);opacity:0;pointer-events:none;transition:opacity .3s,transform .35s cubic-bezier(.16,1,.3,1);z-index:100;white-space:nowrap;}
+        .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+        .panel{background:white;border:1px solid #e8e0d6;border-radius:16px;overflow:hidden;}
+        .panel-hdr{padding:12px 20px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;gap:10px;}
     </style>
 </head>
-<body class="bg-slate-900 text-white min-h-screen flex overflow-hidden">
+<body class="min-h-screen flex overflow-hidden">
 
-    <aside class="w-64 glass-panel border-r border-slate-700 transition-all duration-300 flex flex-col z-20">
-        <div class="p-6 flex justify-between items-center border-b border-slate-700">
-            <h1 class="text-xl font-bold tracking-widest text-blue-400">NUVANA.EX</h1>
-        </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="index.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Dashboard</a>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">
-                    <span>New Booking</span>
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="hidden group-hover:block pl-6 pr-4 py-2 space-y-1">
-                    <a href="international.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">International</a>
-                    <a href="domestic.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Domestic</a>
-                </div>
-            </div>
-            
-            <div class="group relative cursor-pointer">
-                <div class="w-full flex justify-between items-center px-4 py-2 rounded-lg bg-teal-600 bg-opacity-20 text-teal-400 border border-teal-500 border-opacity-30 transition">
-                    <span>Processing</span>
-                    <svg class="w-4 h-4 transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="pl-6 pr-4 py-2 space-y-1">
-                    <a href="processing.html" class="block px-2 py-1 text-sm text-slate-400 hover:text-white transition">Manage Bookings</a>
-                    <a href="update.html" class="block px-2 py-1 text-sm text-white font-bold transition">Process Update</a>
-                </div>
-            </div>
+<div class="toast" id="successToast">
+    <svg style="width:16px;height:16px;color:#10B981;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+    <span id="toastMsg">Updated!</span>
+</div>
 
-            <a href="accounts.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Accounts</a>
-            <a href="customers.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Customers</a>
-            <a href="reports.html" class="block px-4 py-2 text-slate-300 hover:bg-slate-800 rounded-lg transition">Reports</a>
-            <a href="admin.html" id="navAdminLink" class="hidden items-center px-4 py-3 text-white/60 hover:text-white hover:bg-white/5 dark:text-beige/60 dark:hover:text-beige dark:hover:bg-teal/10 rounded-[16px] transition">
-                 <svg class="w-5 h-5 mr-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd" /></svg>
-                 <span class="hidden md:block font-medium">Admin Panel</span>
-            </a>
-        </nav>
-    </aside>
-
-    <main class="flex-1 flex flex-col h-screen overflow-hidden">
-        <header class="h-16 glass-panel border-b border-slate-700 flex items-center justify-between px-8 z-10">
-            <h2 class="text-lg font-semibold text-slate-200">Tracking Checkpoint Engine</h2>
-            <div class="flex items-center space-x-4">
-                <span class="text-sm text-slate-400">Branch: HQ</span>
-                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center font-bold">A</div>
-            </div>
-        </header>
-
-        <div class="flex-1 p-8 overflow-y-auto flex items-center justify-center relative">
-            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-500 rounded-full mix-blend-multiply filter blur-[100px] opacity-20 pointer-events-none"></div>
-
-            <div class="glass-panel p-8 rounded-xl border-t border-l border-slate-600 shadow-2xl relative w-full max-w-md z-10">
-                <h3 class="text-2xl font-semibold text-white mb-2 text-center">Process Update</h3>
-                <p class="text-slate-400 text-sm text-center mb-6">Scan or enter AWB to update logistics status.</p>
-
-                <form id="updateStatusForm" class="space-y-5">
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">AWB Number</label>
-                        <input type="text" id="scanAwb" required placeholder="Scan Barcode / Type AWB" class="w-full bg-slate-800 bg-opacity-70 border border-slate-600 rounded-lg p-3 text-white font-mono text-lg text-center tracking-widest focus:outline-none focus:border-teal-500 transition shadow-inner">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold tracking-wider text-slate-400 uppercase mb-1">New Status</label>
-                        <select id="newStatus" required class="w-full bg-slate-800 bg-opacity-70 border border-slate-600 rounded-lg p-3 text-white focus:outline-none focus:border-teal-500 transition appearance-none">
-                            <option value="" disabled selected>Select check-point...</option>
-                            <option value="Dispatched to Hub">Dispatched to Hub</option>
-                            <option value="Arrived at Hub">Arrived at Hub</option>
-                            <option value="In Transit">In Transit</option>
-                            <option value="Out for Delivery">Out for Delivery</option>
-                            <option value="Delivered">Delivered</option>
-                            <option value="Exception / Held">Exception / Held</option>
-                        </select>
-                    </div>
-
-                    <button type="submit" id="updateBtn" class="mt-4 w-full bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white font-bold py-3.5 rounded-lg transition shadow-lg shadow-teal-500/30 flex justify-center items-center">
-                        <span id="updateBtnText">Update Database</span>
-                        <svg id="updateLoadingIcon" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                    </button>
-                </form>
+<!-- SIDEBAR -->
+<aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;"><p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
+    </div>
+    <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
+        <a href="index.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
+        <div class="section-label" style="margin-top:12px;">Logistics</div>
+        <div class="group" style="position:relative;">
+            <div class="nav-item" style="justify-content:space-between;"><div style="display:flex;align-items:center;gap:10px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div><svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg></div>
+            <div class="hidden group-hover:flex" style="flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;gap:2px;">
+                <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">International</a>
+                <a href="domestic.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
             </div>
         </div>
-    </main>
+        <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
+                <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div>
+            </div>
+            <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
+                <a href="processing.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
+                <a href="update.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">Process Update</a>
+            </div>
+        </div>
+        <div class="section-label" style="margin-top:12px;">Finance & CRM</div>
+        <a href="accounts.html"  class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
+        <a href="customers.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
+        <a href="reports.html"   class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
+        <div class="divider-h" style="margin:8px 0;"></div>
+        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+    </nav>
+    <div style="padding:12px;border-top:1px solid rgba(255,255,255,.06);">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);">
+            <div id="sidebarAvatar" style="width:28px;height:28px;border-radius:9px;background:#F99523;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
+            <div style="overflow:hidden;flex:1;"><div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div><div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div></div>
+        </div>
+    </div>
+</aside>
 
-    <script src="app.js"></script>
+<!-- MAIN -->
+<main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
+    <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:32px;height:32px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
+                <svg style="width:16px;height:16px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"/></svg>
+            </div>
+            <div>
+                <h2 class="font-lexend" style="font-size:14px;font-weight:600;color:#0D2330;">Tracking Checkpoint Engine</h2>
+                <p style="font-size:10px;color:rgba(2,115,133,.6);">Scan AWB · Select status · Submit</p>
+            </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;">
+                <span style="position:relative;display:flex;width:6px;height:6px;"><span class="ping" style="position:absolute;display:inline-flex;width:100%;height:100%;border-radius:50%;background:#10B981;opacity:.75;"></span><span style="position:relative;display:inline-flex;width:6px;height:6px;border-radius:50%;background:#10B981;"></span></span>
+                <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span>
+            </div>
+            <div id="headerAvatar" style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#F99523;">A</div>
+        </div>
+    </header>
+
+    <div style="flex:1;overflow-y:auto;padding:24px;display:flex;align-items:flex-start;justify-content:center;background:#f5f2ee;">
+        <div style="width:100%;max-width:900px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start;">
+
+            <!-- LEFT: Form -->
+            <div style="display:flex;flex-direction:column;gap:20px;" class="anim-1">
+                <!-- AWB -->
+                <div class="panel">
+                    <div class="panel-hdr">
+                        <div style="width:28px;height:28px;border-radius:8px;background:#0D2330;display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 4.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875V17.25a4.5 4.5 0 11-9 0V4.125zm4.5 14.25a1.125 1.125 0 100-2.25 1.125 1.125 0 000 2.25z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div><p class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">AWB / Order ID</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Scan barcode or type manually</p></div>
+                    </div>
+                    <div style="padding:20px;">
+                        <div style="position:relative;">
+                            <span style="position:absolute;left:1rem;top:50%;transform:translateY(-50%);pointer-events:none;"><svg style="width:20px;height:20px;color:rgba(13,35,48,.22);" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 4.125c0-1.036.84-1.875 1.875-1.875h5.25c1.036 0 1.875.84 1.875 1.875V17.25a4.5 4.5 0 11-9 0V4.125zm4.5 14.25a1.125 1.125 0 100-2.25 1.125 1.125 0 000 2.25z" clip-rule="evenodd"/></svg></span>
+                            <input type="text" id="scanAwb" required class="awb-input" placeholder="e.g. NVX-2024-00001" autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status + Submit -->
+                <div class="panel">
+                    <div class="panel-hdr">
+                        <div style="width:28px;height:28px;border-radius:8px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:14px;height:14px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <div><p class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">New Status</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Select the checkpoint to apply</p></div>
+                    </div>
+                    <div style="padding:20px;">
+                        <form id="updateStatusForm">
+                            <div style="position:relative;margin-bottom:16px;">
+                                <select id="newStatus" required class="status-select">
+                                    <option value="" disabled selected>Select checkpoint…</option>
+                                    <option value="Dispatched to Hub">Dispatched to Hub</option>
+                                    <option value="Arrived at Hub">Arrived at Hub</option>
+                                    <option value="In Transit">In Transit</option>
+                                    <option value="Out for Delivery">Out for Delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Exception / Held">Exception / Held</option>
+                                </select>
+                            </div>
+                            <button type="submit" id="updateBtn" class="btn-submit">
+                                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"/></svg>
+                                <span id="updateBtnText">Update Database</span>
+                                <svg id="updateLoadingIcon" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Reference -->
+            <div style="display:flex;flex-direction:column;gap:20px;" class="anim-2">
+                <!-- Checkpoints -->
+                <div class="panel">
+                    <div class="panel-hdr">
+                        <div style="width:28px;height:28px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
+                            <svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Status Checkpoints</span>
+                    </div>
+                    <div style="padding:16px;display:flex;flex-direction:column;gap:8px;">
+                        <div class="status-opt"><div class="status-dot" style="background:#7e22ce;"></div><div><p style="font-size:11px;font-weight:600;color:#0D2330;">Dispatched to Hub</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Package sent from origin</p></div></div>
+                        <div class="status-opt"><div class="status-dot" style="background:#7e22ce;"></div><div><p style="font-size:11px;font-weight:600;color:#0D2330;">Arrived at Hub</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Received at facility</p></div></div>
+                        <div class="status-opt"><div class="status-dot" style="background:#1d4ed8;"></div><div><p style="font-size:11px;font-weight:600;color:#0D2330;">In Transit</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Moving to destination hub</p></div></div>
+                        <div class="status-opt"><div class="status-dot" style="background:#c2410c;"></div><div><p style="font-size:11px;font-weight:600;color:#0D2330;">Out for Delivery</p><p style="font-size:9px;color:rgba(2,115,133,.5);">With delivery agent</p></div></div>
+                        <div class="status-opt" style="border-color:rgba(16,185,129,.2);background:rgba(16,185,129,.03);"><div class="status-dot" style="background:#15803d;"></div><div><p style="font-size:11px;font-weight:600;color:#15803d;">Delivered ✓</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Successfully completed</p></div></div>
+                        <div class="status-opt" style="border-color:rgba(185,28,28,.15);background:rgba(185,28,28,.02);"><div class="status-dot" style="background:#b91c1c;"></div><div><p style="font-size:11px;font-weight:600;color:#b91c1c;">Exception / Held</p><p style="font-size:9px;color:rgba(2,115,133,.5);">Needs attention</p></div></div>
+                    </div>
+                </div>
+
+                <!-- Tips -->
+                <div style="border-radius:16px;padding:20px;background:#0D2330;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+                        <svg style="width:16px;height:16px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M9 4.5a.75.75 0 01.721.544l.813 2.846a3.75 3.75 0 002.576 2.576l2.846.813a.75.75 0 010 1.442l-2.846.813a3.75 3.75 0 00-2.576 2.576l-.813 2.846a.75.75 0 01-1.442 0l-.813-2.846a3.75 3.75 0 00-2.576-2.576l-2.846-.813a.75.75 0 010-1.442l2.846-.813A3.75 3.75 0 007.466 7.89l.813-2.846A.75.75 0 019 4.5z" clip-rule="evenodd"/></svg>
+                        <p class="font-lexend" style="font-size:11px;font-weight:700;color:#EFE7DC;">Pro Tips</p>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><div style="width:5px;height:5px;border-radius:50%;background:#F99523;flex-shrink:0;margin-top:4px;"></div><p style="font-size:10px;line-height:1.6;color:rgba(239,231,220,.45);">A barcode scanner auto-fills the AWB field. Press Enter to jump to the status dropdown.</p></div>
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><div style="width:5px;height:5px;border-radius:50%;background:#027385;flex-shrink:0;margin-top:4px;"></div><p style="font-size:10px;line-height:1.6;color:rgba(239,231,220,.45);">After submitting, the form resets and cursor returns to AWB — ready for the next scan.</p></div>
+                        <div style="display:flex;align-items:flex-start;gap:8px;"><div style="width:5px;height:5px;border-radius:50%;background:#10B981;flex-shrink:0;margin-top:4px;"></div><p style="font-size:10px;line-height:1.6;color:rgba(239,231,220,.45);">Use "Exception / Held" for customs delays, failed deliveries, or address issues.</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function showToast(msg) {
+    const t = document.getElementById('successToast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const raw = sessionStorage.getItem('erp_user');
+    if (raw) {
+        const u=JSON.parse(raw),i=(u.name||'U').charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent=i;
+        document.getElementById('headerAvatar').textContent=i;
+        document.getElementById('sidebarName').textContent=u.name;
+        document.getElementById('sidebarRole').textContent=`${u.role} · ${u.branchId}`;
+        if(u.role==='Admin'){const l=document.getElementById('navAdminLink');l.style.display='flex';}
+    }
+    document.getElementById('scanAwb').focus();
+
+    const form=document.getElementById('updateStatusForm');
+    const fresh=form.cloneNode(true);
+    form.parentNode.replaceChild(fresh,form);
+
+    const btn=document.getElementById('updateBtn'),btnText=document.getElementById('updateBtnText'),spinner=document.getElementById('updateLoadingIcon');
+    const SCRIPT='https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+
+    fresh.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const awbEl=document.getElementById('scanAwb'),statusEl=document.getElementById('newStatus');
+        if (!awbEl.value.trim()){awbEl.focus();return;}
+        if (!statusEl.value){statusEl.focus();return;}
+        btnText.textContent='Updating...';spinner.classList.remove('hidden');btn.disabled=true;
+        try {
+            const res=await fetch(SCRIPT,{method:'POST',body:JSON.stringify({formType:'updateStatus',awb:awbEl.value.trim().toUpperCase(),status:statusEl.value}),headers:{'Content-Type':'text/plain;charset=utf-8'}});
+            const result=await res.json();
+            if(result.result==='success'){showToast(`✓ ${awbEl.value.toUpperCase()} → ${statusEl.value}`);fresh.reset();awbEl.focus();}
+            else alert('Error: '+(result.error||'Update failed.'));
+        } catch(err){alert('Connection failed.');}
+        finally{btnText.textContent='Update Database';spinner.classList.add('hidden');btn.disabled=false;}
+    });
+
+    document.getElementById('scanAwb').addEventListener('keydown',(e)=>{
+        if(e.key==='Enter'){e.preventDefault();document.getElementById('newStatus').focus();}
+    });
+});
+</script>
+<script src="app.js"></script>
 </body>
 </html>
