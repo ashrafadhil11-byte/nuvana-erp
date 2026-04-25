@@ -6,421 +6,281 @@
     <title>Nuvana.ex ERP — International Booking</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-
     <script>document.documentElement.classList.remove('dark');</script>
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        orange: '#F99523', teal: '#027385',
-                        beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981'
-                    },
-                    fontFamily: { poppins: ['Poppins','sans-serif'], lexend: ['Lexend','sans-serif'] }
-                }
-            }
-        }
-    </script>
-
+    <script>tailwind.config={darkMode:'class',theme:{extend:{colors:{orange:'#F99523',teal:'#027385',beige:'#EFE7DC',charcoal:'#0D2330',success:'#10B981'},fontFamily:{poppins:['Poppins','sans-serif'],lexend:['Lexend','sans-serif']}}}}</script>
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: #f5f2ee; }
-        .font-lexend { font-family: 'Lexend', sans-serif; }
-
-        @keyframes slideUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes ping    { 75%,100% { transform:scale(2.1); opacity:0; } }
-        @keyframes spin    { to { transform:rotate(360deg); } }
-
-        .anim-1 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
-        .anim-2 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .12s both; }
-        .anim-3 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .19s both; }
-        .anim-4 { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .26s both; }
-        .ping   { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
-        .spin   { animation: spin 1s linear infinite; }
-
-        /* ── Scrollbar ── */
-        ::-webkit-scrollbar { width:5px; height:5px; }
-        ::-webkit-scrollbar-track { background:transparent; }
-        ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
-        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
-
-        /* ── Sidebar nav ── */
-        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
-        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
-        .nav-item.active { background:rgba(249,149,35,.13); border-left:3px solid #F99523; color:#F99523; font-weight:600; padding-left:9px; }
-        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
-        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
-
-        /* ── Card ── */
-        .card { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
-        .card-header { padding:14px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
-
-        /* ── Section panel ── */
-        .section-panel { background:white; border:1px solid #e8e0d6; border-radius:14px; overflow:hidden; }
-        .section-panel-header { padding:12px 18px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; gap:9px; background:#faf8f5; }
-
-        /* ── Field ── */
-        .field {
-            width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15);
-            border-radius:10px; padding:.6rem .85rem; font-family:'Poppins',sans-serif;
-            font-size:.8125rem; color:#0D2330; outline:none;
-            transition:border-color .2s, box-shadow .2s, background .2s;
-        }
-        .field::placeholder { color:rgba(2,115,133,.3); }
-        .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
-        .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
-
-        select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
-
-        /* ── Box row ── */
-        .box-row { display:grid; grid-template-columns:48px 1fr 1fr 1fr 1fr 1fr; gap:6px; align-items:center; }
-        .box-input { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.12); border-radius:8px; padding:.45rem .6rem; font-family:'Poppins',sans-serif; font-size:.75rem; color:#0D2330; outline:none; text-align:center; transition:border-color .2s,box-shadow .2s; }
-        .box-input:focus { border-color:#F99523; box-shadow:0 0 0 2px rgba(249,149,35,.1); }
-        .box-input[readonly] { background:rgba(249,149,35,.06); border-color:rgba(249,149,35,.25); color:#c47b0a; font-weight:700; cursor:default; }
-        .box-num { width:48px; height:34px; border-radius:8px; background:rgba(2,115,133,.08); display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#027385; font-family:'Lexend',sans-serif; }
-
-        /* ── Submit ── */
-        .btn-submit {
-            width:100%; padding:.9rem 1rem; border-radius:12px; background:#0D2330; color:white;
-            font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em;
-            border:none; cursor:pointer; transition:background .2s,transform .15s,box-shadow .2s;
-            display:flex; align-items:center; justify-content:center; gap:.5rem;
-            box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden;
-        }
-        .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
-        .btn-submit > * { position:relative; z-index:1; }
-        .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
-        .btn-submit:hover::after { width:100%; }
-        .btn-submit:active { transform:translateY(0); }
-        .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
-
-        /* ── Total summary bar ── */
-        .totals-bar { background:#0D2330; border-radius:12px; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
-        .total-item { text-align:center; }
-        .total-item .lbl { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(239,231,220,.35); margin-bottom:3px; }
-        .total-item .val { font-family:'Lexend',sans-serif; font-size:15px; font-weight:700; color:#EFE7DC; }
-        .total-item .val.orange { color:#F99523; }
-
-        /* ── Grand total field ── */
-        .grand-total-field { width:100%; background:rgba(249,149,35,.08); border:2px solid rgba(249,149,35,.35); border-radius:10px; padding:.65rem 1rem; font-family:'Lexend',sans-serif; font-size:1rem; font-weight:700; color:#c47b0a; outline:none; text-align:center; cursor:default; }
-
-        /* ── Add box btn ── */
-        .btn-add-box { display:flex; align-items:center; gap:6px; padding:6px 14px; border-radius:8px; background:rgba(2,115,133,.1); border:1px solid rgba(2,115,133,.2); color:#027385; font-size:11px; font-weight:700; cursor:pointer; transition:all .2s; font-family:'Lexend',sans-serif; }
-        .btn-add-box:hover { background:rgba(2,115,133,.18); }
-        .btn-add-box:disabled { opacity:.45; cursor:not-allowed; }
-
-        /* ── Column header ── */
-        .col-header { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.5); text-align:center; }
+        *{box-sizing:border-box;}body{font-family:'Poppins',sans-serif;background:#f5f2ee;}.font-lexend{font-family:'Lexend',sans-serif;}
+        @keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+        @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}}
+        @keyframes spin{to{transform:rotate(360deg);}}
+        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}.anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .12s both;}.anim-3{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .19s both;}.anim-4{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .26s both;}
+        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}.spin{animation:spin 1s linear infinite;}
+        ::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}::-webkit-scrollbar-thumb:hover{background:#F99523;}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}.nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
+        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}.divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
+        .sp{background:white;border:1px solid #e8e0d6;border-radius:14px;overflow:hidden;}
+        .sp-hdr{padding:12px 18px;border-bottom:1px solid #f0ece6;display:flex;align-items:center;justify-content:space-between;gap:9px;background:#faf8f5;}
+        .field{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.15);border-radius:10px;padding:.6rem .85rem;font-family:'Poppins',sans-serif;font-size:.8125rem;color:#0D2330;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;}
+        .field::placeholder{color:rgba(2,115,133,.3);}.field:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);background:#fff;}
+        .fl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:5px;}
+        .fl-opt{font-size:8px;color:rgba(2,115,133,.35);text-transform:none;letter-spacing:0;font-weight:400;}
+        select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;background-size:14px;padding-right:2rem;}
+        .ph-grp{display:flex;gap:6px;align-items:center;}.ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.6rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:56px;text-align:center;}
+        .box-row{display:grid;grid-template-columns:48px 1fr 1fr 1fr 1fr 1fr;gap:6px;align-items:center;}
+        .box-input{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.12);border-radius:8px;padding:.45rem .6rem;font-family:'Poppins',sans-serif;font-size:.75rem;color:#0D2330;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s;}
+        .box-input:focus{border-color:#F99523;box-shadow:0 0 0 2px rgba(249,149,35,.1);}
+        .readonly-cw{background:rgba(249,149,35,.06);border-color:rgba(249,149,35,.25);color:#c47b0a;font-weight:700;cursor:default;}
+        .box-num{width:48px;height:34px;border-radius:8px;background:rgba(2,115,133,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#027385;font-family:'Lexend',sans-serif;}
+        .col-hdr{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);text-align:center;}
+        .totals-bar{background:#0D2330;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+        .total-item .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(239,231,220,.35);margin-bottom:3px;}
+        .total-item .val{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:#EFE7DC;}.total-item .val.orange{color:#F99523;}
+        .gt-field{width:100%;background:rgba(249,149,35,.08);border:2px solid rgba(249,149,35,.35);border-radius:10px;padding:.65rem 1rem;font-family:'Lexend',sans-serif;font-size:1rem;font-weight:700;color:#c47b0a;outline:none;text-align:center;cursor:default;}
+        .btn-add-box{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(2,115,133,.1);border:1px solid rgba(2,115,133,.2);color:#027385;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;}.btn-add-box:hover{background:rgba(2,115,133,.18);}.btn-add-box:disabled{opacity:.45;cursor:not-allowed;}
+        .btn-submit{width:100%;padding:.9rem 1rem;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(13,35,48,.2);position:relative;overflow:hidden;}
+        .btn-submit::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;}.btn-submit>*{position:relative;z-index:1;}
+        .btn-submit:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);}.btn-submit:hover::after{width:100%;}.btn-submit:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+        .validation-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:20px;display:none;}
+        .val-header{display:flex;align-items:center;gap:8px;color:#dc2626;font-size:13px;font-weight:600;margin-bottom:8px;}
+        .validation-banner ul{margin:0;padding-left:18px;}.validation-banner ul li{font-size:12px;color:#b91c1c;line-height:1.7;}
+        /* ── SUCCESS MODAL ── */
+        .modal-overlay{position:fixed;inset:0;background:rgba(13,35,48,.6);backdrop-filter:blur(6px);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+        .modal-overlay.active{opacity:1;pointer-events:all;}
+        .modal-box{background:white;border-radius:20px;width:100%;max-width:580px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(13,35,48,.2);transform:scale(.94) translateY(20px);transition:transform .4s cubic-bezier(.16,1,.3,1);}
+        .modal-overlay.active .modal-box{transform:scale(1) translateY(0);}
+        .modal-hdr{padding:28px 28px 20px;text-align:center;border-bottom:1px solid #f0ece6;}
+        .modal-success-icon{width:56px;height:56px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+        .modal-title{font-family:'Lexend',sans-serif;font-size:20px;font-weight:700;color:#0D2330;}.modal-sub{font-size:12px;color:rgba(2,115,133,.6);margin-top:4px;}
+        .modal-awb-block{margin:20px 28px;background:#0D2330;border-radius:14px;padding:18px;text-align:center;}
+        .modal-awb-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.4);margin-bottom:6px;}
+        .modal-awb-number{font-family:'Lexend',sans-serif;font-size:22px;font-weight:900;color:#EFE7DC;letter-spacing:.08em;}
+        .child-awb-row{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-radius:8px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:4px;}
+        .child-awb-label{font-size:11px;color:#374151;}.child-awb-val{font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;}
+        .modal-summary{margin:0 28px 20px;display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+        .modal-summary-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:10px;padding:10px 12px;}
+        .msi-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:3px;}.msi-value{font-size:12px;font-weight:600;color:#0D2330;}
+        .modal-actions{padding:0 28px 28px;display:flex;gap:10px;flex-wrap:wrap;}
+        .modal-btn{flex:1;min-width:120px;padding:10px 16px;border-radius:11px;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+        .mbp{background:#0D2330;color:white;box-shadow:0 3px 8px rgba(13,35,48,.2);}.mbp:hover{background:#122c3f;}
+        .mbs{background:rgba(2,115,133,.08);color:#027385;border:1px solid rgba(2,115,133,.2);}.mbs:hover{background:rgba(2,115,133,.14);}
+        .mbg{background:rgba(13,35,48,.05);color:#374151;border:1px solid #e8e0d6;}.mbg:hover{background:rgba(13,35,48,.08);}
     </style>
 </head>
-
 <body class="min-h-screen flex overflow-hidden">
 
-<!-- ══ SIDEBAR ══ -->
-<aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
-    <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
-        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
-             style="filter:brightness(0) invert(1);"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div style="display:none;">
-            <p class="font-lexend text-[15px] font-bold tracking-[.14em]" style="color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p>
-            <p class="text-[9px] tracking-[.1em] uppercase mt-0.5" style="color:rgba(239,231,220,.25);">Enterprise Platform</p>
-        </div>
+<!-- SUCCESS MODAL -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal-box">
+    <div class="modal-hdr">
+      <div class="modal-success-icon">
+        <svg style="width:28px;height:28px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
+      </div>
+      <h2 class="modal-title">Booking Submitted Successfully!</h2>
+      <p class="modal-sub">Your international cargo booking has been recorded in the system.</p>
     </div>
+    <div class="modal-awb-block">
+      <div class="modal-awb-label">Master Airway Bill Number</div>
+      <div class="modal-awb-number" id="modalMasterAWB">—</div>
+    </div>
+    <div style="margin:0 28px 16px;">
+      <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);margin-bottom:8px;">Box AWB Numbers</div>
+      <div id="modalChildAWBs"></div>
+    </div>
+    <div class="modal-summary">
+      <div class="modal-summary-item"><div class="msi-label">Shipper</div><div class="msi-value" id="modalShipper">—</div></div>
+      <div class="modal-summary-item"><div class="msi-label">Consignee</div><div class="msi-value" id="modalConsignee">—</div></div>
+      <div class="modal-summary-item"><div class="msi-label">Route</div><div class="msi-value"><span id="modalOrigin">—</span> → <span id="modalDest">—</span></div></div>
+      <div class="modal-summary-item"><div class="msi-label">Total Boxes</div><div class="msi-value" id="modalTotalBoxes">—</div></div>
+      <div class="modal-summary-item"><div class="msi-label">Total Weight</div><div class="msi-value" id="modalTotalWeight">—</div></div>
+      <div class="modal-summary-item"><div class="msi-label">Chargeable Weight</div><div class="msi-value" id="modalCW">—</div></div>
+      <div class="modal-summary-item" style="grid-column:span 2;"><div class="msi-label">Grand Total</div><div class="msi-value" style="font-size:16px;color:#F99523;font-family:'Lexend',sans-serif;font-weight:700;" id="modalGrandTotal">—</div></div>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn mbp" id="modalPrintLabelBtn">
+        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25z" clip-rule="evenodd"/></svg>
+        Print Labels
+      </button>
+      <button class="modal-btn mbs" id="modalPrintInvoiceBtn">
+        <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+        Print Invoice
+      </button>
+      <button class="modal-btn mbg" id="modalCloseBtn">Close &amp; New Booking</button>
+    </div>
+  </div>
+</div>
 
-    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
-        <a href="index.html" class="nav-item">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
-            Command Center
-        </a>
-
-        <div class="section-label mt-3">Logistics</div>
-
-        <div class="group">
-            <div class="nav-item justify-between" style="background:rgba(249,149,35,.08);border-left:3px solid #F99523;padding-left:9px;">
-                <div class="flex items-center gap-2.5" style="color:#F99523;font-weight:600;">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"/></svg>
-                    New Booking
-                </div>
-                <svg class="w-3 h-3" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+<!-- SIDEBAR -->
+<aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
+    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;"><p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
+    </div>
+    <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
+        <a href="index.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
+        <div class="section-label" style="margin-top:12px;">Logistics</div>
+        <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
+                <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div>
             </div>
-            <div class="flex flex-col pl-9 pr-3 pb-1 gap-0.5">
-                <a href="international.html" class="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[12px] font-semibold transition" style="color:#F99523;background:rgba(249,149,35,.08);">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
-                    International
-                </a>
-                <a href="domestic.html" class="flex items-center gap-2 py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">
-                    <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                    Domestic
-                </a>
+            <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
+                <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">International</a>
+                <a href="domestic.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
             </div>
         </div>
-
-        <div class="group">
-            <div class="nav-item justify-between">
-                <div class="flex items-center gap-2.5">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                    Processing
-                </div>
-                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
-            </div>
-            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
-                <a href="processing.html" class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">Manage Bookings</a>
-                <a href="update.html"     class="py-1.5 px-2 rounded-lg text-[12px] transition" style="color:rgba(239,231,220,.4);">Process Update</a>
+        <div class="group" style="position:relative;">
+            <div class="nav-item" style="justify-content:space-between;"><div style="display:flex;align-items:center;gap:10px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div><svg style="width:12px;height:12px;" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg></div>
+            <div class="hidden group-hover:flex" style="flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;gap:2px;">
+                <a href="processing.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
+                <a href="update.html"     style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
             </div>
         </div>
-
-        <div class="section-label mt-3">Finance & CRM</div>
-        <a href="accounts.html"  class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
-        <a href="customers.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
-        <a href="reports.html"   class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
-        <div class="divider-h my-2"></div>
-        <a href="admin.html" id="navAdminLink" class="nav-item hidden"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+        <div class="section-label" style="margin-top:12px;">Finance &amp; CRM</div>
+        <a href="accounts.html"  class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
+        <a href="customers.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
+        <a href="reports.html"   class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
+        <div class="divider-h" style="margin:8px 0;"></div>
+        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
     </nav>
-
-    <div class="px-3 py-4" style="border-top:1px solid rgba(255,255,255,.06);">
-        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:rgba(255,255,255,.04);">
-            <div class="w-7 h-7 rounded-[9px] bg-orange flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" id="sidebarAvatar">A</div>
-            <div class="overflow-hidden flex-1">
-                <div class="text-[11px] font-semibold truncate" style="color:rgba(239,231,220,.9);" id="sidebarName">—</div>
-                <div class="text-[9px]" style="color:rgba(239,231,220,.35);" id="sidebarRole">—</div>
-            </div>
+    <div style="padding:12px;border-top:1px solid rgba(255,255,255,.06);">
+        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);">
+            <div id="sidebarAvatar" style="width:28px;height:28px;border-radius:9px;background:#F99523;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
+            <div style="overflow:hidden;flex:1;"><div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div><div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div></div>
         </div>
     </div>
 </aside>
 
-<!-- ══ MAIN ══ -->
-<main class="flex-1 flex flex-col h-screen overflow-hidden">
-
-    <!-- Header -->
-    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
-            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
-        <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(249,149,35,.1);">
-                <svg class="w-4 h-4" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg>
-            </div>
-            <div>
-                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">International Cargo Booking</h2>
-                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">NUVEX GLOBAL · Complete all required fields</p>
-            </div>
+<!-- MAIN -->
+<main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
+    <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:16px;height:16px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg></div>
+            <div><h2 class="font-lexend" style="font-size:14px;font-weight:600;color:#0D2330;">International Cargo Booking</h2><p style="font-size:10px;color:rgba(2,115,133,.6);">NUVEX GLOBAL · AWB auto-generated on submit</p></div>
         </div>
-        <div class="flex items-center gap-3">
-            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
-                <span class="relative flex h-1.5 w-1.5"><span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span><span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span></span>
-                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
-            </div>
-            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm" style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;" id="headerAvatar">A</div>
+        <div style="display:flex;align-items:center;gap:12px;">
+            <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;"><span style="position:relative;display:flex;width:6px;height:6px;"><span class="ping" style="position:absolute;display:inline-flex;width:100%;height:100%;border-radius:50%;background:#10B981;opacity:.75;"></span><span style="position:relative;display:inline-flex;width:6px;height:6px;border-radius:50%;background:#10B981;"></span></span><span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span></div>
+            <div id="headerAvatar" style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#F99523;">A</div>
         </div>
     </header>
 
-    <!-- Scrollable body -->
-    <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
+    <div style="flex:1;overflow-y:auto;padding:24px;background:#f5f2ee;">
         <form id="internationalForm" class="space-y-5 max-w-6xl mx-auto">
 
-            <!-- ── ROW 1: Shipper + Receiver ── -->
+            <!-- ROW 1: Shipper + Consignee -->
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 anim-1">
 
-                <!-- Shipper -->
-                <div class="section-panel">
-                    <div class="section-panel-header">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(2,115,133,.1);">
-                            <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                <!-- SHIPPER -->
+                <div class="sp">
+                    <div class="sp-hdr">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:28px;height:28px;border-radius:8px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></div>
+                            <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipper Details</span>
                         </div>
-                        <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Shipper Details</span>
-                        <span class="ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider" style="background:rgba(2,115,133,.1);color:#027385;">Origin</span>
+                        <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(2,115,133,.1);color:#027385;text-transform:uppercase;letter-spacing:.04em;">Origin</span>
                     </div>
-                    <div class="p-5 grid grid-cols-2 gap-4">
-                        <div class="col-span-2">
-                            <label class="field-label">Shipper Full Name *</label>
-                            <input type="text" id="shipperName" required placeholder="Full name" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Primary Phone *</label>
-                            <input type="text" id="contactNumber" required placeholder="+968 XXXX XXXX" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Alternate Phone</label>
-                            <input type="text" id="altNumber" placeholder="Optional" class="field">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="field-label">Address</label>
-                            <input type="text" id="shipperAddress" placeholder="Street, area, city" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Origin Country</label>
-                            <input type="text" id="originCountry" placeholder="e.g. Oman" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Postal Code</label>
-                            <input type="text" id="postalCode" placeholder="123" class="field">
-                        </div>
+                    <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                        <div style="grid-column:span 2;"><label class="fl">Shipper Full Name *</label><input type="text" id="shipperName" required placeholder="Full name" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Origin Country *</label><select id="originCountry" required class="field"><option value="" disabled selected>Select origin country…</option></select></div>
+                        <div style="grid-column:span 2;"><label class="fl">Primary Phone *</label><div class="ph-grp"><div class="ph-code" id="shipperPhoneCodeDisplay">—</div><input type="hidden" id="shipperPhoneCode"><input type="tel" id="contactNumber" required placeholder="Phone number" class="field" style="flex:1;"></div></div>
+                        <div><label class="fl">Alternate Phone</label><input type="tel" id="altNumber" placeholder="Optional" class="field"></div>
+                        <div><label class="fl">Postal Code</label><input type="text" id="postalCode" placeholder="123" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Street Address</label><input type="text" id="shipperAddress" placeholder="Street, area" class="field"></div>
+                        <div><label class="fl">City *</label><input type="text" id="shipperCity" required placeholder="City name" class="field"></div>
+                        <div><label class="fl">State / Province *</label><select id="shipperState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
+                        <!-- ID fields -->
+                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:12px;margin-top:4px;"><label class="fl">ID Document <span class="fl-opt">(optional — customs)</span></label></div>
+                        <div><label class="fl" style="font-size:8px;">ID Type</label><select id="shipperIdType" class="field"><option value="" disabled selected>Select…</option></select></div>
+                        <div><label class="fl" style="font-size:8px;">ID Number</label><input type="text" id="shipperIdNumber" placeholder="Passport / ID number" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl" style="font-size:8px;">ID Expiry Date</label><input type="date" id="shipperIdExpiry" class="field"></div>
                     </div>
                 </div>
 
-                <!-- Receiver -->
-                <div class="section-panel">
-                    <div class="section-panel-header">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(249,149,35,.1);">
-                            <svg class="w-3.5 h-3.5" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                <!-- CONSIGNEE -->
+                <div class="sp">
+                    <div class="sp-hdr">
+                        <div style="display:flex;align-items:center;gap:10px;">
+                            <div style="width:28px;height:28px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg></div>
+                            <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Consignee Details</span>
                         </div>
-                        <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Receiver Details</span>
-                        <span class="ml-auto text-[9px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider" style="background:rgba(249,149,35,.1);color:#c47b0a;">Destination</span>
+                        <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(249,149,35,.1);color:#c47b0a;text-transform:uppercase;letter-spacing:.04em;">Destination</span>
                     </div>
-                    <div class="p-5 grid grid-cols-2 gap-4">
-                        <div class="col-span-2">
-                            <label class="field-label">Receiver Full Name *</label>
-                            <input type="text" id="receiverNameInt" required placeholder="Full name" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Primary Phone *</label>
-                            <input type="text" id="receiverPhoneInt" required placeholder="+XX XXXX XXXX" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Alternate Phone</label>
-                            <input type="text" id="receiverAltInt" placeholder="Optional" class="field">
-                        </div>
-                        <div class="col-span-2">
-                            <label class="field-label">Delivery Address</label>
-                            <input type="text" id="receiverAddress" placeholder="Street, area, city" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Destination Country *</label>
-                            <input type="text" id="destCountry" required placeholder="e.g. United Kingdom" class="field">
-                        </div>
-                        <div>
-                            <label class="field-label">Zip / Postal Code</label>
-                            <input type="text" id="zipCode" placeholder="SW1A 1AA" class="field">
-                        </div>
+                    <div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+                        <div style="grid-column:span 2;"><label class="fl">Receiver Full Name *</label><input type="text" id="receiverNameInt" required placeholder="Full name" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Destination Country *</label><select id="destCountry" required class="field"><option value="" disabled selected>Select destination country…</option></select></div>
+                        <div style="grid-column:span 2;"><label class="fl">Primary Phone *</label><div class="ph-grp"><div class="ph-code" id="consigneePhoneCodeDisplay">—</div><input type="hidden" id="consigneePhoneCode"><input type="tel" id="receiverPhoneInt" required placeholder="Phone number" class="field" style="flex:1;"></div></div>
+                        <div><label class="fl">Alternate Phone</label><input type="tel" id="receiverAltInt" placeholder="Optional" class="field"></div>
+                        <div><label class="fl">Zip / Postal Code</label><input type="text" id="zipCode" placeholder="SW1A 1AA" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Delivery Address</label><input type="text" id="receiverAddress" placeholder="Street, area" class="field"></div>
+                        <div><label class="fl">City *</label><input type="text" id="consigneeCity" required placeholder="City name" class="field"></div>
+                        <div><label class="fl">State / Province *</label><select id="consigneeState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
+                        <!-- Consignee ID -->
+                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:12px;margin-top:4px;"><label class="fl">ID Document <span class="fl-opt">(optional — customs)</span></label></div>
+                        <div><label class="fl" style="font-size:8px;">ID Type</label><select id="consigneeIdType" class="field"><option value="" disabled selected>Select…</option></select></div>
+                        <div><label class="fl" style="font-size:8px;">ID Number</label><input type="text" id="consigneeIdNumber" placeholder="Passport / ID number" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl" style="font-size:8px;">ID Expiry Date</label><input type="date" id="consigneeIdExpiry" class="field"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ── ROW 2: Shipment Details ── -->
-            <div class="section-panel anim-2">
-                <div class="section-panel-header">
-                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(139,92,246,.1);">
-                        <svg class="w-3.5 h-3.5" style="color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
-                    </div>
-                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Shipment Details</span>
-                </div>
-                <div class="p-5 grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div>
-                        <label class="field-label">Shipment Type</label>
-                        <input type="text" id="shipmentType" placeholder="e.g. Air Freight" class="field">
-                    </div>
-                    <div>
-                        <label class="field-label">Cargo Type</label>
-                        <input type="text" id="cargoType" placeholder="e.g. General" class="field">
-                    </div>
-                    <div>
-                        <label class="field-label">Commodity</label>
-                        <input type="text" id="commodity" placeholder="e.g. Electronics" class="field">
-                    </div>
-                    <div>
-                        <label class="field-label">Declared Value (USD)</label>
-                        <input type="text" id="shipmentValue" placeholder="0.00" class="field">
-                    </div>
-                    <div class="col-span-2 md:col-span-4">
-                        <label class="field-label">Description of Goods</label>
-                        <input type="text" id="description" placeholder="Brief description of contents" class="field">
-                    </div>
+            <!-- ROW 2: Shipment Details -->
+            <div class="sp anim-2">
+                <div class="sp-hdr"><div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;border-radius:8px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg></div><span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipment Details</span></div></div>
+                <div style="padding:20px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+                    <div><label class="fl">Shipment Type</label><input type="text" id="shipmentType" placeholder="e.g. Air Freight" class="field"></div>
+                    <div><label class="fl">Cargo Type</label><input type="text" id="cargoType" placeholder="e.g. General" class="field"></div>
+                    <div><label class="fl">Commodity</label><input type="text" id="commodity" placeholder="e.g. Electronics" class="field"></div>
+                    <div><label class="fl">Declared Value (USD)</label><input type="text" id="shipmentValue" placeholder="0.00" class="field"></div>
+                    <div style="grid-column:span 4;"><label class="fl">Description of Goods</label><input type="text" id="description" placeholder="Brief description of contents" class="field"></div>
                 </div>
             </div>
 
-            <!-- ── ROW 3: Box Dimensions ── -->
-            <div class="section-panel anim-3">
-                <div class="section-panel-header">
-                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(16,185,129,.1);">
-                        <svg class="w-3.5 h-3.5" style="color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
+            <!-- ROW 3: Box Dimensions -->
+            <div class="sp anim-3">
+                <div class="sp-hdr">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div style="width:28px;height:28px;border-radius:8px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg></div>
+                        <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Box Dimensions &amp; Weights</span>
+                        <span style="font-size:10px;color:rgba(2,115,133,.45);">Chargeable = max(actual, L×W×H÷5000)</span>
                     </div>
-                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Box Dimensions & Weights</span>
-                    <div class="ml-auto flex items-center gap-3">
-                        <span class="text-[10px]" style="color:rgba(2,115,133,.5);">Chargeable = max(actual, L×W×H÷5000)</span>
-                        <button type="button" id="addBoxBtn" class="btn-add-box">
-                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
-                            Add Box
-                        </button>
-                    </div>
+                    <button type="button" id="addBoxBtn" class="btn-add-box">
+                        <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
+                        Add Box
+                    </button>
                 </div>
-
-                <div class="p-5">
-                    <!-- Column headers -->
-                    <div class="box-row mb-2 px-1">
-                        <div class="col-header">Box</div>
-                        <div class="col-header">Actual Wt (kg)</div>
-                        <div class="col-header">L (cm)</div>
-                        <div class="col-header">W (cm)</div>
-                        <div class="col-header">H (cm)</div>
-                        <div class="col-header">Chargeable (kg)</div>
+                <div style="padding:20px;">
+                    <div class="box-row" style="margin-bottom:8px;padding:0 4px;">
+                        <div class="col-hdr">Box</div><div class="col-hdr">Actual Wt (kg)</div><div class="col-hdr">L (cm)</div><div class="col-hdr">W (cm)</div><div class="col-hdr">H (cm)</div><div class="col-hdr">Chargeable (kg)</div>
                     </div>
-
-                    <!-- Box rows container -->
                     <div id="boxContainer" class="space-y-2"></div>
-
-                    <!-- Totals bar -->
-                    <div class="totals-bar mt-5">
-                        <div class="total-item">
-                            <div class="lbl">Total Boxes</div>
-                            <div class="val orange" id="lblTotalBoxes">0</div>
-                        </div>
-                        <div class="w-px h-8" style="background:rgba(255,255,255,.1);"></div>
-                        <div class="total-item">
-                            <div class="lbl">Total Actual Weight</div>
-                            <div class="val" id="lblTotalActual">0.00 kg</div>
-                        </div>
-                        <div class="w-px h-8" style="background:rgba(255,255,255,.1);"></div>
-                        <div class="total-item">
-                            <div class="lbl">Total Chargeable</div>
-                            <div class="val orange" id="lblTotalCW">0.00 kg</div>
-                        </div>
+                    <div class="totals-bar" style="margin-top:20px;">
+                        <div class="total-item"><div class="lbl">Total Boxes</div><div class="val orange" id="lblTotalBoxes">0</div></div>
+                        <div style="width:1px;height:32px;background:rgba(255,255,255,.1);"></div>
+                        <div class="total-item"><div class="lbl">Total Actual Weight</div><div class="val" id="lblTotalActual">0.00 kg</div></div>
+                        <div style="width:1px;height:32px;background:rgba(255,255,255,.1);"></div>
+                        <div class="total-item"><div class="lbl">Total Chargeable</div><div class="val orange" id="lblTotalCW">0.00 kg</div></div>
                     </div>
                 </div>
             </div>
 
-            <!-- ── ROW 4: Pricing ── -->
-            <div class="section-panel anim-4">
-                <div class="section-panel-header">
-                    <div class="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0" style="background:rgba(249,149,35,.1);">
-                        <svg class="w-3.5 h-3.5" style="color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75zM8.25 9.75a3.75 3.75 0 117.5 0 3.75 3.75 0 01-7.5 0z" clip-rule="evenodd"/></svg>
+            <!-- ROW 4: Pricing -->
+            <div class="sp anim-4">
+                <div class="sp-hdr"><div style="display:flex;align-items:center;gap:10px;"><div style="width:28px;height:28px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:14px;height:14px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg></div><span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Pricing &amp; Charges</span></div></div>
+                <div style="padding:20px;">
+                    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:12px;">
+                        <div><label class="fl">Rate per kg (OMR)</label><input type="number" step="0.01" id="rate" placeholder="0.00" class="field"></div>
+                        <div><label class="fl">Packing Charges</label><input type="number" step="0.01" id="packingCharges" placeholder="0.00" class="field"></div>
+                        <div><label class="fl">Additional Charges</label><input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field"></div>
+                        <div><label class="fl">Grand Total (OMR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt-field"></div>
                     </div>
-                    <span class="font-lexend text-[12px] font-semibold" style="color:#0D2330;">Pricing & Charges</span>
-                </div>
-                <div class="p-5">
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                        <div>
-                            <label class="field-label">Rate per kg (OMR)</label>
-                            <input type="number" step="0.01" id="rate" placeholder="0.00" class="field" oninput="calculateTotals()">
-                        </div>
-                        <div>
-                            <label class="field-label">Packing Charges</label>
-                            <input type="number" step="0.01" id="packingCharges" placeholder="0.00" class="field" oninput="calculateTotals()">
-                        </div>
-                        <div>
-                            <label class="field-label">Additional Charges</label>
-                            <input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field" oninput="calculateTotals()">
-                        </div>
-                        <div>
-                            <label class="field-label">Grand Total (OMR)</label>
-                            <input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="grand-total-field">
-                        </div>
-                    </div>
-                    <p class="text-[10px]" style="color:rgba(2,115,133,.45);">
-                        * Standard delivery schedules starting from the 5th day of dispatch. Grand total auto-calculates from chargeable weight × rate + charges.
-                    </p>
+                    <p style="font-size:10px;color:rgba(2,115,133,.45);">* Standard delivery: 5 days from dispatch. AWB is auto-generated on submission.</p>
                 </div>
             </div>
 
-            <!-- ── SUBMIT ── -->
+            <!-- SUBMIT -->
             <div class="anim-4">
                 <button type="submit" id="submitIntBtn" class="btn-submit">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z" clip-rule="evenodd"/></svg>
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v3.75H9a.75.75 0 000 1.5h3.75v3.75a.75.75 0 001.5 0v-3.75h3.75a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
                     <span id="btnTextInt">Transmit International Booking</span>
-                    <svg id="loadingIconInt" class="spin hidden w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                    </svg>
+                    <svg id="loadingIconInt" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                 </button>
             </div>
 
@@ -428,74 +288,21 @@
     </div>
 </main>
 
+<script src="data/countryMaster.js"></script>
+<script src="modules/internationalBooking.js"></script>
+<script src="app.js"></script>
 <script>
-/* ── Box management ── */
-let boxCount = 0;
-const MAX_BOXES = 10;
-
-function addBox() {
-    if (boxCount >= MAX_BOXES) return;
-    boxCount++;
-    const row = document.createElement('div');
-    row.className = 'box-row';
-    row.id = `boxRow${boxCount}`;
-    row.innerHTML = `
-        <div class="box-num">${boxCount}</div>
-        <input type="number" step="0.01" id="b${boxCount}W"  placeholder="0.00" class="box-input" oninput="calculateTotals()">
-        <input type="number" step="0.01" id="b${boxCount}L"  placeholder="0" class="box-input" oninput="calculateTotals()">
-        <input type="number" step="0.01" id="b${boxCount}Wi" placeholder="0" class="box-input" oninput="calculateTotals()">
-        <input type="number" step="0.01" id="b${boxCount}H"  placeholder="0" class="box-input" oninput="calculateTotals()">
-        <input type="number" step="0.01" id="b${boxCount}CW" readonly placeholder="—" class="box-input">`;
-    document.getElementById('boxContainer').appendChild(row);
-    document.getElementById(`b${boxCount}W`).focus();
-    calculateTotals();
-    if (boxCount >= MAX_BOXES) document.getElementById('addBoxBtn').disabled = true;
-}
-
-window.calculateTotals = function() {
-    let totalActual = 0, totalCW = 0;
-    for (let i = 1; i <= boxCount; i++) {
-        const actW = parseFloat(document.getElementById(`b${i}W`)?.value)  || 0;
-        const l    = parseFloat(document.getElementById(`b${i}L`)?.value)  || 0;
-        const w    = parseFloat(document.getElementById(`b${i}Wi`)?.value) || 0;
-        const h    = parseFloat(document.getElementById(`b${i}H`)?.value)  || 0;
-        const cw   = Math.max(actW, (l * w * h) / 5000);
-        const cwEl = document.getElementById(`b${i}CW`);
-        if (cwEl) cwEl.value = cw > 0 ? cw.toFixed(2) : '';
-        totalActual += actW;
-        totalCW     += cw;
-    }
-    document.getElementById('lblTotalBoxes').textContent  = boxCount;
-    document.getElementById('lblTotalActual').textContent = totalActual.toFixed(2) + ' kg';
-    document.getElementById('lblTotalCW').textContent     = totalCW.toFixed(2) + ' kg';
-
-    const rate = parseFloat(document.getElementById('rate').value) || 0;
-    const pack = parseFloat(document.getElementById('packingCharges').value) || 0;
-    const add  = parseFloat(document.getElementById('additionalCharges').value) || 0;
-    document.getElementById('grandTotal').value = rate > 0 ? ((totalCW * rate) + pack + add).toFixed(2) : '';
-};
-
-document.getElementById('addBoxBtn').addEventListener('click', addBox);
-
-/* ── User info ── */
 document.addEventListener('DOMContentLoaded', () => {
-    addBox(); // start with 1 box
     const raw = sessionStorage.getItem('erp_user');
     if (raw) {
-        const u = JSON.parse(raw);
-        const first = (u.name || 'U').charAt(0).toUpperCase();
-        document.getElementById('sidebarAvatar').textContent = first;
-        document.getElementById('headerAvatar').textContent  = first;
-        document.getElementById('sidebarName').textContent   = u.name;
-        document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
-        if (u.role === 'Admin') {
-            document.getElementById('navAdminLink').classList.remove('hidden');
-            document.getElementById('navAdminLink').classList.add('flex');
-        }
+        const u=JSON.parse(raw),i=(u.name||'U').charAt(0).toUpperCase();
+        document.getElementById('sidebarAvatar').textContent=i;
+        document.getElementById('headerAvatar').textContent=i;
+        document.getElementById('sidebarName').textContent=u.name;
+        document.getElementById('sidebarRole').textContent=`${u.role} · ${u.branchId}`;
+        if(u.role==='Admin'){const l=document.getElementById('navAdminLink');l.style.display='flex';}
     }
 });
 </script>
-
-<script src="app.js"></script>
 </body>
 </html>
