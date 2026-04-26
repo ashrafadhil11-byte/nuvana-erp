@@ -10,413 +10,366 @@
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { colors: { orange:'#F99523',teal:'#027385',beige:'#EFE7DC',charcoal:'#0D2330',success:'#10B981' }, fontFamily:{ poppins:['Poppins','sans-serif'],lexend:['Lexend','sans-serif'] } } }
+            theme: { extend: { colors: { orange:'#F99523',teal:'#027385',beige:'#EFE7DC',charcoal:'#0D2330',success:'#10B981', danger:'#ef4444' }, fontFamily:{ poppins:['Poppins','sans-serif'],lexend:['Lexend','sans-serif'] } } }
         }
     </script>
     <style>
-        *{box-sizing:border-box;}
-        body{font-family:'Poppins',sans-serif;background:#f5f2ee;}
-        .font-lexend{font-family:'Lexend',sans-serif;}
+        *{box-sizing:border-box;} body{font-family:'Poppins',sans-serif;background:#f5f2ee;} .font-lexend{font-family:'Lexend',sans-serif;}
         @keyframes slideUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-        @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}}
-        @keyframes spin{to{transform:rotate(360deg);}}
         @keyframes fadeRow{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
-        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}
-        .anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .13s both;}
-        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}
-        .spin{animation:spin 1s linear infinite;}
+        .anim-1{animation:slideUp .4s cubic-bezier(.16,1,.3,1) .05s both;} .anim-2{animation:slideUp .4s cubic-bezier(.16,1,.3,1) .1s both;}
+        .spin{animation:spin 1s linear infinite;} @keyframes spin{to{transform:rotate(360deg);}}
         .fade-row{animation:fadeRow .25s ease both;}
-        ::-webkit-scrollbar{width:5px;height:5px;}
-        ::-webkit-scrollbar-track{background:transparent;}
-        ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
-        ::-webkit-scrollbar-thumb:hover{background:#F99523;}
-        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}
-        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
-        .nav-item.active{background:rgba(249,149,35,.13);border-left:3px solid #F99523;color:#F99523;font-weight:600;padding-left:9px;}
-        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
-        .divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
-        .tab-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;border:none;white-space:nowrap;}
+        
+        ::-webkit-scrollbar{width:5px;height:5px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
+        
+        .tab-btn{display:flex;align-items:center;gap:7px;padding:8px 16px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;border:none;}
         .tab-dom{background:#027385;color:white;box-shadow:0 3px 10px rgba(2,115,133,.3);}
         .tab-int{background:#F99523;color:white;box-shadow:0 3px 10px rgba(249,149,35,.3);}
-        .tab-off{background:transparent;color:rgba(13,35,48,.4);}
-        .tab-off:hover{background:rgba(2,115,133,.06);color:#0D2330;}
-        .search-wrap{position:relative;}
-        .search-input{background:white;border:1px solid #e8e0d6;border-radius:10px;padding:.5rem .85rem .5rem 2.2rem;font-family:'Poppins',sans-serif;font-size:.8rem;color:#0D2330;outline:none;width:210px;transition:border-color .2s,box-shadow .2s,width .25s;}
-        .search-input::placeholder{color:rgba(2,115,133,.3);}
-        .search-input:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);width:260px;}
-        .data-table{width:100%;border-collapse:collapse;}
-        .data-table thead th{padding:10px 16px;text-align:left;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.55);background:#faf8f5;border-bottom:1px solid #f0ece6;white-space:nowrap;position:sticky;top:0;z-index:5;}
-        .data-table tbody tr{border-bottom:1px solid #f5f2ee;transition:background .15s;cursor:pointer;}
-        .data-table tbody tr:hover{background:#fdf9f5;}
-        .data-table tbody td{padding:11px 16px;font-size:12px;color:#374151;white-space:nowrap;}
-        .badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:600;padding:3px 9px;border-radius:6px;font-family:'Lexend',sans-serif;white-space:nowrap;}
-        .badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-        .bp{background:#fef9c3;color:#a16207;}.bp::before{background:#a16207;}
-        .bt{background:#dbeafe;color:#1d4ed8;}.bt::before{background:#1d4ed8;}
-        .bh{background:#f3e8ff;color:#7e22ce;}.bh::before{background:#7e22ce;}
-        .bd{background:#dcfce7;color:#15803d;}.bd::before{background:#15803d;}
-        .be{background:#fee2e2;color:#b91c1c;}.be::before{background:#b91c1c;}
-        .bo{background:#ffedd5;color:#c2410c;}.bo::before{background:#c2410c;}
-        .type-d{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(2,115,133,.1);color:#027385;border:1px solid rgba(2,115,133,.18);font-family:'Lexend',sans-serif;}
-        .type-i{font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:rgba(249,149,35,.1);color:#c47b0a;border:1px solid rgba(249,149,35,.2);font-family:'Lexend',sans-serif;}
-        .mini-stat{background:white;border:1px solid #e8e0d6;border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px;}
-        .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;color:rgba(2,115,133,.35);gap:12px;}
-        .detail-drawer{position:fixed;right:0;top:0;bottom:0;width:380px;background:white;border-left:1px solid #e8e0d6;box-shadow:-8px 0 32px rgba(13,35,48,.1);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+        .tab-off{background:transparent;color:rgba(13,35,48,.4);} .tab-off:hover{background:rgba(2,115,133,.06);color:#0D2330;}
+        
+        .search-input{background:white;border:1px solid #e8e0d6;border-radius:10px;padding:.5rem .85rem .5rem 2.2rem;font-family:'Poppins',sans-serif;font-size:.8rem;color:#0D2330;outline:none;width:240px;transition:all .2s;}
+        .search-input:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);width:280px;}
+        
+        .data-table{width:100%;border-collapse:separate; border-spacing: 0 8px;}
+        .data-table thead th{padding:0 16px 8px;text-align:left;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.55);border-bottom:1px solid #e8e0d6;}
+        .data-table tbody tr{background:white;box-shadow:0 2px 8px rgba(13,35,48,.04);transition:transform .2s, box-shadow .2s; border-radius: 12px;}
+        .data-table tbody tr:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(13,35,48,.08);}
+        .data-table tbody td{padding:14px 16px;font-size:13px;color:#374151; vertical-align: middle;}
+        .data-table tbody td:first-child{border-top-left-radius: 12px; border-bottom-left-radius: 12px;}
+        .data-table tbody td:last-child{border-top-right-radius: 12px; border-bottom-right-radius: 12px;}
+        
+        .badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:8px;font-family:'Lexend',sans-serif;white-space:nowrap;}
+        .bp{background:#fef9c3;color:#a16207;} .bt{background:#dbeafe;color:#1d4ed8;} .bh{background:#f3e8ff;color:#7e22ce;}
+        .bd{background:#dcfce7;color:#15803d;} .be{background:#fee2e2;color:#b91c1c;} .bo{background:#ffedd5;color:#c2410c;}
+        
+        .avatar-circle {width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; font-family:'Lexend',sans-serif;}
+        
+        .action-btn {width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; cursor:pointer;}
+        .ab-view {background:rgba(2,115,133,0.1); color:#027385;} .ab-view:hover {background:#027385; color:white;}
+        .ab-edit {background:rgba(249,149,35,0.1); color:#F99523;} .ab-edit:hover {background:#F99523; color:white;}
+        .ab-del {background:rgba(239,68,68,0.1); color:#ef4444;} .ab-del:hover {background:#ef4444; color:white;}
+
+        .detail-drawer{position:fixed;right:0;top:0;bottom:0;width:400px;background:white;box-shadow:-8px 0 32px rgba(13,35,48,.1);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
         .detail-drawer.open{transform:translateX(0);}
         .drawer-overlay{position:fixed;inset:0;background:rgba(13,35,48,.25);backdrop-filter:blur(2px);z-index:40;opacity:0;pointer-events:none;transition:opacity .3s;}
         .drawer-overlay.open{opacity:1;pointer-events:all;}
-        .btn-refresh{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;background:white;border:1px solid #e8e0d6;font-size:11px;font-weight:600;color:#0D2330;cursor:pointer;font-family:'Lexend',sans-serif;transition:all .2s;}
-        .btn-refresh:hover{background:#faf8f5;}
-        .detail-row{display:flex;justify-content:space-between;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f5f2ee;gap:12px;}
+        
+        .detail-row{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px dashed #f0ece6;gap:12px;}
         .detail-row:last-child{border-bottom:none;}
-        .d-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);flex-shrink:0;}
-        .d-value{font-size:12px;font-weight:600;color:#0D2330;text-align:right;word-break:break-word;}
+        .d-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);flex-shrink:0;}
+        .d-value{font-size:13px;font-weight:600;color:#0D2330;text-align:right;}
+
+        .modal-card {background:white; border-radius:20px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2); padding:24px; position:relative;}
+        .field-modal {width:100%; background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:10px 12px; font-size:13px; outline:none; transition:border 0.2s;}
+        .field-modal:focus {border-color:#F99523;}
     </style>
 </head>
 <body class="min-h-screen flex overflow-hidden">
 
+<div id="global-sidebar-container" class="flex-shrink-0 z-20"></div>
+
 <div class="drawer-overlay" id="drawerOverlay"></div>
 
-<!-- DRAWER -->
 <div class="detail-drawer" id="detailDrawer">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid #f0ece6;background:#faf8f5;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid #f0ece6;background:#faf8f5;">
         <div>
-            <h3 class="font-lexend" style="font-size:14px;font-weight:700;color:#0D2330;" id="drawerTitle">Details</h3>
-            <p style="font-size:10px;color:rgba(2,115,133,.5);margin-top:2px;" id="drawerSub">—</p>
+            <h3 class="font-lexend text-lg font-bold text-charcoal" id="drawerTitle">Details</h3>
+            <p class="text-[11px] text-teal/60 mt-0.5" id="drawerSub">—</p>
         </div>
-        <button id="closeDrawer" style="width:32px;height:32px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
-            <svg style="width:14px;height:14px;color:#0D2330;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        <button id="closeDrawer" style="width:36px;height:36px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
+            <svg style="width:16px;height:16px;color:#0D2330;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
     </div>
-    <div style="flex:1;overflow-y:auto;padding:16px 20px;" id="drawerBody">
-        <p style="font-size:12px;color:rgba(2,115,133,.4);">Select a row to view details.</p>
-    </div>
-    <div style="padding:14px 20px;border-top:1px solid #f0ece6;">
-        <a href="update.html" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;text-decoration:none;transition:background .2s;box-shadow:0 4px 12px rgba(13,35,48,.2);"
-           onmouseenter="this.style.background='#122c3f'" onmouseleave="this.style.background='#0D2330'">
-            <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"/></svg>
-            Update This Shipment Status
+    <div style="flex:1;overflow-y:auto;padding:20px;" id="drawerBody"></div>
+    <div style="padding:20px;border-top:1px solid #f0ece6;background:#faf8f5;">
+        <a href="update.html" class="w-full py-3 rounded-xl bg-charcoal text-white font-lexend text-sm font-bold flex justify-center items-center gap-2 hover:bg-charcoal/90 transition shadow-lg">
+            Update Shipment Status
         </a>
     </div>
 </div>
 
-<!-- SIDEBAR -->
-<aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
-    <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
-        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div style="display:none;"><p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
+<div id="editModal" class="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
+    <div class="modal-card">
+        <h2 class="font-lexend text-lg font-bold text-charcoal mb-1">Quick Edit</h2>
+        <p class="text-xs text-teal/60 mb-5" id="editModalAwb">AWB: —</p>
+        
+        <form id="editForm" class="space-y-4">
+            <input type="hidden" id="editAwb">
+            <input type="hidden" id="editType">
+            <div><label class="d-label">Sender Name</label><input type="text" id="editSender" class="field-modal mt-1" required></div>
+            <div><label class="d-label">Receiver Name</label><input type="text" id="editReceiver" class="field-modal mt-1" required></div>
+            <div>
+                <label class="d-label">Status</label>
+                <select id="editStatus" class="field-modal mt-1" required>
+                    <option value="Booked">Booked</option><option value="Dispatched to Hub">Dispatched to Hub</option>
+                    <option value="In Transit">In Transit</option><option value="Out for Delivery">Out for Delivery</option>
+                    <option value="Delivered">Delivered</option><option value="Exception / Held">Exception / Held</option>
+                </select>
+            </div>
+            <div class="flex gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onclick="closeEditModal()" class="flex-1 py-2.5 rounded-lg bg-gray-100 text-gray-600 font-bold text-sm hover:bg-gray-200 transition">Cancel</button>
+                <button type="submit" id="editSaveBtn" class="flex-1 py-2.5 rounded-lg bg-orange text-white font-bold text-sm hover:bg-orange/90 transition shadow-md">Save Changes</button>
+            </div>
+        </form>
     </div>
-    <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
-        <a href="index.html" class="nav-item">
-            <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
-            Command Center
-        </a>
-        <div class="section-label" style="margin-top:12px;">Logistics</div>
-        <div class="group" style="position:relative;">
-            <div class="nav-item" style="justify-content:space-between;">
-                <div style="display:flex;align-items:center;gap:10px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div>
-                <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
-            </div>
-            <div class="hidden group-hover:flex" style="flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;gap:2px;">
-                <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">International</a>
-                <a href="domestic.html"      style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
-            </div>
-        </div>
-        <!-- Processing active -->
-        <div>
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px 9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
-                <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;">
-                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                    Processing
-                </div>
-                <svg style="width:12px;height:12px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
-            </div>
-            <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
-                <a href="processing.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">Manage Bookings</a>
-                <a href="update.html"     style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;transition:color .2s;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
-            </div>
-        </div>
-        <div class="section-label" style="margin-top:12px;">Finance & CRM</div>
-        <a href="accounts.html"  class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
-        <a href="customers.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
-        <a href="reports.html"   class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
-        <div class="divider-h" style="margin:8px 0;"></div>
-        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
-    </nav>
-    <div style="padding:12px;border-top:1px solid rgba(255,255,255,.06);">
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);">
-            <div id="sidebarAvatar" style="width:28px;height:28px;border-radius:9px;background:#F99523;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
-            <div style="overflow:hidden;flex:1;">
-                <div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
-                <div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div>
-            </div>
-        </div>
-    </div>
-</aside>
+</div>
 
-<!-- MAIN -->
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
-    <!-- Header -->
     <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="width:32px;height:32px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
                 <svg style="width:16px;height:16px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
             </div>
             <div>
-                <h2 class="font-lexend" style="font-size:14px;font-weight:600;color:#0D2330;">Logistics Queue</h2>
-                <p style="font-size:10px;color:rgba(2,115,133,.6);">Click any row to inspect full shipment details</p>
+                <h2 class="font-lexend text-[14px] font-semibold text-charcoal">Logistics Queue</h2>
+                <p class="text-[10px] text-teal/60">Manage your active shipments and tracking records</p>
             </div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;">
-                <span style="position:relative;display:flex;width:6px;height:6px;"><span class="ping" style="position:absolute;display:inline-flex;width:100%;height:100%;border-radius:50%;background:#10B981;opacity:.75;"></span><span style="position:relative;display:inline-flex;width:6px;height:6px;border-radius:50%;background:#10B981;"></span></span>
+                <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
                 <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span>
             </div>
-            <div id="headerAvatar" style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#F99523;">A</div>
         </div>
     </header>
 
-    <!-- Body -->
     <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:24px;gap:20px;">
 
-        <!-- Stat cards -->
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;" class="anim-1">
-            <div class="mini-stat">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:16px;height:16px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                </div>
-                <div><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(2,115,133,.5);">Domestic</p><p id="statDom" class="font-lexend" style="font-size:22px;font-weight:700;color:#0D2330;">—</p></div>
+        <div class="flex items-center justify-between anim-1">
+            <div class="flex items-center gap-2 p-1.5 rounded-xl bg-[#e8e0d6]">
+                <button id="toggleDomBtn" class="tab-btn tab-dom">Domestic Queue</button>
+                <button id="toggleIntBtn" class="tab-btn tab-off">International Queue</button>
             </div>
-            <div class="mini-stat">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:16px;height:16px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
+            <div class="flex items-center gap-3">
+                <div style="position:relative;">
+                    <svg class="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-teal/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    <input type="text" id="searchInput" placeholder="Search AWB or Name..." class="search-input">
                 </div>
-                <div><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(249,149,35,.7);">International</p><p id="statInt" class="font-lexend" style="font-size:22px;font-weight:700;color:#0D2330;">—</p></div>
-            </div>
-            <div class="mini-stat">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:16px;height:16px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
-                </div>
-                <div><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(16,185,129,.7);">Delivered</p><p id="statDelivered" class="font-lexend" style="font-size:22px;font-weight:700;color:#0D2330;">—</p></div>
-            </div>
-            <div class="mini-stat">
-                <div style="width:36px;height:36px;border-radius:10px;background:rgba(234,179,8,.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                    <svg style="width:16px;height:16px;color:#ca8a04;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 6a.75.75 0 00-1.5 0v6c0 .414.336.75.75.75h4.5a.75.75 0 000-1.5h-3.75V6z" clip-rule="evenodd"/></svg>
-                </div>
-                <div><p style="font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(202,138,4,.7);">In Transit</p><p id="statTransit" class="font-lexend" style="font-size:22px;font-weight:700;color:#0D2330;">—</p></div>
+                <button onclick="window.fetchBookings()" class="px-4 py-2 bg-white border border-[#e8e0d6] rounded-xl text-xs font-bold text-charcoal hover:bg-gray-50 transition shadow-sm">
+                    Refresh
+                </button>
             </div>
         </div>
 
-        <!-- Table card -->
-        <div style="flex:1;display:flex;flex-direction:column;background:white;border-radius:16px;overflow:hidden;border:1px solid #e8e0d6;" class="anim-2">
-            <!-- Toolbar -->
-            <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid #f0ece6;background:#faf8f5;flex-wrap:wrap;gap:10px;">
-                <!-- Tabs -->
-                <div style="display:flex;align-items:center;gap:6px;padding:4px;border-radius:11px;background:#f0ece6;">
-                    <button id="toggleDomBtn" class="tab-btn tab-dom">
-                        <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                        Domestic
-                    </button>
-                    <button id="toggleIntBtn" class="tab-btn tab-off">
-                        <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
-                        International
-                    </button>
-                </div>
-                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-                    <!-- Search -->
-                    <div class="search-wrap">
-                        <span style="position:absolute;left:8px;top:50%;transform:translateY(-50%);pointer-events:none;">
-                            <svg style="width:13px;height:13px;color:rgba(2,115,133,.35);" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                        </span>
-                        <input type="text" id="searchInput" placeholder="Search AWB, name, status…" class="search-input">
-                    </div>
-                    <button id="refreshTableBtn" class="btn-refresh">
-                        <svg style="width:13px;height:13px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                        Refresh
-                    </button>
-                    <a href="update.html" style="display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;background:#F99523;color:white;font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;text-decoration:none;transition:background .2s;box-shadow:0 3px 8px rgba(249,149,35,.3);"
-                       onmouseenter="this.style.background='#e08010'" onmouseleave="this.style.background='#F99523'">
-                        <svg style="width:13px;height:13px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.755 10.059a7.5 7.5 0 0112.548-3.364l1.903 1.903h-3.183a.75.75 0 100 1.5h4.992a.75.75 0 00.75-.75V4.356a.75.75 0 00-1.5 0v3.18l-1.9-1.9A9 9 0 003.306 9.67a.75.75 0 101.45.388zm15.408 3.352a.75.75 0 00-.919.53 7.5 7.5 0 01-12.548 3.364l-1.902-1.903h3.183a.75.75 0 000-1.5H2.984a.75.75 0 00-.75.75v4.992a.75.75 0 001.5 0v-3.18l1.9 1.9a9 9 0 0015.059-4.035.75.75 0 00-.53-.918z" clip-rule="evenodd"/></svg>
-                        Update Status
-                    </a>
-                </div>
-            </div>
-
-            <!-- Table -->
-            <div style="flex:1;overflow:auto;">
-                <table class="data-table">
-                    <thead id="tableHeaderRow"></thead>
-                    <tbody id="bookingsTableBody">
-                        <tr><td colspan="6" style="padding:48px;text-align:center;">
-                            <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
-                                <svg class="spin" style="width:28px;height:28px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                <span style="font-size:12px;">Loading bookings...</span>
-                            </div>
-                        </td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Footer -->
-            <div style="padding:10px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #f0ece6;background:#faf8f5;">
-                <span id="rowCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
-                <span style="font-size:10px;color:rgba(2,115,133,.3);">Click a row to inspect details</span>
-            </div>
+        <div class="flex-1 overflow-auto pr-2 anim-2">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th class="w-[18%]">Waybill (AWB)</th>
+                        <th class="w-[22%]">Shipper</th>
+                        <th class="w-[10%]">Route</th>
+                        <th class="w-[22%]">Receiver</th>
+                        <th class="w-[15%]">Status</th>
+                        <th class="w-[13%] text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingsTableBody">
+                    <tr><td colspan="6" class="text-center py-10"><div class="animate-pulse text-teal/40 text-xs font-bold uppercase tracking-widest">Loading Records...</div></td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="flex justify-between items-center text-xs text-teal/50 font-semibold px-2">
+            <span id="rowCountLabel">Loading...</span>
         </div>
     </div>
 </main>
 
+<script src="app.js"></script>
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+// Replace this URL with your active Google Apps Script URL
+const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'YOUR_SCRIPT_URL_HERE';
 let currentView = 'domestic';
 let allRows = [];
 
+// Helpers
 function badge(s) {
-    const m = {'Pending':'bp','In Transit':'bt','Dispatched to Hub':'bh','Arrived at Hub':'bh','Out for Delivery':'bo','Delivered':'bd','Exception / Held':'be'};
+    const m = {'Booked':'bt','Pending':'bp','In Transit':'bo','Dispatched to Hub':'bh','Arrived at Hub':'bh','Out for Delivery':'bo','Delivered':'bd','Exception / Held':'be'};
     return `<span class="badge ${m[s]||'bp'}">${s||'Pending'}</span>`;
 }
-function fmt(v) {
-    if (!v) return '—';
-    const d = new Date(v);
-    return isNaN(d) ? v : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-}
+function fmt(v) { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? v : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
+function initial(name) { return (name || 'U').charAt(0).toUpperCase(); }
 
+// Drawer View
 function openDrawer(title, sub, fields) {
     document.getElementById('drawerTitle').textContent = title;
-    document.getElementById('drawerSub').textContent   = sub;
-    document.getElementById('drawerBody').innerHTML    = fields.map(([l,v]) =>
-        `<div class="detail-row"><span class="d-label">${l}</span><span class="d-value">${v||'—'}</span></div>`
-    ).join('');
+    document.getElementById('drawerSub').textContent = sub;
+    document.getElementById('drawerBody').innerHTML = fields.map(([l,v]) => `<div class="detail-row"><span class="d-label">${l}</span><span class="d-value">${v||'—'}</span></div>`).join('');
     document.getElementById('detailDrawer').classList.add('open');
     document.getElementById('drawerOverlay').classList.add('open');
 }
-function closeDrawer() {
-    document.getElementById('detailDrawer').classList.remove('open');
-    document.getElementById('drawerOverlay').classList.remove('open');
-}
+function closeDrawer() { document.getElementById('detailDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
 document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
+// Edit Modal
+function openEdit(awb, sender, receiver, status, type) {
+    document.getElementById('editModal').classList.remove('hidden');
+    document.getElementById('editModal').classList.add('flex');
+    document.getElementById('editAwb').value = awb;
+    document.getElementById('editModalAwb').textContent = "AWB: " + awb;
+    document.getElementById('editType').value = type;
+    document.getElementById('editSender').value = sender;
+    document.getElementById('editReceiver').value = receiver;
+    document.getElementById('editStatus').value = status || 'Booked';
+}
+function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); document.getElementById('editModal').classList.remove('flex'); }
+
+document.getElementById('editForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('editSaveBtn'); btn.disabled = true; btn.textContent = "Saving...";
+    const payload = {
+        formType: 'editBooking',
+        bookingType: document.getElementById('editType').value,
+        awb: document.getElementById('editAwb').value,
+        senderName: document.getElementById('editSender').value,
+        receiverName: document.getElementById('editReceiver').value,
+        status: document.getElementById('editStatus').value
+    };
+    try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.result === 'success') { closeEditModal(); window.fetchBookings(); } else alert(data.error);
+    } catch(err) { alert("Network Error"); } finally { btn.disabled = false; btn.textContent = "Save Changes"; }
+});
+
+// Delete Logic
+async function deleteRow(awb, type) {
+    if(!confirm(`Are you absolutely sure you want to permanently delete booking ${awb}?`)) return;
+    try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify({formType: 'deleteBooking', awb: awb, bookingType: type}) });
+        const data = await res.json();
+        if (data.result === 'success') window.fetchBookings(); else alert(data.error);
+    } catch(err) { alert("Network Error"); }
+}
+
+// Render Table
 function renderTable(rows) {
-    const thead = document.getElementById('tableHeaderRow');
     const tbody = document.getElementById('bookingsTableBody');
-
-    thead.innerHTML = currentView === 'domestic'
-        ? '<tr><th>Date</th><th>AWB</th><th>Sender</th><th>Receiver</th><th>Dest. Pincode</th><th>Status</th></tr>'
-        : '<tr><th>Date</th><th>Order ID</th><th>Shipper</th><th>Receiver</th><th>Destination</th><th>Status</th></tr>';
-
     if (!rows || rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state"><svg style="width:40px;height:40px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg><p style="font-size:13px;font-weight:600;">No bookings found</p><p style="font-size:11px;">Try refreshing or switching tabs</p></div></td></tr>`;
-        document.getElementById('rowCountLabel').textContent = '0 records';
-        return;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-16"><p class="text-charcoal font-bold font-lexend">No Records Found</p><p class="text-xs text-teal/50">There are no bookings matching your criteria.</p></td></tr>`;
+        document.getElementById('rowCountLabel').textContent = '0 Records'; return;
     }
 
     tbody.innerHTML = '';
     rows.forEach(r => {
         const tr = document.createElement('tr');
-        tr.className = 'fade-row';
-
+        
         if (currentView === 'domestic') {
-            const date=r[0],awb=r[1],sender=r[3],receiver=r[5],dest=r[7],status=r[9];
+            // New Domestic Cols: 0:Time, 1:AWB, 3:Sender, 4:SPhone, 7:SCity, 10:RecName, 14:RecCity, 22:Status
+            const date=r[0], awb=r[1], sender=r[3], sPhone=r[4], origin=r[7]||'Origin', receiver=r[10], rPhone=r[11], dest=r[14]||'Dest', status=r[22];
+            
             tr.innerHTML = `
-                <td style="color:rgba(2,115,133,.6);font-size:11px;">${fmt(date)}</td>
-                <td><span style="font-family:monospace;font-size:12px;font-weight:700;color:#027385;">${awb||'—'}</span></td>
-                <td style="font-weight:500;color:#0D2330;">${sender||'—'}</td>
-                <td style="color:#374151;">${receiver||'—'}</td>
-                <td><span style="font-family:monospace;font-size:11px;color:#6b7280;">${dest||'—'}</span></td>
-                <td>${badge(status)}</td>`;
-            tr.addEventListener('click', () => openDrawer(awb, `Domestic · ${fmt(date)}`, [
-                ['AWB',`<span style="font-family:monospace;">${awb}</span>`],
-                ['Date',fmt(date)],['Sender',sender],['Sender Phone',r[4]||'—'],
-                ['Receiver',receiver],['Receiver Phone',r[6]||'—'],
-                ['Destination Pincode',dest],['Weight',r[8]?r[8]+' kg':'—'],['Status',badge(status)]
-            ]));
+                <td>
+                    <div class="font-lexend font-bold text-teal text-[13px]">${awb}</div>
+                    <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${sender||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone||'—'}</div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,6)}</div>
+                        <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,6)}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${receiver||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone||'—'}</div></div>
+                    </div>
+                </td>
+                <td>${badge(status)}</td>
+                <td class="text-right">
+                    <div class="flex justify-end gap-2">
+                        <button onclick='openDrawer("${awb}","Domestic", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender City","${origin}"],["Receiver","${receiver}"],["Dest City","${dest}"],["Weight","${r[19]||0} kg"],["Total","₹${r[21]||0}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                        <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "domestic")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                        <button onclick='deleteRow("${awb}", "domestic")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>
+                </td>`;
         } else {
-            const orderId=r[0],date=r[1],shipper=r[2],receiver=r[9],dest=r[14],status=r[61];
+            // New Intl Cols: 0:AWB, 1:Time, 3:Shipper, 4:SPhone, 8:SCountry, 12:RecName, 13:RPhone, 17:Dest, 34:Status
+            const awb=r[0], date=r[1], sender=r[3], sPhone=r[4], origin=r[8]||'Origin', receiver=r[12], rPhone=r[13], dest=r[17]||'Dest', status=r[34];
+            
             tr.innerHTML = `
-                <td style="color:rgba(2,115,133,.6);font-size:11px;">${fmt(date)}</td>
-                <td><span style="font-family:monospace;font-size:12px;font-weight:700;color:#F99523;">${orderId||'—'}</span></td>
-                <td style="font-weight:500;color:#0D2330;">${shipper||'—'}</td>
-                <td style="color:#374151;">${receiver||'—'}</td>
-                <td style="color:#6b7280;">${dest||'—'}</td>
-                <td>${badge(status)}</td>`;
-            tr.addEventListener('click', () => openDrawer(orderId, `International · ${fmt(date)}`, [
-                ['Order ID',`<span style="font-family:monospace;">${orderId}</span>`],
-                ['Date',fmt(date)],['Shipper',shipper],['Shipper Phone',r[3]||'—'],
-                ['Receiver',receiver],['Receiver Phone',r[10]||'—'],
-                ['Destination',dest],['Cargo Type',r[17]||'—'],
-                ['Total Actual Wt',(r[22]||'—')+' kg'],['Chargeable Wt',(r[23]||'—')+' kg'],
-                ['Grand Total','OMR '+(r[27]||'—')],['Status',badge(status)]
-            ]));
+                <td>
+                    <div class="font-lexend font-bold text-orange text-[13px]">${awb}</div>
+                    <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${sender||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone||'—'}</div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,3)}</div>
+                        <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,3)}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${receiver||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone||'—'}</div></div>
+                    </div>
+                </td>
+                <td>${badge(status)}</td>
+                <td class="text-right">
+                    <div class="flex justify-end gap-2">
+                        <button onclick='openDrawer("${awb}","International", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender Country","${origin}"],["Receiver","${receiver}"],["Dest Country","${dest}"],["Boxes","${r[26]||0}"],["Chargeable Wt","${r[28]||0} kg"],["Grand Total","OMR ${r[32]||0}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                        <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "international")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                        <button onclick='deleteRow("${awb}", "international")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>
+                </td>`;
         }
         tbody.appendChild(tr);
     });
-    document.getElementById('rowCountLabel').textContent = `${rows.length} record${rows.length!==1?'s':''} · ${currentView==='domestic'?'Domestic':'International'}`;
+    document.getElementById('rowCountLabel').textContent = `${rows.length} Total Records`;
 }
 
+// Search
 document.getElementById('searchInput').addEventListener('input', function() {
     const q = this.value.toLowerCase().trim();
-    if (!q) { renderTable(allRows); return; }
-    const f = allRows.filter(r => r.join(' ').toLowerCase().includes(q));
-    renderTable(f);
-    document.getElementById('rowCountLabel').textContent = `${f.length} match${f.length!==1?'es':''} for "${this.value}"`;
+    if (!q) return renderTable(allRows);
+    renderTable(allRows.filter(r => r.join(' ').toLowerCase().includes(q)));
 });
 
+// Fetch Data
 window.fetchBookings = async function() {
-    document.getElementById('bookingsTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:26px;height:26px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Fetching live data...</span></div></td></tr>`;
-    document.getElementById('searchInput').value = '';
+    document.getElementById('bookingsTableBody').innerHTML = `<tr><td colspan="6" class="text-center py-10"><div class="animate-pulse text-teal/40 text-xs font-bold uppercase tracking-widest">Loading Records...</div></td></tr>`;
     try {
-        const ep  = currentView === 'domestic' ? 'getDomestic' : 'getInternational';
+        const ep = currentView === 'domestic' ? 'getDomestic' : 'getInternational';
         const res = await fetch(`${SCRIPT_URL}?action=${ep}`);
         const result = await res.json();
         if (result.result === 'success') {
             allRows = result.data.length > 1 ? [...result.data].slice(1).reverse() : [];
             renderTable(allRows);
-            const sidx = currentView === 'domestic' ? 9 : 61;
-            const delivered = allRows.filter(r => r[sidx]==='Delivered').length;
-            const transit   = allRows.filter(r => ['In Transit','Out for Delivery','Dispatched to Hub'].includes(r[sidx])).length;
-            if (currentView==='domestic') document.getElementById('statDom').textContent = allRows.length;
-            else document.getElementById('statInt').textContent = allRows.length;
-            document.getElementById('statDelivered').textContent = delivered;
-            document.getElementById('statTransit').textContent   = transit;
         } else {
-            document.getElementById('bookingsTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Error: ${result.message||'Failed to load.'}</td></tr>`;
+            alert('Failed to load data: ' + result.message);
         }
-    } catch(e) {
-        document.getElementById('bookingsTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed. Please refresh.</td></tr>`;
-    }
+    } catch(e) { alert('Connection failed. Please refresh.'); }
 };
 
+// Tabs
 document.getElementById('toggleDomBtn').addEventListener('click', () => {
-    if (currentView==='domestic') return;
-    currentView='domestic';
-    document.getElementById('toggleDomBtn').className='tab-btn tab-dom';
-    document.getElementById('toggleIntBtn').className='tab-btn tab-off';
+    if (currentView==='domestic') return; currentView='domestic';
+    document.getElementById('toggleDomBtn').className='tab-btn tab-dom'; document.getElementById('toggleIntBtn').className='tab-btn tab-off';
     closeDrawer(); window.fetchBookings();
 });
 document.getElementById('toggleIntBtn').addEventListener('click', () => {
-    if (currentView==='international') return;
-    currentView='international';
-    document.getElementById('toggleIntBtn').className='tab-btn tab-int';
-    document.getElementById('toggleDomBtn').className='tab-btn tab-off';
+    if (currentView==='international') return; currentView='international';
+    document.getElementById('toggleIntBtn').className='tab-btn tab-int'; document.getElementById('toggleDomBtn').className='tab-btn tab-off';
     closeDrawer(); window.fetchBookings();
 });
-document.getElementById('refreshTableBtn').addEventListener('click', window.fetchBookings);
 
-document.addEventListener('DOMContentLoaded', () => {
-    const raw = sessionStorage.getItem('erp_user');
-    if (raw) {
-        const u=JSON.parse(raw), i=(u.name||'U').charAt(0).toUpperCase();
-        document.getElementById('sidebarAvatar').textContent=i;
-        document.getElementById('headerAvatar').textContent=i;
-        document.getElementById('sidebarName').textContent=u.name;
-        document.getElementById('sidebarRole').textContent=`${u.role} · ${u.branchId}`;
-        if (u.role==='Admin'){const l=document.getElementById('navAdminLink');l.style.display='flex';}
-    }
-    window.fetchBookings();
-});
+document.addEventListener('DOMContentLoaded', window.fetchBookings);
 </script>
-<script src="app.js"></script>
 </body>
 </html>
