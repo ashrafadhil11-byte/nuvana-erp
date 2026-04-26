@@ -11,137 +11,68 @@
         tailwind.config = {
             darkMode: 'class',
             theme: {
-                extend: {
-                    colors: { orange:'#F99523', teal:'#027385', beige:'#EFE7DC', charcoal:'#0D2330', success:'#10B981' },
-                    fontFamily: { poppins:['Poppins','sans-serif'], lexend:['Lexend','sans-serif'] }
-                }
+                extend: { colors: { orange:'#F99523', teal:'#027385', beige:'#EFE7DC', charcoal:'#0D2330', success:'#10B981' }, fontFamily: { poppins:['Poppins','sans-serif'], lexend:['Lexend','sans-serif'] } }
             }
         }
     </script>
-
     <style>
-        *{box-sizing:border-box;}
-        body{font-family:'Poppins',sans-serif;background:#f5f2ee;}
-        .font-lexend{font-family:'Lexend',sans-serif;}
-
+        *{box-sizing:border-box;} body{font-family:'Poppins',sans-serif;background:#f5f2ee;} .font-lexend{font-family:'Lexend',sans-serif;}
         @keyframes slideUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
-        @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}}
-        @keyframes spin{to{transform:rotate(360deg);}}
-
-        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;}
-        .anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .12s both;}
-        .anim-3{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .19s both;}
-        .anim-4{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .26s both;}
-        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;}
-        .spin{animation:spin 1s linear infinite;}
-
-        ::-webkit-scrollbar{width:5px;height:5px;}
-        ::-webkit-scrollbar-track{background:transparent;}
-        ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
+        @keyframes ping{75%,100%{transform:scale(2.1);opacity:0;}} @keyframes spin{to{transform:rotate(360deg);}}
+        .anim-1{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .05s both;} .anim-2{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .12s both;}
+        .anim-3{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .19s both;} .anim-4{animation:slideUp .5s cubic-bezier(.16,1,.3,1) .26s both;}
+        .ping{animation:ping 1.8s cubic-bezier(0,0,.2,1) infinite;} .spin{animation:spin 1s linear infinite;}
+        ::-webkit-scrollbar{width:5px;height:5px;} ::-webkit-scrollbar-track{background:transparent;} ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
         ::-webkit-scrollbar-thumb:hover{background:#F99523;}
-
-        /* Sidebar */
         .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}
-        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);}
-        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
+        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);} .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
         .divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
-
-        /* Panels */
-        .sp{background:white;border:1px solid #e8e0d6;border-radius:14px;overflow:hidden;}
-        .sp-hdr{padding:12px 18px;border-bottom:1px solid #f0ece6;display:flex;align-items:center;justify-content:space-between;gap:9px;background:#faf8f5;}
-
-        /* Fields */
+        .sp{background:white;border:1px solid #e8e0d6;border-radius:14px;overflow:hidden;} .sp-hdr{padding:12px 18px;border-bottom:1px solid #f0ece6;display:flex;align-items:center;justify-content:space-between;gap:9px;background:#faf8f5;}
         .field{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.15);border-radius:10px;padding:.62rem .85rem;font-family:'Poppins',sans-serif;font-size:.8125rem;color:#0D2330;outline:none;transition:border-color .2s,box-shadow .2s,background .2s;}
-        .field::placeholder{color:rgba(2,115,133,.3);}
-        .field:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);background:#fff;}
-        .field[readonly]{background:rgba(2,115,133,.04);color:#027385;font-weight:600;cursor:default;}
+        .field::placeholder{color:rgba(2,115,133,.3);} .field:focus{border-color:#F99523;box-shadow:0 0 0 3px rgba(249,149,35,.1);background:#fff;} .field[readonly]{background:rgba(2,115,133,.04);color:#027385;font-weight:600;cursor:default;}
         select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;background-size:14px;padding-right:2rem;}
-        .fl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:5px;}
-        .fl-opt{font-size:8px;color:rgba(2,115,133,.35);text-transform:none;letter-spacing:0;font-weight:400;}
-
-        /* Phone group */
-        .ph-grp{display:flex;gap:6px;align-items:stretch;}
-        .ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.62rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:60px;text-align:center;display:flex;align-items:center;justify-content:center;}
-
-        /* Box rows - UPDATED FOR DELETE BUTTON */
+        .fl{display:block;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:5px;} .fl-opt{font-size:8px;color:rgba(2,115,133,.35);text-transform:none;letter-spacing:0;font-weight:400;}
+        .ph-grp{display:flex;gap:6px;align-items:stretch;} .ph-code{flex-shrink:0;background:#EFE7DC;border:1px solid #ddd5c8;border-radius:10px;padding:.62rem .8rem;font-family:'Lexend',sans-serif;font-size:.8rem;font-weight:700;color:#0D2330;min-width:60px;text-align:center;display:flex;align-items:center;justify-content:center;}
         .box-row{display:grid;grid-template-columns:44px 1fr 1fr 1fr 1fr 1fr 36px;gap:6px;align-items:center;}
         .box-input{width:100%;background:rgba(2,115,133,.03);border:1px solid rgba(2,115,133,.12);border-radius:8px;padding:.45rem .55rem;font-family:'Poppins',sans-serif;font-size:.75rem;color:#0D2330;outline:none;text-align:center;transition:border-color .2s,box-shadow .2s;}
-        .box-input:focus{border-color:#F99523;box-shadow:0 0 0 2px rgba(249,149,35,.1);}
-        .box-input.cw{background:rgba(249,149,35,.07);border-color:rgba(249,149,35,.3);color:#c47b0a;font-weight:700;cursor:default;}
+        .box-input:focus{border-color:#F99523;box-shadow:0 0 0 2px rgba(249,149,35,.1);} .box-input.cw{background:rgba(249,149,35,.07);border-color:rgba(249,149,35,.3);color:#c47b0a;font-weight:700;cursor:default;}
         .box-num{width:44px;height:34px;border-radius:8px;background:rgba(2,115,133,.08);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#027385;font-family:'Lexend',sans-serif;}
         .col-hdr{font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(2,115,133,.5);text-align:center;}
         .del-btn{width:36px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:rgba(239,68,68,0.1);color:#ef4444;transition:all 0.2s;border:1px solid transparent;cursor:pointer;}
-        .del-btn:not(:disabled):hover{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.3);transform:scale(1.05);}
-        .del-btn:disabled{opacity:0.3;cursor:not-allowed;background:transparent;}
-
-        /* Totals */
+        .del-btn:not(:disabled):hover{background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.3);transform:scale(1.05);} .del-btn:disabled{opacity:0.3;cursor:not-allowed;background:transparent;}
         .totals-bar{background:#0D2330;border-radius:12px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:16px;}
-        .ti .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(239,231,220,.35);margin-bottom:3px;}
-        .ti .val{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:#EFE7DC;}
-        .ti .val.o{color:#F99523;}
-
-        /* Grand total */
+        .ti .lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:rgba(239,231,220,.35);margin-bottom:3px;} .ti .val{font-family:'Lexend',sans-serif;font-size:15px;font-weight:700;color:#EFE7DC;} .ti .val.o{color:#F99523;}
         .gt{width:100%;background:rgba(249,149,35,.08);border:2px solid rgba(249,149,35,.3);border-radius:10px;padding:.65rem 1rem;font-family:'Lexend',sans-serif;font-size:1rem;font-weight:700;color:#c47b0a;outline:none;text-align:center;cursor:default;}
-
-        /* Add box btn */
         .btn-add{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:8px;background:rgba(2,115,133,.1);border:1px solid rgba(2,115,133,.2);color:#027385;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;font-family:'Lexend',sans-serif;}
-        .btn-add:hover{background:rgba(2,115,133,.18);}
-        .btn-add:disabled{opacity:.4;cursor:not-allowed;}
-
-        /* Submit */
+        .btn-add:hover{background:rgba(2,115,133,.18);} .btn-add:disabled{opacity:.4;cursor:not-allowed;}
         .btn-sub{width:100%;padding:.9rem 1rem;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:.875rem;font-weight:600;letter-spacing:.05em;border:none;cursor:pointer;transition:background .2s,transform .15s,box-shadow .2s;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 16px rgba(13,35,48,.2);position:relative;overflow:hidden;}
-        .btn-sub::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;}
-        .btn-sub>*{position:relative;z-index:1;}
-        .btn-sub:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);}
-        .btn-sub:hover::after{width:100%;}
-        .btn-sub:active{transform:translateY(0);}
-        .btn-sub:disabled{opacity:.65;cursor:not-allowed;transform:none;}
-
-        /* Validation banner */
-        .val-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:none;}
-        .val-banner-hdr{display:flex;align-items:center;gap:8px;color:#dc2626;font-size:13px;font-weight:600;margin-bottom:8px;}
-        .val-banner ul{margin:0;padding-left:18px;}
-        .val-banner li{font-size:12px;color:#b91c1c;line-height:1.7;}
-
-        /* Success modal */
+        .btn-sub::after{content:'';position:absolute;left:0;top:0;width:4px;height:100%;background:#F99523;transition:width .35s cubic-bezier(.4,0,.2,1);z-index:0;} .btn-sub>*{position:relative;z-index:1;}
+        .btn-sub:hover{background:#122c3f;transform:translateY(-1px);box-shadow:0 8px 24px rgba(13,35,48,.28);} .btn-sub:hover::after{width:100%;} .btn-sub:active{transform:translateY(0);} .btn-sub:disabled{opacity:.65;cursor:not-allowed;transform:none;}
+        .val-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:12px;padding:14px 18px;margin-bottom:18px;display:none;} .val-banner-hdr{display:flex;align-items:center;gap:8px;color:#dc2626;font-size:13px;font-weight:600;margin-bottom:8px;} .val-banner ul{margin:0;padding-left:18px;} .val-banner li{font-size:12px;color:#b91c1c;line-height:1.7;}
         .modal-bg{position:fixed;inset:0;background:rgba(13,35,48,.7);backdrop-filter:blur(8px);z-index:300;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
-        .modal-bg.open{opacity:1;pointer-events:all;}
-        .modal-card{background:white;border-radius:24px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.4);transform:scale(.95) translateY(30px);transition:all .4s cubic-bezier(.16,1,.3,1); border: 1px solid rgba(255,255,255,0.2);}
-        .modal-bg.open .modal-card{transform:scale(1) translateY(0);}
+        .modal-bg.open{opacity:1;pointer-events:all;} .modal-card{background:white;border-radius:24px;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;box-shadow:0 25px 50px -12px rgba(0,0,0,0.4);transform:scale(.95) translateY(30px);transition:all .4s cubic-bezier(.16,1,.3,1); border: 1px solid rgba(255,255,255,0.2);} .modal-bg.open .modal-card{transform:scale(1) translateY(0);}
         .modal-hdr{padding:32px 28px 20px;text-align:center;border-bottom:1px solid #f0ece6; background: linear-gradient(180deg, rgba(16,185,129,0.05) 0%, rgba(255,255,255,0) 100%);}
         .modal-icon{width:64px;height:64px;border-radius:50%;background:rgba(16,185,129,.1);border:2px solid rgba(16,185,129,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 16px; animation: modalPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; transform: scale(0);}
-        
         @keyframes modalPop { 0% { transform: scale(0); } 70% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
-        .modal-title{font-family:'Lexend',sans-serif;font-size:22px;font-weight:700;color:#0D2330;}
-        .modal-sub{font-size:13px;color:rgba(2,115,133,.7);margin-top:6px;}
+        .modal-title{font-family:'Lexend',sans-serif;font-size:22px;font-weight:700;color:#0D2330;} .modal-sub{font-size:13px;color:rgba(2,115,133,.7);margin-top:6px;}
         .awb-block{margin:20px 28px;background:linear-gradient(135deg, #0D2330 0%, #122c3f 100%);border-radius:16px;padding:22px;text-align:center; box-shadow: inset 0 2px 10px rgba(0,0,0,0.2); position: relative; overflow: hidden;}
         .awb-block::after { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(249,149,35,0.1) 0%, transparent 60%); pointer-events: none; }
-        
         .awb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(239,231,220,.5);margin-bottom:8px; position: relative; z-index: 1;}
         .awb-val{font-family:'Lexend',sans-serif;font-size:24px;font-weight:900;color:#F99523;letter-spacing:.08em; position: relative; z-index: 1; text-shadow: 0 0 20px rgba(249,149,35,0.4);}
         .awb-sub{font-size:11px;color:rgba(239,231,220,.5);margin-top:6px; position: relative; z-index: 1;}
-        
-        .child-list{margin:0 28px 20px;}
-        .child-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:10px;}
+        .child-list{margin:0 28px 20px;} .child-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.6);margin-bottom:10px;}
         .child-row{display:flex;justify-content:space-between;align-items:center;padding:8px 14px;border-radius:10px;background:#faf8f5;border:1px solid #f0ece6;margin-bottom:6px; transition: all 0.2s;}
-        .child-row:hover { border-color: rgba(249,149,35,0.3); background: #fff; }
-        .cr-box{font-size:12px;color:#374151; font-weight: 500;}
-        .cr-awb{font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;color:#027385;}
-        
-        .sum-grid{margin:0 28px 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-        .sum-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:12px;padding:12px 14px;}
-        .sum-item .sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:4px;}
-        .sum-item .sv{font-size:13px;font-weight:600;color:#0D2330;}
-        
-        .modal-btns{padding:0 28px 28px;display:flex;gap:12px;flex-wrap:wrap;}
-        .mbtn{flex:1;min-width:120px;padding:12px 16px;border-radius:12px;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
-        .mb-dark{background:#0D2330;color:white;box-shadow:0 4px 12px rgba(13,35,48,.2);}
-        .mb-dark:hover{background:#122c3f; transform: translateY(-2px); box-shadow:0 6px 16px rgba(13,35,48,.3);}
-        .mb-teal{background:rgba(2,115,133,.1);color:#027385;border:1px solid rgba(2,115,133,.2);}
-        .mb-teal:hover{background:rgba(2,115,133,.15); transform: translateY(-2px);}
-        .mb-ghost{background:transparent;color:#6b7280;border:1px solid #e5e7eb;}
-        .mb-ghost:hover{background:#f3f4f6; color: #374151;}
+        .child-row:hover { border-color: rgba(249,149,35,0.3); background: #fff; } .cr-box{font-size:12px;color:#374151; font-weight: 500;} .cr-awb{font-family:'Lexend',sans-serif;font-size:12px;font-weight:700;color:#027385;}
+        .sum-grid{margin:0 28px 24px;display:grid;grid-template-columns:1fr 1fr;gap:10px;} .sum-item{background:#faf8f5;border:1px solid #f0ece6;border-radius:12px;padding:12px 14px;}
+        .sum-item .sl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:rgba(2,115,133,.5);margin-bottom:4px;} .sum-item .sv{font-size:13px;font-weight:600;color:#0D2330;}
+        .modal-btns{padding:0 28px 28px;display:flex;gap:12px;flex-wrap:wrap;} .mbtn{flex:1;min-width:120px;padding:12px 16px;border-radius:12px;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+        .mb-dark{background:#0D2330;color:white;box-shadow:0 4px 12px rgba(13,35,48,.2);} .mb-dark:hover{background:#122c3f; transform: translateY(-2px); box-shadow:0 6px 16px rgba(13,35,48,.3);}
+        .mb-teal{background:rgba(2,115,133,.1);color:#027385;border:1px solid rgba(2,115,133,.2);} .mb-teal:hover{background:rgba(2,115,133,.15); transform: translateY(-2px);}
+        .mb-ghost{background:transparent;color:#6b7280;border:1px solid #e5e7eb;} .mb-ghost:hover{background:#f3f4f6; color: #374151;}
+
+        /* Custom Scrollbar for CRM Cards */
+        .crm-scroll::-webkit-scrollbar { height: 6px; }
+        .crm-scroll::-webkit-scrollbar-thumb { background: rgba(2,115,133,0.2); border-radius: 10px; }
     </style>
 </head>
 <body class="min-h-screen flex overflow-hidden">
@@ -150,9 +81,7 @@
     <div class="modal-card">
         <div class="modal-hdr">
             <div class="modal-icon">
-                <svg style="width:32px;height:32px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/>
-                </svg>
+                <svg style="width:32px;height:32px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
             </div>
             <div class="modal-title">Booking Successful</div>
             <div class="modal-sub">International cargo booking has been securely recorded.</div>
@@ -198,73 +127,44 @@
 
 <aside style="width:220px;flex-shrink:0;display:flex;flex-direction:column;height:100vh;background:#0D2330;">
     <div style="padding:20px;border-bottom:1px solid rgba(255,255,255,.06);">
-        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex"
-             style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div style="display:none;">
-            <p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p>
-        </div>
+        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px;width:auto;object-fit:contain;filter:brightness(0) invert(1);" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+        <div style="display:none;"><p class="font-lexend" style="font-size:15px;font-weight:700;letter-spacing:.14em;color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
     </div>
 
     <nav style="flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;">
-        <a href="index.html" class="nav-item">
-            <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
-            Command Center
-        </a>
-
+        <a href="index.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
         <div class="section-label" style="margin-top:10px;">Logistics</div>
-
         <div>
             <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 9px;border-radius:11px;background:rgba(249,149,35,.08);border-left:3px solid #F99523;">
                 <div style="display:flex;align-items:center;gap:10px;color:#F99523;font-weight:600;font-size:13px;">
-                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
-                    New Booking
+                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking
                 </div>
             </div>
             <div style="display:flex;flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;margin-top:2px;gap:2px;">
                 <a href="international.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;font-weight:600;color:#F99523;background:rgba(249,149,35,.1);text-decoration:none;">✈ International</a>
-                <a href="domestic.html"      style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
+                <a href="domestic.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
             </div>
         </div>
-
         <div class="group" style="position:relative;">
             <div class="nav-item" style="justify-content:space-between;">
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                    Processing
-                </div>
+                <div style="display:flex;align-items:center;gap:10px;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div>
                 <svg style="width:12px;height:12px;" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
             </div>
             <div class="hidden group-hover:flex" style="flex-direction:column;padding-left:36px;padding-right:12px;padding-bottom:4px;gap:2px;">
                 <a href="processing.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
-                <a href="update.html"     style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
+                <a href="update.html" style="display:block;padding:6px 8px;border-radius:8px;font-size:12px;color:rgba(239,231,220,.4);text-decoration:none;" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
             </div>
         </div>
-
         <div class="section-label" style="margin-top:10px;">Finance &amp; CRM</div>
-        <a href="accounts.html"  class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
+        <a href="accounts.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
         <a href="customers.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
-        <a href="reports.html"   class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
+        <a href="reports.html" class="nav-item"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
         <div class="divider-h" style="margin:8px 0;"></div>
-        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;">
-            <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
-            Master Control
-        </a>
+        <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none;"><svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
     </nav>
-
-    <div style="padding:12px;border-top:1px solid rgba(255,255,255,.06);">
-        <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,.04);">
-            <div id="sidebarAvatar" style="width:28px;height:28px;border-radius:9px;background:#F99523;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:white;flex-shrink:0;">A</div>
-            <div style="overflow:hidden;flex:1;">
-                <div id="sidebarName" style="font-size:11px;font-weight:600;color:rgba(239,231,220,.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">—</div>
-                <div id="sidebarRole" style="font-size:9px;color:rgba(239,231,220,.35);">—</div>
-            </div>
-        </div>
-    </div>
 </aside>
 
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
-
     <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
@@ -283,18 +183,13 @@
                 </span>
                 <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span>
             </div>
-            <div id="headerAvatar" style="width:32px;height:32px;border-radius:10px;background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:#F99523;">A</div>
         </div>
     </header>
 
     <div style="flex:1;overflow-y:auto;padding:24px;background:#f5f2ee;">
         <form id="internationalForm" class="space-y-5 max-w-6xl mx-auto">
-
             <div class="val-banner" id="valBanner">
-                <div class="val-banner-hdr">
-                    <svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/></svg>
-                    <span id="valBannerTitle">Please fix errors before submitting</span>
-                </div>
+                <div class="val-banner-hdr"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zM12 8.25a.75.75 0 01.75.75v3.75a.75.75 0 01-1.5 0V9a.75.75 0 01.75-.75zm0 8.25a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd"/></svg><span id="valBannerTitle">Please fix errors before submitting</span></div>
                 <ul id="valBannerList"></ul>
             </div>
 
@@ -308,70 +203,34 @@
                             </div>
                             <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipper Details</span>
                         </div>
-                        <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(2,115,133,.1);color:#027385;text-transform:uppercase;letter-spacing:.04em;">Origin</span>
+                        <div id="shipperStatusBadge"></div>
                     </div>
                     <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
                         <div style="grid-column:span 2;">
-                            <label class="fl">Shipper Full Name *</label>
-                            <input type="text" id="shipperName" required placeholder="Full name" class="field">
-                        </div>
-                        <div style="grid-column:span 2;">
                             <label class="fl">Origin Country *</label>
-                            <select id="originCountry" required class="field">
-                                <option value="" disabled selected>Loading countries…</option>
-                            </select>
+                            <select id="originCountry" required class="field"><option value="" disabled selected>Loading countries…</option></select>
                         </div>
                         <div style="grid-column:span 2;">
-                            <label class="fl">Primary Phone *</label>
+                            <label class="fl">Primary Phone * <span style="text-transform:none; font-weight:normal; color:#F99523;">(Enter to Search Address Book)</span></label>
                             <div class="ph-grp">
                                 <div class="ph-code" id="shipperPhoneCodeDisplay">—</div>
                                 <input type="hidden" id="shipperPhoneCode">
                                 <input type="tel" id="contactNumber" required placeholder="Phone number" class="field" style="flex:1;">
                             </div>
                         </div>
-                        <div>
-                            <label class="fl">Alternate Phone</label>
-                            <input type="tel" id="altNumber" placeholder="Optional" class="field">
-                        </div>
-                        <div>
-                            <label class="fl">Postal Code</label>
-                            <input type="text" id="postalCode" placeholder="123" class="field">
-                        </div>
                         <div style="grid-column:span 2;">
-                            <label class="fl">Street Address</label>
-                            <input type="text" id="shipperAddress" placeholder="Street, area" class="field">
+                            <label class="fl">Shipper Full Name *</label>
+                            <input type="text" id="shipperName" required placeholder="Full name" class="field">
                         </div>
-                        <div>
-                            <label class="fl">City *</label>
-                            <input type="text" id="shipperCity" required placeholder="City name" class="field">
-                        </div>
-                        <div>
-                            <label class="fl">State / Province *</label>
-                            <select id="shipperState" required class="field">
-                                <option value="" disabled selected>Select country first…</option>
-                            </select>
-                        </div>
-                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
-                            <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
-                        </div>
-                        <div>
-                            <label class="fl" style="font-size:8px;">ID Type</label>
-                            <select id="shipperIdType" class="field">
-                                <option value="">— None —</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="fl" style="font-size:8px;">ID Number</label>
-                            <input type="text" id="shipperIdNumber" placeholder="Passport / ID number" class="field">
-                        </div>
-                        <div style="grid-column:span 2;">
-                            <label class="fl" style="font-size:8px;">ID Expiry Date</label>
-                            <input type="date" id="shipperIdExpiry" class="field">
-                        </div>
+                        <div><label class="fl">Alternate Phone</label><input type="tel" id="altNumber" placeholder="Optional" class="field"></div>
+                        <div><label class="fl">Postal Code</label><input type="text" id="postalCode" placeholder="123" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Street Address</label><input type="text" id="shipperAddress" placeholder="Street, area" class="field"></div>
+                        <div><label class="fl">City *</label><input type="text" id="shipperCity" required placeholder="City name" class="field"></div>
+                        <div><label class="fl">State / Province *</label><select id="shipperState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
                     </div>
                 </div>
 
-                <div class="sp">
+                <div class="sp flex flex-col h-full">
                     <div class="sp-hdr">
                         <div style="display:flex;align-items:center;gap:9px;">
                             <div style="width:27px;height:27px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
@@ -379,18 +238,25 @@
                             </div>
                             <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Consignee Details</span>
                         </div>
-                        <span style="font-size:9px;font-weight:700;padding:2px 9px;border-radius:20px;background:rgba(249,149,35,.1);color:#c47b0a;text-transform:uppercase;letter-spacing:.04em;">Destination</span>
                     </div>
-                    <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                    
+                    <div id="consigneeHistoryContainer" class="hidden px-5 py-4 border-b border-[#f0ece6] bg-slate-50/50">
+                        <p class="text-[10px] font-bold text-teal/70 uppercase tracking-widest mb-2 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            Select from History
+                        </p>
+                        <div id="consigneeCards" class="flex gap-3 overflow-x-auto pb-2 crm-scroll">
+                            </div>
+                    </div>
+
+                    <div style="padding:18px;display:grid;grid-template-columns:1fr 1fr;gap:12px; flex:1;">
+                        <div style="grid-column:span 2;">
+                            <label class="fl">Destination Country *</label>
+                            <select id="destCountry" required class="field"><option value="" disabled selected>Loading countries…</option></select>
+                        </div>
                         <div style="grid-column:span 2;">
                             <label class="fl">Receiver Full Name *</label>
                             <input type="text" id="receiverNameInt" required placeholder="Full name" class="field">
-                        </div>
-                        <div style="grid-column:span 2;">
-                            <label class="fl">Destination Country *</label>
-                            <select id="destCountry" required class="field">
-                                <option value="" disabled selected>Loading countries…</option>
-                            </select>
                         </div>
                         <div style="grid-column:span 2;">
                             <label class="fl">Primary Phone *</label>
@@ -400,45 +266,11 @@
                                 <input type="tel" id="receiverPhoneInt" required placeholder="Phone number" class="field" style="flex:1;">
                             </div>
                         </div>
-                        <div>
-                            <label class="fl">Alternate Phone</label>
-                            <input type="tel" id="receiverAltInt" placeholder="Optional" class="field">
-                        </div>
-                        <div>
-                            <label class="fl">Zip / Postal Code</label>
-                            <input type="text" id="zipCode" placeholder="SW1A 1AA" class="field">
-                        </div>
-                        <div style="grid-column:span 2;">
-                            <label class="fl">Delivery Address</label>
-                            <input type="text" id="receiverAddress" placeholder="Street, area" class="field">
-                        </div>
-                        <div>
-                            <label class="fl">City *</label>
-                            <input type="text" id="consigneeCity" required placeholder="City name" class="field">
-                        </div>
-                        <div>
-                            <label class="fl">State / Province *</label>
-                            <select id="consigneeState" required class="field">
-                                <option value="" disabled selected>Select country first…</option>
-                            </select>
-                        </div>
-                        <div style="grid-column:span 2;border-top:1px solid #f0ece6;padding-top:10px;margin-top:4px;">
-                            <label class="fl">ID Document <span class="fl-opt">(optional — for customs)</span></label>
-                        </div>
-                        <div>
-                            <label class="fl" style="font-size:8px;">ID Type</label>
-                            <select id="consigneeIdType" class="field">
-                                <option value="">— None —</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="fl" style="font-size:8px;">ID Number</label>
-                            <input type="text" id="consigneeIdNumber" placeholder="Passport / ID number" class="field">
-                        </div>
-                        <div style="grid-column:span 2;">
-                            <label class="fl" style="font-size:8px;">ID Expiry Date</label>
-                            <input type="date" id="consigneeIdExpiry" class="field">
-                        </div>
+                        <div><label class="fl">Alternate Phone</label><input type="tel" id="receiverAltInt" placeholder="Optional" class="field"></div>
+                        <div><label class="fl">Zip / Postal Code</label><input type="text" id="zipCode" placeholder="SW1A 1AA" class="field"></div>
+                        <div style="grid-column:span 2;"><label class="fl">Delivery Address</label><input type="text" id="receiverAddress" placeholder="Street, area" class="field"></div>
+                        <div><label class="fl">City *</label><input type="text" id="consigneeCity" required placeholder="City name" class="field"></div>
+                        <div><label class="fl">State / Province *</label><select id="consigneeState" required class="field"><option value="" disabled selected>Select country first…</option></select></div>
                     </div>
                 </div>
             </div>
@@ -446,9 +278,7 @@
             <div class="sp anim-2">
                 <div class="sp-hdr">
                     <div style="display:flex;align-items:center;gap:9px;">
-                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;">
-                            <svg style="width:13px;height:13px;color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
-                        </div>
+                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(139,92,246,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:13px;height:13px;color:#8b5cf6;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg></div>
                         <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Shipment Details</span>
                     </div>
                 </div>
@@ -478,30 +308,17 @@
             <div class="sp anim-3">
                 <div class="sp-hdr">
                     <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap;">
-                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;">
-                            <svg style="width:13px;height:13px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg>
-                        </div>
+                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(16,185,129,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:13px;height:13px;color:#10B981;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75z"/></svg></div>
                         <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Box Dimensions &amp; Weights</span>
                         <span style="font-size:10px;color:rgba(2,115,133,.45);">Chargeable = max(actual, L×W×H÷5000)</span>
                     </div>
-                    <button type="button" id="addBoxBtn" class="btn-add">
-                        <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
-                        Add Box
-                    </button>
+                    <button type="button" id="addBoxBtn" class="btn-add"><svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>Add Box</button>
                 </div>
                 <div style="padding:18px;">
                     <div class="box-row" style="margin-bottom:8px;">
-                        <div class="col-hdr">Box</div>
-                        <div class="col-hdr">Actual Wt (kg)</div>
-                        <div class="col-hdr">L (cm)</div>
-                        <div class="col-hdr">W (cm)</div>
-                        <div class="col-hdr">H (cm)</div>
-                        <div class="col-hdr">Chargeable (kg)</div>
-                        <div class="col-hdr">Del</div>
+                        <div class="col-hdr">Box</div><div class="col-hdr">Actual Wt (kg)</div><div class="col-hdr">L (cm)</div><div class="col-hdr">W (cm)</div><div class="col-hdr">H (cm)</div><div class="col-hdr">Chargeable (kg)</div><div class="col-hdr">Del</div>
                     </div>
-                    
                     <div id="boxContainer" class="space-y-2"></div>
-                    
                     <div class="totals-bar">
                         <div class="ti"><div class="lbl">Total Boxes</div><div class="val o" id="lblTotalBoxes">0</div></div>
                         <div style="width:1px;height:28px;background:rgba(255,255,255,.1);"></div>
@@ -514,12 +331,7 @@
 
             <div class="sp anim-4">
                 <div class="sp-hdr">
-                    <div style="display:flex;align-items:center;gap:9px;">
-                        <div style="width:27px;height:27px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
-                            <svg style="width:13px;height:13px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg>
-                        </div>
-                        <span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Pricing &amp; Charges</span>
-                    </div>
+                    <div style="display:flex;align-items:center;gap:9px;"><div style="width:27px;height:27px;border-radius:8px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;"><svg style="width:13px;height:13px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7.5a2.25 2.25 0 100 4.5 2.25 2.25 0 000-4.5z"/><path fill-rule="evenodd" d="M1.5 4.875C1.5 3.839 2.34 3 3.375 3h17.25c1.035 0 1.875.84 1.875 1.875v9.75c0 1.036-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 011.5 14.625v-9.75z" clip-rule="evenodd"/></svg></div><span class="font-lexend" style="font-size:12px;font-weight:600;color:#0D2330;">Pricing &amp; Charges</span></div>
                 </div>
                 <div style="padding:18px;">
                     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;">
@@ -528,7 +340,6 @@
                         <div><label class="fl">Additional Charges</label><input type="number" step="0.01" id="additionalCharges" placeholder="0.00" class="field"></div>
                         <div><label class="fl">Grand Total (INR)</label><input type="number" step="0.01" id="grandTotal" readonly placeholder="—" class="gt"></div>
                     </div>
-                    <p style="font-size:10px;color:rgba(2,115,133,.45);">* Standard delivery: 5 days from dispatch. AWB is auto-generated on submission.</p>
                 </div>
             </div>
 
@@ -536,17 +347,12 @@
                 <button type="submit" id="submitIntBtn" class="btn-sub">
                     <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zm.75 6a.75.75 0 00-1.5 0v3.75H9a.75.75 0 000 1.5h3.75v3.75a.75.75 0 001.5 0v-3.75h3.75a.75.75 0 000-1.5h-3.75V8.25z" clip-rule="evenodd"/></svg>
                     <span id="btnTextInt">Transmit International Booking</span>
-                    <svg id="loadingIconInt" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                        <path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
-                    </svg>
+                    <svg id="loadingIconInt" class="spin hidden" style="width:16px;height:16px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/></svg>
                 </button>
             </div>
-
         </form>
     </div>
 </main>
-
 <script>
 // ─────────────────────────────────────────────────────────
 // 1. GLOBAL COUNTRY MASTER DATA (240+ Countries & Territories)
@@ -811,7 +617,7 @@ const ID_TYPES = [
 // 2. STATE & HELPERS
 // ─────────────────────────────────────────────────────────
 const _state = {
-  boxes:    [],    // Holds actual box data
+  boxes:    [],
   totals:   { boxes:0, actual:0, cw:0, grand:0 },
   lastBooking: null,
   scriptURL: 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec'
@@ -1200,6 +1006,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.getElementById('addBoxBtn')?.addEventListener('click', addBox);
   
+  // ── CRM Address Book Fetch ──
+  document.getElementById('contactNumber')?.addEventListener('blur', async (e) => {
+      const phone = e.target.value.trim();
+      if(phone.length < 6) return;
+
+      const badge = document.getElementById('shipperStatusBadge');
+      badge.innerHTML = '<span class="text-orange text-[10px] font-bold uppercase bg-orange/10 px-2 py-1 rounded animate-pulse">Searching CRM...</span>';
+
+      try {
+          const res = await fetch(`${_state.scriptURL}?action=getShipperHistory&phone=${encodeURIComponent(phone)}`);
+          const result = await res.json();
+
+          if (result.customer) {
+              badge.innerHTML = '<span class="text-success text-[10px] font-bold uppercase bg-success/10 px-2 py-1 rounded">Customer Found</span>';
+              if(!val('shipperName')) document.getElementById('shipperName').value = result.customer.name.toUpperCase();
+              if(!val('shipperAddress')) document.getElementById('shipperAddress').value = result.customer.address.toUpperCase();
+          } else {
+              badge.innerHTML = '<span class="text-teal/60 text-[10px] font-bold uppercase bg-teal/10 px-2 py-1 rounded">New Customer</span>';
+          }
+
+          if (result.consignees && result.consignees.length > 0) {
+              const histContainer = document.getElementById('consigneeHistoryContainer');
+              const cardsDiv = document.getElementById('consigneeCards');
+              cardsDiv.innerHTML = '';
+              
+              result.consignees.forEach(c => {
+                  const card = document.createElement('div');
+                  card.className = 'cursor-pointer border border-teal/20 rounded-xl p-3 min-w-[220px] max-w-[220px] bg-white hover:border-orange hover:shadow-md transition group shrink-0';
+                  card.innerHTML = `
+                      <div class="flex justify-between items-start mb-1">
+                          <p class="font-bold text-xs text-charcoal truncate group-hover:text-orange transition">${c.name}</p>
+                          <span class="bg-teal/10 text-teal text-[9px] px-1.5 py-0.5 rounded font-bold">${c.country.substring(0,3).toUpperCase()}</span>
+                      </div>
+                      <p class="text-[10px] text-teal/70 font-mono mb-1">${c.phone}</p>
+                      <p class="text-[10px] text-teal/50 truncate">${c.address || ''}, ${c.city || ''}</p>
+                  `;
+                  
+                  card.addEventListener('click', () => {
+                      document.getElementById('receiverNameInt').value = c.name.toUpperCase();
+                      document.getElementById('receiverPhoneInt').value = c.phone.replace(/^\+\d+\s*/, '');
+                      document.getElementById('receiverAddress').value = c.address.toUpperCase();
+                      document.getElementById('consigneeCity').value = c.city.toUpperCase();
+                      document.getElementById('zipCode').value = c.zip;
+                      
+                      const destSel = document.getElementById('destCountry');
+                      for(let i=0; i<destSel.options.length; i++) {
+                          if(destSel.options[i].text.toUpperCase() === c.country.toUpperCase()) { destSel.selectedIndex = i; break; }
+                      }
+                      destSel.dispatchEvent(new Event('change'));
+                      
+                      setTimeout(() => {
+                          const stateSel = document.getElementById('consigneeState');
+                          for(let i=0; i<stateSel.options.length; i++) {
+                              if(stateSel.options[i].value.toUpperCase() === c.state.toUpperCase()) { stateSel.selectedIndex = i; break; }
+                          }
+                      }, 100);
+                  });
+                  cardsDiv.appendChild(card);
+              });
+              histContainer.classList.remove('hidden');
+          }
+      } catch (err) {
+          badge.innerHTML = '';
+      }
+  });
+
   // Custom Form Submit Handler
   document.getElementById('internationalForm')?.addEventListener('submit', async (e) => {
       e.preventDefault();
