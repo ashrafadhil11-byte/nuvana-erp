@@ -647,125 +647,182 @@ if (adminDashboardView && activeUser && activeUser.role === 'Admin') {
     window.fetchUsers(); 
 }
 // ==========================================
+// GLOBAL CONFIGURATION
+// ==========================================
+const _globalConfig = {
+    scriptURL: 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec'
+};
+
+// ==========================================
 // GLOBAL SIDEBAR COMPONENT
 // ==========================================
 function loadGlobalSidebar() {
     const container = document.getElementById('global-sidebar-container');
-    if (!container) return; // Exit if the container isn't on the page
+    if (!container) return; // Exit if the container isn't placed on the page
 
-    // Determine current page to handle active states dynamically
+    // 1. Detect Current Page for Active State Logic
     const path = window.location.pathname;
-    const page = path.split('/').pop() || 'index.html'; 
+    const page = path.split('/').pop() || 'index.html';
 
-    const isActive = (p) => page === p;
+    const isActive = (p) => page === p ? 'active' : '';
     const isLogistics = ['international.html', 'domestic.html'].includes(page);
     const isProcessing = ['processing.html', 'update.html'].includes(page);
 
-    // Dynamic Style Variables
-    const activeNav = 'background:rgba(255,255,255,.05); color:rgba(239,231,220,.85);';
-    const logBg = isLogistics ? 'background:rgba(249,149,35,.08); border-left:3px solid #F99523;' : '';
-    const logIcon = isLogistics ? 'color:#F99523; font-weight:600;' : '';
-    const logSub = isLogistics ? 'flex' : 'none';
-    
-    const procBg = isProcessing ? 'background:rgba(249,149,35,.08); border-left:3px solid #F99523;' : '';
-    const procIcon = isProcessing ? 'color:#F99523; font-weight:600;' : '';
-    const procSub = isProcessing ? 'flex' : 'none';
+    // 2. Inject the HTML & CSS Template
+    container.innerHTML = `
+    <style>
+        /* Embedded CSS to ensure the sidebar renders perfectly on every page */
+        .sidebar-nav-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 9px 12px; border-radius: 11px;
+            cursor: pointer; transition: all .2s;
+            font-size: 13px; color: rgba(239,231,220,.45);
+            text-decoration: none;
+        }
+        .sidebar-nav-item:hover { background: rgba(255,255,255,.05); color: rgba(239,231,220,.85); }
+        .sidebar-nav-item.active {
+            background: rgba(249,149,35,.13);
+            border-left: 3px solid #F99523;
+            color: #F99523; font-weight: 600;
+            padding-left: 9px;
+        }
+        .sidebar-section-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(239,231,220,.28); padding: 6px 12px 4px; }
+        .sidebar-divider { height: 1px; background: rgba(255,255,255,.06); margin: 8px 0; }
+    </style>
 
-    const sidebarHTML = `
-    <aside style="width:220px; flex-shrink:0; display:flex; flex-direction:column; height:100vh; background:#0D2330; z-index:50;">
-        <div style="padding:20px; border-bottom:1px solid rgba(255,255,255,.06);">
-            <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" style="height:40px; width:auto; object-fit:contain; filter:brightness(0) invert(1);" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-            <div style="display:none;"><p class="font-lexend" style="font-size:15px; font-weight:700; letter-spacing:.14em; color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
+    <aside class="w-[220px] bg-[#0D2330] flex flex-col flex-shrink-0 z-20 h-screen">
+        
+        <div class="px-5 py-4 border-b border-white/[0.06] flex items-center">
+            <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+            <div style="display:none">
+                <div class="font-lexend text-[15px] font-bold tracking-[.14em] text-[#EFE7DC]">NUVANA<span class="text-[#F99523]">.EX</span></div>
+                <div class="text-[9px] tracking-[.1em] text-[#EFE7DC]/25 mt-0.5 uppercase">Enterprise Platform</div>
+            </div>
         </div>
 
-        <nav style="flex:1; padding:12px; overflow-y:auto; display:flex; flex-direction:column; gap:2px;">
-            <a href="index.html" class="nav-item" style="${isActive('index.html') ? activeNav : ''}">
-                <svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
+        <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
+
+            <a href="index.html" class="sidebar-nav-item ${isActive('index.html')}">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
                 Command Center
             </a>
-            
-            <div class="section-label" style="margin-top:10px;">Logistics</div>
-            
-            <div class="group" style="position:relative;">
-                <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 9px; border-radius:11px; cursor:pointer; ${logBg}">
-                    <div style="display:flex; align-items:center; gap:10px; font-size:13px; ${logIcon || 'color:rgba(239,231,220,.45);'}">
-                        <svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>
+
+            <div class="sidebar-section-label mt-3">Logistics</div>
+
+            <div class="group">
+                <div class="sidebar-nav-item justify-between ${isLogistics ? 'text-[#F99523] font-semibold' : ''}">
+                    <div class="flex items-center gap-2.5">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"/></svg>
                         New Booking
                     </div>
-                    <svg style="width:12px; height:12px; ${!isLogistics ? 'color:rgba(239,231,220,.45);' : ''}" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+                    <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
                 </div>
-                <div style="display:${logSub}; flex-direction:column; padding-left:36px; padding-right:12px; padding-bottom:4px; margin-top:2px; gap:2px;" class="${!isLogistics ? 'hidden group-hover:flex' : ''}">
-                    <a href="international.html" style="display:block; padding:6px 8px; border-radius:8px; font-size:12px; text-decoration:none; ${isActive('international.html') ? 'font-weight:600; color:#F99523; background:rgba(249,149,35,.1);' : 'color:rgba(239,231,220,.4);'}">✈ International</a>
-                    <a href="domestic.html" style="display:block; padding:6px 8px; border-radius:8px; font-size:12px; text-decoration:none; ${isActive('domestic.html') ? 'font-weight:600; color:#F99523; background:rgba(249,149,35,.1);' : 'color:rgba(239,231,220,.4);'}">Domestic</a>
+                <div class="${isLogistics ? 'flex' : 'hidden group-hover:flex'} flex-col pl-9 pr-3 pb-1 gap-0.5">
+                    <a href="international.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('international.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg>
+                        International
+                    </a>
+                    <a href="domestic.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('domestic.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">
+                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+                        Domestic
+                    </a>
                 </div>
             </div>
 
-            <div class="group" style="position:relative; margin-top:4px;">
-                <div style="display:flex; align-items:center; justify-content:space-between; padding:9px 9px; border-radius:11px; cursor:pointer; ${procBg}">
-                    <div style="display:flex; align-items:center; gap:10px; font-size:13px; ${procIcon || 'color:rgba(239,231,220,.45);'}">
-                        <svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+            <div class="group">
+                <div class="sidebar-nav-item justify-between ${isProcessing ? 'text-[#F99523] font-semibold' : ''}">
+                    <div class="flex items-center gap-2.5">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
                         Processing
                     </div>
-                    <svg style="width:12px; height:12px; ${!isProcessing ? 'color:rgba(239,231,220,.45);' : ''}" class="transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
+                    <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
                 </div>
-                <div style="display:${procSub}; flex-direction:column; padding-left:36px; padding-right:12px; padding-bottom:4px; margin-top:2px; gap:2px;" class="${!isProcessing ? 'hidden group-hover:flex' : ''}">
-                    <a href="processing.html" style="display:block; padding:6px 8px; border-radius:8px; font-size:12px; text-decoration:none; ${isActive('processing.html') ? 'font-weight:600; color:#F99523; background:rgba(249,149,35,.1);' : 'color:rgba(239,231,220,.4);'}">Manage Bookings</a>
-                    <a href="update.html" style="display:block; padding:6px 8px; border-radius:8px; font-size:12px; text-decoration:none; ${isActive('update.html') ? 'font-weight:600; color:#F99523; background:rgba(249,149,35,.1);' : 'color:rgba(239,231,220,.4);'}">Process Update</a>
+                <div class="${isProcessing ? 'flex' : 'hidden group-hover:flex'} flex-col pl-9 pr-3 pb-1 gap-0.5">
+                    <a href="processing.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition ${isActive('processing.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">Manage Bookings</a>
+                    <a href="update.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition ${isActive('update.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">Process Update</a>
                 </div>
             </div>
 
-            <div class="section-label" style="margin-top:10px;">Finance & CRM</div>
-            <a href="accounts.html" class="nav-item" style="${isActive('accounts.html') ? activeNav : ''}"><svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
-            <a href="customers.html" class="nav-item" style="${isActive('customers.html') ? activeNav : ''}"><svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
-            <a href="reports.html" class="nav-item" style="${isActive('reports.html') ? activeNav : ''}"><svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
-            
-            <div class="divider-h" style="margin:8px 0;"></div>
-            
-            <a href="admin.html" id="navAdminLink" class="nav-item" style="display:none; ${isActive('admin.html') ? activeNav : ''}"><svg style="width:16px; height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
+            <div class="sidebar-section-label mt-3">Finance & CRM</div>
+
+            <a href="accounts.html" class="sidebar-nav-item ${isActive('accounts.html')}">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/></svg>
+                Accounts
+            </a>
+            <a href="customers.html" class="sidebar-nav-item ${isActive('customers.html')}">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                CRM
+            </a>
+            <a href="reports.html" class="sidebar-nav-item ${isActive('reports.html')}">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>
+                Analytics
+            </a>
+
+            <div class="sidebar-divider"></div>
+
+            <a href="admin.html" id="globalNavAdminLink" class="sidebar-nav-item hidden ${isActive('admin.html')}">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
+                Master Control
+            </a>
         </nav>
 
-        <div style="padding:12px; border-top:1px solid rgba(255,255,255,.06);">
-            <div style="display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:12px; background:rgba(255,255,255,.04);">
-                <div id="sidebarAvatar" style="width:28px; height:28px; border-radius:9px; background:#F99523; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:white; flex-shrink:0;">A</div>
-                <div style="overflow:hidden; flex:1;">
-                    <div id="sidebarName" style="font-size:11px; font-weight:600; color:rgba(239,231,220,.9); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">—</div>
-                    <div id="sidebarRole" style="font-size:9px; color:rgba(239,231,220,.35);">—</div>
+        <div class="px-3 py-4 border-t border-white/[0.06]">
+            <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/[0.04] cursor-pointer hover:bg-white/[0.07] transition" id="globalSidebarProfileBtn">
+                <div class="w-7 h-7 rounded-[9px] bg-[#F99523] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" id="globalSidebarAvatarText">U</div>
+                <div class="overflow-hidden flex-1">
+                    <div class="text-[11px] font-semibold text-[#EFE7DC]/90 truncate" id="globalSidebarUserName">Loading...</div>
+                    <div class="text-[9px] text-[#EFE7DC]/35" id="globalSidebarUserRole">—</div>
                 </div>
+                <svg class="w-3 h-3 text-[#EFE7DC]/25 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/></svg>
             </div>
         </div>
-    </aside>`;
+    </aside>
+    `;
 
-    container.innerHTML = sidebarHTML;
-
-    // Apply JS Hover Effects to mimic the old CSS
-    const navItems = container.querySelectorAll('.nav-item');
-    navItems.forEach(item => {
-        item.addEventListener('mouseenter', () => { if (!item.style.background) { item.style.background = 'rgba(255,255,255,.05)'; item.style.color = 'rgba(239,231,220,.85)'; } });
-        item.addEventListener('mouseleave', () => { if (item.getAttribute('href') !== page) { item.style.background = ''; item.style.color = 'rgba(239,231,220,.45)'; } });
-    });
-
-    const subLinks = container.querySelectorAll('a[style*="padding:6px 8px"]');
-    subLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => { if(!link.style.background) link.style.color = 'rgba(249,149,35,.9)'; });
-        link.addEventListener('mouseleave', () => { if(!link.style.background) link.style.color = 'rgba(239,231,220,.4)'; });
-    });
-
-    // Populate User Details immediately 
+    // 3. Populate User Details Securely from SessionStorage
     const rawUser = sessionStorage.getItem('erp_user');
     if (rawUser) {
         try {
             const u = JSON.parse(rawUser);
-            document.getElementById('sidebarAvatar').textContent = (u.name || 'U').charAt(0).toUpperCase();
-            document.getElementById('sidebarName').textContent = u.name;
-            document.getElementById('sidebarRole').textContent = `${u.role} · ${u.branchId}`;
-            if (u.role === 'Admin') document.getElementById('navAdminLink').style.display = 'flex';
-        } catch(e) {}
+            const firstChar = (u.name || 'U').charAt(0).toUpperCase();
+            
+            document.getElementById('globalSidebarAvatarText').textContent = firstChar;
+            document.getElementById('globalSidebarUserName').textContent = u.name;
+            document.getElementById('globalSidebarUserRole').textContent = `${u.role} · ${u.branchId}`;
+            
+            // Show Admin Link if they have Master Control access
+            if (u.role === 'Admin') {
+                const adminLink = document.getElementById('globalNavAdminLink');
+                if (adminLink) {
+                    adminLink.classList.remove('hidden');
+                    adminLink.style.display = 'flex';
+                }
+            }
+        } catch(e) { console.error("Error parsing user session data.", e); }
     }
+
+    // 4. Connect the Profile Button Click Router
+    document.getElementById('globalSidebarProfileBtn')?.addEventListener('click', () => {
+        const modal = document.getElementById('profileModal');
+        if (modal) {
+            // If the modal exists on the current page (like index.html), open it
+            modal.classList.remove('hidden');
+        } else {
+            // If they click on a sub-page without the modal, redirect them to the main dash
+            if (page !== 'index.html') {
+                window.location.href = 'index.html';
+            }
+        }
+    });
 }
 
-// Automatically inject the sidebar securely regardless of load time
+// ==========================================
+// INITIALIZATION LISTENER
+// ==========================================
+// Guarantee the sidebar paints itself regardless of page loading speed
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadGlobalSidebar);
 } else {
     loadGlobalSidebar();
-};
+}
