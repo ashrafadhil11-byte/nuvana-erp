@@ -46,9 +46,10 @@
         .avatar-circle {width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; font-family:'Lexend',sans-serif;}
         
         .action-btn {width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; cursor:pointer;}
+        .ab-wa   {background:rgba(34,197,94,0.1); color:#22c55e;} .ab-wa:hover {background:#22c55e; color:white;}
         .ab-view {background:rgba(2,115,133,0.1); color:#027385;} .ab-view:hover {background:#027385; color:white;}
         .ab-edit {background:rgba(249,149,35,0.1); color:#F99523;} .ab-edit:hover {background:#F99523; color:white;}
-        .ab-del {background:rgba(239,68,68,0.1); color:#ef4444;} .ab-del:hover {background:#ef4444; color:white;}
+        .ab-del  {background:rgba(239,68,68,0.1); color:#ef4444;} .ab-del:hover {background:#ef4444; color:white;}
 
         .detail-drawer{position:fixed;right:0;top:0;bottom:0;width:400px;background:white;box-shadow:-8px 0 32px rgba(13,35,48,.1);z-index:50;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
         .detail-drawer.open{transform:translateX(0);}
@@ -60,7 +61,7 @@
         .d-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);flex-shrink:0;}
         .d-value{font-size:13px;font-weight:600;color:#0D2330;text-align:right;}
 
-        .modal-card {background:white; border-radius:20px; width:100%; max-width:400px; box-shadow:0 20px 40px rgba(0,0,0,0.2); padding:24px; position:relative;}
+        .modal-card {background:white; border-radius:20px; width:100%; max-width:550px; box-shadow:0 20px 40px rgba(0,0,0,0.2); padding:24px; position:relative;}
         .field-modal {width:100%; background:#f9fafb; border:1px solid #e5e7eb; border-radius:8px; padding:10px 12px; font-size:13px; outline:none; transition:border 0.2s;}
         .field-modal:focus {border-color:#F99523;}
     </style>
@@ -84,32 +85,44 @@
     <div style="flex:1;overflow-y:auto;padding:20px;" id="drawerBody"></div>
     <div style="padding:20px;border-top:1px solid #f0ece6;background:#faf8f5;">
         <a href="update.html" class="w-full py-3 rounded-xl bg-charcoal text-white font-lexend text-sm font-bold flex justify-center items-center gap-2 hover:bg-charcoal/90 transition shadow-lg">
-            Update Shipment Status
+            Scan & Update Checkpoint
         </a>
     </div>
 </div>
 
 <div id="editModal" class="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[100] hidden items-center justify-center p-4">
     <div class="modal-card">
-        <h2 class="font-lexend text-lg font-bold text-charcoal mb-1">Quick Edit</h2>
+        <h2 class="font-lexend text-lg font-bold text-charcoal mb-1">Complete Booking Edit</h2>
         <p class="text-xs text-teal/60 mb-5" id="editModalAwb">AWB: —</p>
         
         <form id="editForm" class="space-y-4">
             <input type="hidden" id="editAwb">
             <input type="hidden" id="editType">
-            <div><label class="d-label">Sender Name</label><input type="text" id="editSender" class="field-modal mt-1" required></div>
-            <div><label class="d-label">Receiver Name</label><input type="text" id="editReceiver" class="field-modal mt-1" required></div>
-            <div>
-                <label class="d-label">Status</label>
-                <select id="editStatus" class="field-modal mt-1" required>
-                    <option value="Booked">Booked</option><option value="Dispatched to Hub">Dispatched to Hub</option>
-                    <option value="In Transit">In Transit</option><option value="Out for Delivery">Out for Delivery</option>
-                    <option value="Delivered">Delivered</option><option value="Exception / Held">Exception / Held</option>
-                </select>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div><label class="d-label">Sender Name</label><input type="text" id="editSender" class="field-modal mt-1" required></div>
+                <div><label class="d-label">Sender Phone</label><input type="text" id="editSPhone" class="field-modal mt-1" required></div>
+                <div><label class="d-label">Receiver Name</label><input type="text" id="editReceiver" class="field-modal mt-1" required></div>
+                <div><label class="d-label">Receiver Phone</label><input type="text" id="editRPhone" class="field-modal mt-1" required></div>
+                <div><label class="d-label">Total Weight / Chargeable</label><input type="text" id="editWeight" class="field-modal mt-1" required></div>
+                <div><label class="d-label">Grand Total</label><input type="text" id="editTotal" class="field-modal mt-1" required></div>
+                
+                <div class="col-span-2">
+                    <label class="d-label">Shipment Status</label>
+                    <select id="editStatus" class="field-modal mt-1" required>
+                        <option value="Booked">Booked</option>
+                        <option value="Dispatched to Hub">Dispatched to Hub</option>
+                        <option value="In Transit">In Transit</option>
+                        <option value="Out for Delivery">Out for Delivery</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Exception / Held">Exception / Held</option>
+                    </select>
+                </div>
             </div>
+
             <div class="flex gap-3 pt-4 border-t border-gray-100">
                 <button type="button" onclick="closeEditModal()" class="flex-1 py-2.5 rounded-lg bg-gray-100 text-gray-600 font-bold text-sm hover:bg-gray-200 transition">Cancel</button>
-                <button type="submit" id="editSaveBtn" class="flex-1 py-2.5 rounded-lg bg-orange text-white font-bold text-sm hover:bg-orange/90 transition shadow-md">Save Changes</button>
+                <button type="submit" id="editSaveBtn" class="flex-1 py-2.5 rounded-lg bg-orange text-white font-bold text-sm hover:bg-orange/90 transition shadow-md">Save Master Record</button>
             </div>
         </form>
     </div>
@@ -157,11 +170,11 @@
                 <thead>
                     <tr>
                         <th class="w-[18%]">Waybill (AWB)</th>
-                        <th class="w-[22%]">Shipper</th>
-                        <th class="w-[10%]">Route</th>
-                        <th class="w-[22%]">Receiver</th>
-                        <th class="w-[15%]">Status</th>
-                        <th class="w-[13%] text-right">Actions</th>
+                        <th class="w-[20%]">Shipper</th>
+                        <th class="w-[10%] text-center">Route</th>
+                        <th class="w-[20%]">Receiver</th>
+                        <th class="w-[13%] text-center">Status</th>
+                        <th class="w-[19%] text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="bookingsTableBody">
@@ -178,7 +191,6 @@
 
 <script src="app.js"></script>
 <script>
-// Safely locate the script URL
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 let currentView = 'domestic';
 let allRows = [];
@@ -191,56 +203,132 @@ function badge(s) {
 function fmt(v) { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? v : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
 function initial(name) { return String(name || 'U').charAt(0).toUpperCase(); }
 
-// Drawer View Functions
+// ─────────────────────────────────────────────────────────
+// WHATSAPP ENGINE
+// ─────────────────────────────────────────────────────────
+function sendWAByAwb(awb) {
+    const row = allRows.find(r => r[0] === awb || r[1] === awb);
+    if (!row) return;
+
+    let phone, name, status;
+    if (currentView === 'domestic') {
+        phone = row[4]; name = row[3]; status = row[22];
+    } else {
+        phone = row[4]; name = row[3]; status = row[34];
+    }
+
+    if (!phone || phone === '—') return alert('No phone number attached to this shipper.');
+    
+    // Strip everything except numbers to ensure a perfect WhatsApp link
+    let cleanPhone = String(phone).replace(/[^0-9]/g, '');
+    if (cleanPhone.length < 8) return alert('Invalid phone number format: ' + phone);
+
+    // Contextual Pre-Template Messages
+    let msg = '';
+    if (status === 'Booked' || status === 'Pending') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully booked with Nuvana Express. You can track it using your AWB number.`;
+    else if (status === 'Dispatched to Hub' || status === 'Arrived at Hub') msg = `Hello ${name}, an update! Your shipment (AWB: ${awb}) is currently processing securely at our logistics hub.`;
+    else if (status === 'In Transit') msg = `Hello ${name}, your shipment (AWB: ${awb}) is now safely in transit to its destination.`;
+    else if (status === 'Out for Delivery') msg = `Hello ${name}, great news! Your shipment (AWB: ${awb}) is out for delivery today. Please ensure someone is available to receive it.`;
+    else if (status === 'Delivered') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully delivered. Thank you for trusting Nuvana Express!`;
+    else msg = `Hello ${name}, there is an update regarding your shipment (AWB: ${awb}). Current Status: ${status}. Please contact us for more details.`;
+
+    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ─────────────────────────────────────────────────────────
+// DRAWER VIEW ENGINE
+// ─────────────────────────────────────────────────────────
+function openDrawerByAwb(awb) {
+    const row = allRows.find(r => r[0] === awb || r[1] === awb);
+    if (!row) return;
+
+    if (currentView === 'domestic') {
+        openDrawer(awb, `Domestic`, [
+            ["Date", fmt(row[0])], ["Sender", String(row[3])], ["Sender Phone", String(row[4])],
+            ["Sender City", String(row[7])], ["Receiver", String(row[10])], ["Receiver Phone", String(row[11])],
+            ["Dest City", String(row[14])], ["Weight", String(row[19] || 0) + " kg"],
+            ["Total", "₹" + String(row[21] || 0)], ["Status", badge(String(row[22]))]
+        ]);
+    } else {
+        openDrawer(awb, `International`, [
+            ["Date", fmt(row[1])], ["Sender", String(row[3])], ["Sender Phone", String(row[4])],
+            ["Sender Country", String(row[8])], ["Receiver", String(row[12])], ["Receiver Phone", String(row[13])],
+            ["Dest Country", String(row[17])], ["Boxes", String(row[26] || 0)],
+            ["Chargeable Wt", String(row[28] || 0) + " kg"], ["Grand Total", "OMR " + String(row[32] || 0)],
+            ["Status", badge(String(row[34]))]
+        ]);
+    }
+}
 function openDrawer(title, sub, fields) {
-    document.getElementById('drawerTitle').textContent = title;
-    document.getElementById('drawerSub').textContent = sub;
+    document.getElementById('drawerTitle').textContent = title; document.getElementById('drawerSub').textContent = sub;
     document.getElementById('drawerBody').innerHTML = fields.map(([l,v]) => `<div class="detail-row"><span class="d-label">${l}</span><span class="d-value">${v||'—'}</span></div>`).join('');
-    document.getElementById('detailDrawer').classList.add('open');
-    document.getElementById('drawerOverlay').classList.add('open');
+    document.getElementById('detailDrawer').classList.add('open'); document.getElementById('drawerOverlay').classList.add('open');
 }
-function closeDrawer() { 
-    document.getElementById('detailDrawer').classList.remove('open'); 
-    document.getElementById('drawerOverlay').classList.remove('open'); 
-}
+function closeDrawer() { document.getElementById('detailDrawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
 document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
-// Edit Modal Functions
-function openEdit(awb, sender, receiver, status, type) {
+// ─────────────────────────────────────────────────────────
+// COMPLETE EDIT ENGINE
+// ─────────────────────────────────────────────────────────
+function openEditByAwb(awb) {
+    const row = allRows.find(r => r[0] === awb || r[1] === awb);
+    if (!row) return;
+
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editModal').classList.add('flex');
     document.getElementById('editAwb').value = awb;
     document.getElementById('editModalAwb').textContent = "AWB: " + awb;
-    document.getElementById('editType').value = type;
-    document.getElementById('editSender').value = sender;
-    document.getElementById('editReceiver').value = receiver;
-    document.getElementById('editStatus').value = status || 'Booked';
+    
+    if (currentView === 'domestic') {
+        document.getElementById('editType').value = 'domestic';
+        document.getElementById('editSender').value   = row[3] || '';
+        document.getElementById('editSPhone').value   = row[4] || '';
+        document.getElementById('editReceiver').value = row[10] || '';
+        document.getElementById('editRPhone').value   = row[11] || '';
+        document.getElementById('editWeight').value   = row[19] || '0';
+        document.getElementById('editTotal').value    = row[21] || '0';
+        document.getElementById('editStatus').value   = row[22] || 'Booked';
+    } else {
+        document.getElementById('editType').value = 'international';
+        document.getElementById('editSender').value   = row[3] || '';
+        document.getElementById('editSPhone').value   = row[4] || '';
+        document.getElementById('editReceiver').value = row[12] || '';
+        document.getElementById('editRPhone').value   = row[13] || '';
+        document.getElementById('editWeight').value   = row[28] || '0';
+        document.getElementById('editTotal').value    = row[32] || '0';
+        document.getElementById('editStatus').value   = row[34] || 'Booked';
+    }
 }
-function closeEditModal() { 
-    document.getElementById('editModal').classList.add('hidden'); 
-    document.getElementById('editModal').classList.remove('flex'); 
-}
+function closeEditModal() { document.getElementById('editModal').classList.add('hidden'); document.getElementById('editModal').classList.remove('flex'); }
 
 document.getElementById('editForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('editSaveBtn'); btn.disabled = true; btn.textContent = "Saving...";
+    
     const payload = {
         formType: 'editBooking',
         bookingType: document.getElementById('editType').value,
         awb: document.getElementById('editAwb').value,
         senderName: document.getElementById('editSender').value,
+        senderPhone: document.getElementById('editSPhone').value,
         receiverName: document.getElementById('editReceiver').value,
+        receiverPhone: document.getElementById('editRPhone').value,
+        weight: document.getElementById('editWeight').value,
+        total: document.getElementById('editTotal').value,
         status: document.getElementById('editStatus').value
     };
+    
     try {
         const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
         const data = await res.json();
         if (data.result === 'success') { closeEditModal(); window.fetchBookings(); } else alert(data.error);
-    } catch(err) { alert("Network Error"); } finally { btn.disabled = false; btn.textContent = "Save Changes"; }
+    } catch(err) { alert("Network Error"); } finally { btn.disabled = false; btn.textContent = "Save Master Record"; }
 });
 
-// Delete Logic
+// ─────────────────────────────────────────────────────────
+// DELETE ENGINE
+// ─────────────────────────────────────────────────────────
 async function deleteRow(awb, type) {
     if(!confirm(`Are you absolutely sure you want to permanently delete booking ${awb}?`)) return;
     try {
@@ -250,7 +338,9 @@ async function deleteRow(awb, type) {
     } catch(err) { alert("Network Error"); }
 }
 
-// Ultra-Safe Table Renderer
+// ─────────────────────────────────────────────────────────
+// TABLE RENDERER
+// ─────────────────────────────────────────────────────────
 function renderTable(rows) {
     const tbody = document.getElementById('bookingsTableBody');
     if (!tbody) return;
@@ -267,119 +357,63 @@ function renderTable(rows) {
         try {
             const tr = document.createElement('tr');
             
+            let awb, date, sender, sPhone, origin, receiver, rPhone, dest, status;
+
             if (currentView === 'domestic') {
-                // Ensure every variable is safely parsed as a string to prevent .substring() crashes
-                const date     = r[0];
-                const awb      = String(r[1]  || '—');
-                const sender   = String(r[3]  || '—');
-                const sPhone   = String(r[4]  || '—');
-                const origin   = String(r[7]  || 'ORG');
-                const receiver = String(r[10] || '—');
-                const rPhone   = String(r[11] || '—');
-                const dest     = String(r[14] || 'DST');
-                const status   = String(r[22] || 'Pending');
-                const weight   = String(r[19] || '0');
-                const total    = String(r[21] || '0');
-                
-                tr.innerHTML = `
-                    <td>
-                        <div class="font-lexend font-bold text-teal text-[13px]">${awb}</div>
-                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,6)}</div>
-                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,6)}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>${badge(status)}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-2">
-                            <button onclick='openDrawer("${awb}","Domestic", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender City","${origin}"],["Receiver","${receiver}"],["Dest City","${dest}"],["Weight","${weight} kg"],["Total","₹${total}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                            <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "domestic")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                            <button onclick='deleteRow("${awb}", "domestic")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                        </div>
-                    </td>`;
+                date = r[0]; awb = String(r[1]||'—'); sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
+                origin = String(r[7]||'ORG'); receiver = String(r[10]||'—'); rPhone = String(r[11]||'—'); dest = String(r[14]||'DST'); status = String(r[22]||'Pending');
             } else {
-                // Ultra-Safe International Caster
-                const awb      = String(r[0]  || '—');
-                const date     = r[1];
-                const sender   = String(r[3]  || '—');
-                const sPhone   = String(r[4]  || '—');
-                const origin   = String(r[8]  || 'ORG');
-                const receiver = String(r[12] || '—');
-                const rPhone   = String(r[13] || '—');
-                const dest     = String(r[17] || 'DST');
-                const boxes    = String(r[26] || '0');
-                const cWeight  = String(r[28] || '0');
-                const total    = String(r[32] || '0');
-                const status   = String(r[34] || 'Pending');
-                
-                tr.innerHTML = `
-                    <td>
-                        <div class="font-lexend font-bold text-orange text-[13px]">${awb}</div>
-                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,3)}</div>
-                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,3)}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>${badge(status)}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-2">
-                            <button onclick='openDrawer("${awb}","International", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender Country","${origin}"],["Receiver","${receiver}"],["Dest Country","${dest}"],["Boxes","${boxes}"],["Chargeable Wt","${cWeight} kg"],["Grand Total","OMR ${total}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                            <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "international")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                            <button onclick='deleteRow("${awb}", "international")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                        </div>
-                    </td>`;
+                awb = String(r[0]||'—'); date = r[1]; sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
+                origin = String(r[8]||'ORG'); receiver = String(r[12]||'—'); rPhone = String(r[13]||'—'); dest = String(r[17]||'DST'); status = String(r[34]||'Pending');
             }
+            
+            tr.innerHTML = `
+                <td>
+                    <div class="font-lexend font-bold ${currentView==='domestic' ? 'text-teal' : 'text-orange'} text-[13px]">${awb}</div>
+                    <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,5)}</div>
+                        <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,5)}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
+                    </div>
+                </td>
+                <td class="text-center">${badge(status)}</td>
+                <td class="text-right">
+                    <div class="flex justify-end gap-2">
+                        <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
+                        <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                        <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                        <button onclick="deleteRow('${awb}', '${currentView}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>
+                </td>`;
             tbody.appendChild(tr);
             successCount++;
-        } catch(e) {
-            // Silently ignore broken rows so the app doesn't crash
-            console.warn("Skipped an unreadable row in database");
-        }
+        } catch(e) {}
     });
     
     document.getElementById('rowCountLabel').textContent = `${successCount} Total Records`;
 }
 
-// Search
 document.getElementById('searchInput').addEventListener('input', function() {
     const q = this.value.toLowerCase().trim();
     if (!q) return renderTable(allRows);
     renderTable(allRows.filter(r => r.join(' ').toLowerCase().includes(q)));
 });
 
-// Locked Fetch Data Function
 window.fetchBookings = async function() {
     const tbody = document.getElementById('bookingsTableBody');
     if (!tbody) return; 
@@ -407,20 +441,17 @@ window.fetchBookings = async function() {
     }
 };
 
-// Tabs
 document.getElementById('toggleDomBtn').addEventListener('click', () => {
     if (currentView === 'domestic') return; 
     currentView = 'domestic';
-    document.getElementById('toggleDomBtn').className = 'tab-btn tab-dom'; 
-    document.getElementById('toggleIntBtn').className = 'tab-btn tab-off';
+    document.getElementById('toggleDomBtn').className = 'tab-btn tab-dom'; document.getElementById('toggleIntBtn').className = 'tab-btn tab-off';
     closeDrawer(); window.fetchBookings();
 });
 
 document.getElementById('toggleIntBtn').addEventListener('click', () => {
     if (currentView === 'international') return; 
     currentView = 'international';
-    document.getElementById('toggleIntBtn').className = 'tab-btn tab-int'; 
-    document.getElementById('toggleDomBtn').className = 'tab-btn tab-off';
+    document.getElementById('toggleIntBtn').className = 'tab-btn tab-int'; document.getElementById('toggleDomBtn').className = 'tab-btn tab-off';
     closeDrawer(); window.fetchBookings();
 });
 
