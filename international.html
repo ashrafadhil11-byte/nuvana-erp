@@ -656,7 +656,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const localPhone = e.target.value.trim();
       if(localPhone.length < 6) return;
 
-      // Combine the country code and the typed number to send to the backend
       const phoneCode = document.getElementById('shipperPhoneCode').value || '';
       const fullPhone = (phoneCode + localPhone).replace(/\s+/g, '');
 
@@ -664,7 +663,6 @@ document.addEventListener('DOMContentLoaded', () => {
       badge.innerHTML = '<span class="text-orange text-[10px] font-bold uppercase bg-orange/10 px-2 py-1 rounded animate-pulse">Searching CRM...</span>';
 
       try {
-          // Send the full phone number to the robust backend API
           const res = await fetch(`${_state.scriptURL}?action=getShipperHistory&phone=${encodeURIComponent(fullPhone)}`);
           const result = await res.json();
 
@@ -673,6 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
               
               // Force populate Shipper Details securely
               document.getElementById('shipperName').value = (result.customer.name || '').toUpperCase();
+              document.getElementById('altNumber').value = result.customer.altPhone || ''; // Added Alt Phone
               document.getElementById('shipperAddress').value = (result.customer.address || '').toUpperCase();
               document.getElementById('shipperCity').value = (result.customer.city || '').toUpperCase();
               document.getElementById('postalCode').value = (result.customer.zip || '').toUpperCase();
@@ -686,7 +685,6 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
                   sel.dispatchEvent(new Event('change'));
                   
-                  // Wait for state dropdown to populate before setting state
                   setTimeout(() => {
                       const st = document.getElementById('shipperState');
                       for(let i=0; i<st.options.length; i++) { 
@@ -711,13 +709,15 @@ document.addEventListener('DOMContentLoaded', () => {
                           <h4 class="font-bold text-charcoal text-sm truncate">${c.name}</h4>
                           <span class="bg-teal/10 text-teal text-[9px] px-2 py-1 rounded font-bold">${(c.country||'').substring(0,3).toUpperCase()}</span>
                       </div>
-                      <p class="text-xs text-teal/70 font-mono mb-2">${c.phone}</p>
+                      <p class="text-xs text-teal/70 font-mono mb-1">${c.phone}</p>
+                      ${c.altPhone ? `<p class="text-xs text-teal/70 font-mono mb-2">Alt: ${c.altPhone}</p>` : '<div class="mb-2"></div>'}
                       <p class="text-xs text-teal/60 line-clamp-2">${c.address||''}, ${c.city||''}</p>
                   `;
                   
                   card.addEventListener('click', () => {
                       document.getElementById('receiverNameInt').value = (c.name || '').toUpperCase();
                       document.getElementById('receiverPhoneInt').value = (c.phone || '').replace(/^\+\d+\s*/, '');
+                      document.getElementById('receiverAltInt').value = c.altPhone || ''; // Added Alt Phone
                       document.getElementById('receiverAddress').value = (c.address || '').toUpperCase();
                       document.getElementById('consigneeCity').value = (c.city || '').toUpperCase();
                       document.getElementById('zipCode').value = (c.zip || '').toUpperCase();
