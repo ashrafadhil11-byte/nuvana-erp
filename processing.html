@@ -178,20 +178,20 @@
 
 <script src="app.js"></script>
 <script>
-// Prevent Null Error if SCRIPT_URL isn't global
+// Safely locate the script URL
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 let currentView = 'domestic';
 let allRows = [];
 
-// Helpers
+// Formatting Helpers
 function badge(s) {
     const m = {'Booked':'bt','Pending':'bp','In Transit':'bo','Dispatched to Hub':'bh','Arrived at Hub':'bh','Out for Delivery':'bo','Delivered':'bd','Exception / Held':'be'};
     return `<span class="badge ${m[s]||'bp'}">${s||'Pending'}</span>`;
 }
 function fmt(v) { if (!v) return '—'; const d = new Date(v); return isNaN(d) ? v : d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); }
-function initial(name) { return (name || 'U').charAt(0).toUpperCase(); }
+function initial(name) { return String(name || 'U').charAt(0).toUpperCase(); }
 
-// Drawer View
+// Drawer View Functions
 function openDrawer(title, sub, fields) {
     document.getElementById('drawerTitle').textContent = title;
     document.getElementById('drawerSub').textContent = sub;
@@ -206,7 +206,7 @@ function closeDrawer() {
 document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
 document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
 
-// Edit Modal
+// Edit Modal Functions
 function openEdit(awb, sender, receiver, status, type) {
     document.getElementById('editModal').classList.remove('hidden');
     document.getElementById('editModal').classList.add('flex');
@@ -250,7 +250,7 @@ async function deleteRow(awb, type) {
     } catch(err) { alert("Network Error"); }
 }
 
-// Render Table
+// Ultra-Safe Table Renderer
 function renderTable(rows) {
     const tbody = document.getElementById('bookingsTableBody');
     if (!tbody) return;
@@ -261,49 +261,115 @@ function renderTable(rows) {
     }
 
     tbody.innerHTML = '';
+    let successCount = 0;
+
     rows.forEach(r => {
-        const tr = document.createElement('tr');
-        
-        if (currentView === 'domestic') {
-            // Corrected Domestic Cols: 0:Time, 1:AWB, 3:Sender, 4:SPhone, 7:SCity, 10:RecName, 11:RPhone, 14:RCity, 22:Status
-            const date=r[0], awb=r[1], sender=r[3], sPhone=r[4], origin=r[7]||'Origin', receiver=r[10], rPhone=r[11], dest=r[14]||'Dest', status=r[22];
+        try {
+            const tr = document.createElement('tr');
             
-            tr.innerHTML = `
-                <td>
-                    <div class="font-lexend font-bold text-teal text-[13px]">${awb}</div>
-                    <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
-                </td>
-                <td>
-                    <div class="flex items-center gap-3">
-                        <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
-                        <div><div class="font-bold text-charcoal text-xs">${sender||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone||'—'}</div></div>
-                    </div>
-                </td>
-                <td>
-                    <div class="flex flex-col items-center justify-center">
-                        <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,6)}</div>
-                        <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                        <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,6)}</div>
-                    </div>
-                </td>
-                <td>
-                    <div class="flex items-center gap-3">
-                        <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
-                        <div><div class="font-bold text-charcoal text-xs">${receiver||'—'}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone||'—'}</div></div>
-                    </div>
-                </td>
-                <td>${badge(status)}</td>
-                <td class="text-right">
-                    <div class="flex justify-end gap-2">
-                        <button onclick='openDrawer("${awb}","Domestic", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender City","${origin}"],["Receiver","${receiver}"],["Dest City","${dest}"],["Weight","${r[19]||0} kg"],["Total","₹${r[21]||0}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                        <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "domestic")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                        <button onclick='deleteRow("${awb}", "domestic")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                    </div>
-                </td>`;
+            if (currentView === 'domestic') {
+                // Ensure every variable is safely parsed as a string to prevent .substring() crashes
+                const date     = r[0];
+                const awb      = String(r[1]  || '—');
+                const sender   = String(r[3]  || '—');
+                const sPhone   = String(r[4]  || '—');
+                const origin   = String(r[7]  || 'ORG');
+                const receiver = String(r[10] || '—');
+                const rPhone   = String(r[11] || '—');
+                const dest     = String(r[14] || 'DST');
+                const status   = String(r[22] || 'Pending');
+                const weight   = String(r[19] || '0');
+                const total    = String(r[21] || '0');
+                
+                tr.innerHTML = `
+                    <td>
+                        <div class="font-lexend font-bold text-teal text-[13px]">${awb}</div>
+                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,6)}</div>
+                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,6)}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
+                        </div>
+                    </td>
+                    <td>${badge(status)}</td>
+                    <td class="text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick='openDrawer("${awb}","Domestic", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender City","${origin}"],["Receiver","${receiver}"],["Dest City","${dest}"],["Weight","${weight} kg"],["Total","₹${total}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "domestic")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                            <button onclick='deleteRow("${awb}", "domestic")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                        </div>
+                    </td>`;
+            } else {
+                // Ultra-Safe International Caster
+                const awb      = String(r[0]  || '—');
+                const date     = r[1];
+                const sender   = String(r[3]  || '—');
+                const sPhone   = String(r[4]  || '—');
+                const origin   = String(r[8]  || 'ORG');
+                const receiver = String(r[12] || '—');
+                const rPhone   = String(r[13] || '—');
+                const dest     = String(r[17] || 'DST');
+                const boxes    = String(r[26] || '0');
+                const cWeight  = String(r[28] || '0');
+                const total    = String(r[32] || '0');
+                const status   = String(r[34] || 'Pending');
+                
+                tr.innerHTML = `
+                    <td>
+                        <div class="font-lexend font-bold text-orange text-[13px]">${awb}</div>
+                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex flex-col items-center justify-center">
+                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,3)}</div>
+                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,3)}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
+                        </div>
+                    </td>
+                    <td>${badge(status)}</td>
+                    <td class="text-right">
+                        <div class="flex justify-end gap-2">
+                            <button onclick='openDrawer("${awb}","International", [["Date","${fmt(date)}"],["Sender","${sender}"],["Sender Country","${origin}"],["Receiver","${receiver}"],["Dest Country","${dest}"],["Boxes","${boxes}"],["Chargeable Wt","${cWeight} kg"],["Grand Total","OMR ${total}"],["Status","${status}"]])' class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                            <button onclick='openEdit("${awb}", "${sender}", "${receiver}", "${status}", "international")' class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                            <button onclick='deleteRow("${awb}", "international")' class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                        </div>
+                    </td>`;
+            }
+            tbody.appendChild(tr);
+            successCount++;
+        } catch(e) {
+            // Silently ignore broken rows so the app doesn't crash
+            console.warn("Skipped an unreadable row in database");
         }
-        tbody.appendChild(tr);
     });
-    document.getElementById('rowCountLabel').textContent = `${rows.length} Total Records`;
+    
+    document.getElementById('rowCountLabel').textContent = `${successCount} Total Records`;
 }
 
 // Search
@@ -313,14 +379,12 @@ document.getElementById('searchInput').addEventListener('input', function() {
     renderTable(allRows.filter(r => r.join(' ').toLowerCase().includes(q)));
 });
 
-// Locked Fetch Data Function (Prevents tab-switching race condition)
+// Locked Fetch Data Function
 window.fetchBookings = async function() {
     const tbody = document.getElementById('bookingsTableBody');
-    if (!tbody) return; // Prevent null error if triggered incorrectly
+    if (!tbody) return; 
     
-    // Capture the target view to prevent race conditions
     const fetchTarget = currentView;
-    
     tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10"><div class="animate-pulse text-teal/40 text-xs font-bold uppercase tracking-widest">Loading Records...</div></td></tr>`;
     
     try {
@@ -328,7 +392,6 @@ window.fetchBookings = async function() {
         const res = await fetch(`${SCRIPT_URL}?action=${ep}`);
         const result = await res.json();
         
-        // RACE CONDITION LOCK: If the user changed tabs while we were downloading, DO NOT render!
         if (currentView !== fetchTarget) return;
 
         if (result.result === 'success') {
