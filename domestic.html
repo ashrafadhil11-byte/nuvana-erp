@@ -4,16 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuvana.ex ERP — Domestic Booking</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <script src="data/pincode.js"></script>
 
     <script>document.documentElement.classList.remove('dark');</script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
-            theme: { extend: { colors: { orange: '#F99523', teal: '#027385', beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981' }, fontFamily: { poppins: ['Poppins','sans-serif'], lexend: ['Lexend','sans-serif'] } } }
+            theme: {
+                extend: {
+                    colors: {
+                        orange: '#F99523', teal: '#027385',
+                        beige: '#EFE7DC', charcoal: '#0D2330', success: '#10B981'
+                    },
+                    fontFamily: { poppins: ['Poppins','sans-serif'], lexend: ['Lexend','sans-serif'] }
+                }
+            }
         }
     </script>
 
@@ -32,29 +40,50 @@
         .ping   { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
         .spin   { animation: spin 1s linear infinite; }
 
+        /* ── Scrollbar ── */
         ::-webkit-scrollbar { width:5px; height:5px; }
         ::-webkit-scrollbar-track { background:transparent; }
         ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
+        ::-webkit-scrollbar-thumb:hover { background:#F99523; }
 
+        /* ── Section panel ── */
         .section-panel { background:white; border:1px solid #e8e0d6; border-radius:14px; overflow:hidden; }
         .section-panel-header { padding:12px 18px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; gap:9px; background:#faf8f5; }
 
-        .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:all .2s; }
+        /* ── Field ── */
+        .field {
+            width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15);
+            border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif;
+            font-size:.8125rem; color:#0D2330; outline:none;
+            transition:border-color .2s, box-shadow .2s, background .2s;
+        }
         .field::placeholder { color:rgba(2,115,133,.3); }
         .field:focus { border-color:#027385; box-shadow:0 0 0 3px rgba(2,115,133,.1); background:#fff; }
         .field[readonly] { background:rgba(2,115,133,.04); color:#027385; font-weight:600; cursor:default; border-style:dashed; }
-        select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .65rem center;background-size:14px;padding-right:2rem;}
+        
+        select.field {
+            appearance:none;
+            background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E");
+            background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem;
+        }
         
         .fl { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
 
-        .btn-submit { width:100%; padding:.9rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em; border:none; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:.5rem; box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden; }
+        /* ── Submit button ── */
+        .btn-submit {
+            width:100%; padding:.9rem 1rem; border-radius:12px; background:#0D2330; color:white;
+            font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; letter-spacing:.05em;
+            border:none; cursor:pointer; transition:all .2s;
+            display:flex; align-items:center; justify-content:center; gap:.5rem;
+            box-shadow:0 4px 16px rgba(13,35,48,.2); position:relative; overflow:hidden;
+        }
         .btn-submit::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#10B981; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
         .btn-submit > * { position:relative; z-index:1; }
         .btn-submit:hover { background:#122c3f; transform:translateY(-1px); box-shadow:0 8px 24px rgba(13,35,48,.28); }
         .btn-submit:hover::after { width:100%; }
         .btn-submit:disabled { opacity:.65; cursor:not-allowed; transform:none; }
 
-        /* Modal Styles */
+        /* ── Modal Styles ── */
         .modal-bg { position:fixed; inset:0; background:rgba(13,35,48,.7); backdrop-filter:blur(8px); z-index:300; display:flex; align-items:center; justify-content:center; padding:20px; opacity:0; pointer-events:none; transition:opacity .3s; }
         .modal-bg.open { opacity:1; pointer-events:all; } 
         .modal-card { background:white; border-radius:24px; width:100%; max-width:500px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.4); transform:scale(.95) translateY(30px); transition:all .4s; } 
@@ -83,7 +112,7 @@
         </div>
 
         <div class="px-6 pb-6 flex gap-3">
-            <button type="button" class="flex-1 py-3 rounded-xl bg-teal/10 text-teal font-lexend font-bold text-sm hover:bg-teal/20 transition text-center" id="btnPrintModal">Print Label</button>
+            <button type="button" class="flex-1 py-3 rounded-xl bg-teal/10 text-teal font-lexend font-bold text-sm hover:bg-teal/20 transition text-center" id="btnPrintModal" onclick="window.print()">Print Label</button>
             <button type="button" class="flex-1 py-3 rounded-xl bg-charcoal text-white font-lexend font-bold text-sm hover:bg-charcoal/90 transition text-center" id="btnCloseModal">Done</button>
         </div>
     </div>
@@ -100,6 +129,17 @@
                 <h2 class="font-lexend text-[14px] font-semibold text-charcoal">Domestic Booking (India)</h2>
                 <p class="text-[10px] text-teal/60">NUVANA EXPRESS · AWB Auto-Generated</p>
             </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
+                <span class="relative flex h-1.5 w-1.5">
+                    <span class="ping absolute inline-flex h-full w-full rounded-full" style="background:#10B981;opacity:.75;"></span>
+                    <span class="relative inline-flex rounded-full h-1.5 w-1.5" style="background:#10B981;"></span>
+                </span>
+                <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#0D2330;">API Online</span>
+            </div>
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
+                 style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;" id="headerAvatar">U</div>
         </div>
     </header>
 
@@ -131,8 +171,14 @@
                             <input type="text" id="senderAddress" placeholder="House No, Street, Landmark" class="field">
                         </div>
                         <div class="col-span-2">
-                            <label class="fl">Pincode * <span class="fl-opt text-teal">(Auto-fills City/State)</span></label>
+                            <label class="fl">Pincode * <span class="fl-opt text-teal">(Auto-fills Area/City/State)</span></label>
                             <input type="text" id="senderPincode" required placeholder="e.g. 110001" maxlength="6" class="field bg-teal/5">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="fl">Area / Locality *</label>
+                            <select id="senderArea" required class="field">
+                                <option value="" disabled selected>Enter PIN first...</option>
+                            </select>
                         </div>
                         <div>
                             <label class="fl">City</label>
@@ -168,8 +214,14 @@
                             <input type="text" id="receiverAddress" required placeholder="House No, Street, Landmark" class="field">
                         </div>
                         <div class="col-span-2">
-                            <label class="fl">Pincode * <span class="fl-opt text-orange">(Auto-fills City/State)</span></label>
+                            <label class="fl">Pincode * <span class="fl-opt text-orange">(Auto-fills Area/City/State)</span></label>
                             <input type="text" id="receiverPincode" required placeholder="e.g. 400001" maxlength="6" class="field bg-orange/5">
+                        </div>
+                        <div class="col-span-2">
+                            <label class="fl">Area / Locality *</label>
+                            <select id="receiverArea" required class="field">
+                                <option value="" disabled selected>Enter PIN first...</option>
+                            </select>
                         </div>
                         <div>
                             <label class="fl">City</label>
@@ -241,9 +293,10 @@
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
-    // Auto-capitalize and Calculate Totals
+    // ─────────────────────────────────────────────────────────
+    // AUTO-CAPITALIZE & AUTO-CALCULATE
+    // ─────────────────────────────────────────────────────────
     document.addEventListener('input', function(e) {
-        // Auto Caps
         if ((e.target.tagName === 'INPUT' && e.target.type === 'text') || e.target.tagName === 'TEXTAREA') {
             const start = e.target.selectionStart; 
             const end = e.target.selectionEnd;
@@ -251,7 +304,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.setSelectionRange(start, end);
         }
         
-        // Auto Math
         if (e.target.id === 'weight' || e.target.id === 'rate') {
             const w = parseFloat(document.getElementById('weight').value) || 0;
             const r = parseFloat(document.getElementById('rate').value) || 0;
@@ -261,60 +313,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ─────────────────────────────────────────────────────────
-    // LIVE PINCODE API AUTO-FILL
+    // LIVE PINCODE API & AREA POPULATION
     // ─────────────────────────────────────────────────────────
-    function handlePincode(pinId, cityId, stateId) {
+    function handlePincode(pinId, cityId, stateId, areaId) {
         const pinInput = document.getElementById(pinId);
         const cityInput = document.getElementById(cityId);
         const stateInput = document.getElementById(stateId);
+        const areaSelect = document.getElementById(areaId);
 
         pinInput.addEventListener('blur', async (e) => {
             const pin = e.target.value.trim();
             
-            // Only fire if it's a valid 6-digit Indian PIN code
             if (pin.length === 6 && /^\d+$/.test(pin)) {
-                
-                // Optional: Show a quick loading state
                 cityInput.placeholder = "Searching...";
                 stateInput.placeholder = "Searching...";
+                areaSelect.innerHTML = '<option value="" disabled selected>Loading areas...</option>';
 
                 try {
-                    // Call the free, public Indian Postal API
                     const response = await fetch(`https://api.postalpincode.in/pincode/${pin}`);
                     const data = await response.json();
 
                     if (data[0].Status === "Success") {
-                        // The API returns an array of Post Offices. We just need the first one for City/State.
-                        const postOffice = data[0].PostOffice[0];
+                        const postOffices = data[0].PostOffice;
                         
-                        // Populate the fields (District = City, State = State)
-                        cityInput.value = postOffice.District.toUpperCase();
-                        stateInput.value = postOffice.State.toUpperCase();
+                        // Auto-fill City and State
+                        cityInput.value = postOffices[0].District.toUpperCase();
+                        stateInput.value = postOffices[0].State.toUpperCase();
+
+                        // Populate the Area Dropdown
+                        areaSelect.innerHTML = '<option value="" disabled selected>Select Area...</option>';
+                        postOffices.forEach(po => {
+                            const opt = document.createElement('option');
+                            opt.value = po.Name.toUpperCase();
+                            opt.textContent = po.Name.toUpperCase();
+                            areaSelect.appendChild(opt);
+                        });
+                        
+                        // Auto-select if only one area
+                        if(postOffices.length === 1) {
+                            areaSelect.selectedIndex = 1;
+                        }
                     } else {
-                        // If the PIN is invalid
-                        cityInput.value = '';
-                        stateInput.value = '';
+                        cityInput.value = ''; stateInput.value = '';
                         cityInput.placeholder = "Invalid PIN";
                         stateInput.placeholder = "Invalid PIN";
+                        areaSelect.innerHTML = '<option value="" disabled selected>Invalid PIN</option>';
                     }
                 } catch (error) {
-                    console.error("API Error:", error);
-                    cityInput.placeholder = "City";
-                    stateInput.placeholder = "State";
+                    cityInput.placeholder = "City"; stateInput.placeholder = "State";
+                    areaSelect.innerHTML = '<option value="" disabled selected>Error loading</option>';
                 }
             }
         });
     }
     
-    handlePincode('senderPincode', 'senderCity', 'senderState');
-    handlePincode('receiverPincode', 'receiverCity', 'receiverState');
+    // Initialize Pincode listeners
+    handlePincode('senderPincode', 'senderCity', 'senderState', 'senderArea');
+    handlePincode('receiverPincode', 'receiverCity', 'receiverState', 'receiverArea');
 
-    // Handle session data
+    // ─────────────────────────────────────────────────────────
+    // SESSION HANDLING & SUBMISSION
+    // ─────────────────────────────────────────────────────────
     const raw = sessionStorage.getItem('erp_user');
     let userBranch = 'UNKNOWN';
-    if (raw) { try { userBranch = JSON.parse(raw).branchId || 'UNKNOWN'; } catch(e) {} }
+    if (raw) { 
+        try { 
+            const u = JSON.parse(raw);
+            userBranch = u.branchId || 'UNKNOWN';
+            document.getElementById('headerAvatar').textContent = (u.name || 'U').charAt(0).toUpperCase();
+        } catch(e) {} 
+    }
 
-    // Submit Form
     const form = document.getElementById('domesticForm');
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -325,12 +394,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         btn.disabled = true; btnText.textContent = 'Transmitting...'; loading.classList.remove('hidden');
 
+        // Note: We now capture senderArea and receiverArea
         const payload = {
             formType: 'domestic',
             branchId: userBranch,
+            
             senderName: document.getElementById('senderName').value.trim(),
             senderPhone: document.getElementById('senderPhone').value.trim(),
             senderAddress: document.getElementById('senderAddress').value.trim(),
+            senderArea: document.getElementById('senderArea').value || '',
             senderCity: document.getElementById('senderCity').value.trim(),
             senderState: document.getElementById('senderState').value.trim(),
             senderPincode: document.getElementById('senderPincode').value.trim(),
@@ -338,6 +410,7 @@ document.addEventListener('DOMContentLoaded', () => {
             receiverName: document.getElementById('receiverName').value.trim(),
             receiverPhone: document.getElementById('receiverPhone').value.trim(),
             receiverAddress: document.getElementById('receiverAddress').value.trim(),
+            receiverArea: document.getElementById('receiverArea').value || '',
             receiverCity: document.getElementById('receiverCity').value.trim(),
             receiverState: document.getElementById('receiverState').value.trim(),
             receiverPincode: document.getElementById('receiverPincode').value.trim(),
@@ -362,10 +435,15 @@ document.addEventListener('DOMContentLoaded', () => {
         finally { btn.disabled = false; btnText.textContent = 'Transmit Domestic Booking'; loading.classList.add('hidden'); }
     });
 
-    // Close Modal
+    // Close Modal and Reset
     document.getElementById('btnCloseModal').addEventListener('click', () => {
         document.getElementById('successModal').classList.remove('open');
         form.reset();
+        
+        // Reset the Area dropdowns
+        document.getElementById('senderArea').innerHTML = '<option value="" disabled selected>Enter PIN first...</option>';
+        document.getElementById('receiverArea').innerHTML = '<option value="" disabled selected>Enter PIN first...</option>';
+        
         window.scrollTo(0,0);
     });
 
