@@ -560,7 +560,7 @@ function recalcAll() {
 // ─────────────────────────────────────────────────────────
 // CRM ADDRESS BOOK LOGIC
 // ─────────────────────────────────────────────────────────
-function closeAddressBook() { document.getElementById('addressBookModal').classList.remove('active'); }
+function closeAddressBook() { document.getElementById('addressBookModal').classList.remove('open'); }
 function addAddNewConsignee() { 
     closeAddressBook(); 
     ['receiverNameInt','receiverPhoneInt','receiverAltInt','zipCode','receiverAddress','consigneeCity','destCountry','consigneeState','consigneeIdType','consigneeIdNumber','consigneeIdExpiry'].forEach(id => {
@@ -742,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   });
                   grid.appendChild(card);
               });
-              document.getElementById('addressBookModal').classList.add('active');
+              document.getElementById('addressBookModal').classList.add('open');
           }
       } catch (err) {
           badge.innerHTML = '';
