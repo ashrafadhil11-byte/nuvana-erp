@@ -763,5 +763,9 @@ function loadGlobalSidebar() {
     }
 }
 
-// Automatically inject the sidebar when the page loads
-document.addEventListener('DOMContentLoaded', loadGlobalSidebar);
+// Automatically inject the sidebar securely regardless of load time
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', loadGlobalSidebar);
+} else {
+    loadGlobalSidebar();
+};
