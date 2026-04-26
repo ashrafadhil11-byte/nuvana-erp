@@ -29,11 +29,6 @@
         ::-webkit-scrollbar-thumb{background:rgba(2,115,133,.18);border-radius:10px;}
         ::-webkit-scrollbar-thumb:hover{background:#F99523;}
         
-        .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;cursor:pointer;transition:all .2s;font-size:13px;color:rgba(239,231,220,.45);text-decoration:none;}
-        .nav-item:hover{background:rgba(255,255,255,.05);color:rgba(239,231,220,.85);} 
-        .section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(239,231,220,.28);padding:6px 12px 4px;}
-        .divider-h{height:1px;background:rgba(255,255,255,.06);margin:4px 0;}
-        
         .sp{background:white;border:1px solid #e8e0d6;border-radius:14px;overflow:hidden;} 
         .sp-hdr{padding:12px 18px;border-bottom:1px solid #f0ece6;display:flex;align-items:center;justify-content:space-between;gap:9px;background:#faf8f5;}
         
@@ -105,6 +100,8 @@
     </style>
 </head>
 <body class="min-h-screen flex overflow-hidden">
+
+<div id="global-sidebar-container" style="flex-shrink:0;"></div>
 
 <div class="modal-bg" id="addressBookModal">
     <div class="modal-card" style="max-width: 800px;">
@@ -182,8 +179,6 @@
         </div>
     </div>
 </div>
-
-<div id="global-sidebar-container" class="flex-shrink-0"></div>
 
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
     <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
@@ -398,6 +393,8 @@
     </div>
 </main>
 
+<script src="app.js"></script>
+
 <script>
 // ─────────────────────────────────────────────────────────
 // STATE & HELPERS
@@ -599,14 +596,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dynamic Country -> Phone Code & State population
   document.getElementById('originCountry')?.addEventListener('change', e => {
-    const code = e.target.value; 
-    updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode'); 
-    populateStateDropdown('shipperState', code);
+    const code = e.target.value; updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode'); populateStateDropdown('shipperState', code);
   });
   document.getElementById('destCountry')?.addEventListener('change', e => {
-    const code = e.target.value; 
-    updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode'); 
-    populateStateDropdown('consigneeState', code);
+    const code = e.target.value; updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode'); populateStateDropdown('consigneeState', code);
   });
 
   ['rate','packingCharges','additionalCharges'].forEach(id => { document.getElementById(id)?.addEventListener('input', recalcAll); });
@@ -632,7 +625,7 @@ document.addEventListener('DOMContentLoaded', () => {
               
               // Force populate Shipper Details securely
               document.getElementById('shipperName').value = (result.customer.name || '').toUpperCase();
-              document.getElementById('altNumber').value = result.customer.altPhone || ''; // Added Alt Phone
+              document.getElementById('altNumber').value = result.customer.altPhone || '';
               document.getElementById('shipperAddress').value = (result.customer.address || '').toUpperCase();
               document.getElementById('shipperCity').value = (result.customer.city || '').toUpperCase();
               document.getElementById('postalCode').value = (result.customer.zip || '').toUpperCase();
@@ -646,6 +639,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   }
                   sel.dispatchEvent(new Event('change'));
                   
+                  // Wait for state dropdown to populate before setting state
                   setTimeout(() => {
                       const st = document.getElementById('shipperState');
                       for(let i=0; i<st.options.length; i++) { 
@@ -678,7 +672,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   card.addEventListener('click', () => {
                       document.getElementById('receiverNameInt').value = (c.name || '').toUpperCase();
                       document.getElementById('receiverPhoneInt').value = (c.phone || '').replace(/^\+\d+\s*/, '');
-                      document.getElementById('receiverAltInt').value = c.altPhone || ''; // Added Alt Phone
+                      document.getElementById('receiverAltInt').value = c.altPhone || '';
                       document.getElementById('receiverAddress').value = (c.address || '').toUpperCase();
                       document.getElementById('consigneeCity').value = (c.city || '').toUpperCase();
                       document.getElementById('zipCode').value = (c.zip || '').toUpperCase();
@@ -760,14 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
   addBox();
 });
 </script>
-
-<div id="global-sidebar-container" class="flex-shrink-0"></div>
-
-<main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
-   ... (All your main page content) ...
-</main>
-
-<script src="app.js"></script>
 
 </body>
 </html>
