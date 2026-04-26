@@ -638,10 +638,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Dynamic Country -> Phone Code & State population
   document.getElementById('originCountry')?.addEventListener('change', e => {
-    const code = e.target.value; updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode'); updateStates(code, 'shipperState');
+    const code = e.target.value; 
+    updatePhoneCode(code, 'shipperPhoneCodeDisplay', 'shipperPhoneCode'); 
+    populateStateDropdown('shipperState', code);
   });
   document.getElementById('destCountry')?.addEventListener('change', e => {
-    const code = e.target.value; updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode'); updateStates(code, 'consigneeState');
+    const code = e.target.value; 
+    updatePhoneCode(code, 'consigneePhoneCodeDisplay', 'consigneePhoneCode'); 
+    populateStateDropdown('consigneeState', code);
   });
 
   ['rate','packingCharges','additionalCharges'].forEach(id => { document.getElementById(id)?.addEventListener('input', recalcAll); });
