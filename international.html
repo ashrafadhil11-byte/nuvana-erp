@@ -653,14 +653,19 @@ document.addEventListener('DOMContentLoaded', () => {
   
   // CRM Fetch Trigger
   document.getElementById('contactNumber')?.addEventListener('blur', async (e) => {
-      const phone = e.target.value.trim();
-      if(phone.length < 6) return;
+      const localPhone = e.target.value.trim();
+      if(localPhone.length < 6) return;
+
+      // Combine the country code and the typed number to send to the backend
+      const phoneCode = document.getElementById('shipperPhoneCode').value || '';
+      const fullPhone = (phoneCode + localPhone).replace(/\s+/g, '');
 
       const badge = document.getElementById('shipperStatusBadge');
       badge.innerHTML = '<span class="text-orange text-[10px] font-bold uppercase bg-orange/10 px-2 py-1 rounded animate-pulse">Searching CRM...</span>';
 
       try {
-          const res = await fetch(`${_state.scriptURL}?action=getShipperHistory&phone=${encodeURIComponent(phone)}`);
+          // Send the full phone number to the robust backend API
+          const res = await fetch(`${_state.scriptURL}?action=getShipperHistory&phone=${encodeURIComponent(fullPhone)}`);
           const result = await res.json();
 
           if (result.customer) {
@@ -704,7 +709,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   card.innerHTML = `
                       <div class="flex justify-between items-start mb-2">
                           <h4 class="font-bold text-charcoal text-sm truncate">${c.name}</h4>
-                          <span class="bg-teal/10 text-teal text-[9px] px-2 py-1 rounded font-bold">${c.country.substring(0,3).toUpperCase()}</span>
+                          <span class="bg-teal/10 text-teal text-[9px] px-2 py-1 rounded font-bold">${(c.country||'').substring(0,3).toUpperCase()}</span>
                       </div>
                       <p class="text-xs text-teal/70 font-mono mb-2">${c.phone}</p>
                       <p class="text-xs text-teal/60 line-clamp-2">${c.address||''}, ${c.city||''}</p>
@@ -722,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
                       const destSel = document.getElementById('destCountry');
                       let foundCountry = false;
                       for(let i=0; i<destSel.options.length; i++) { 
-                          if(destSel.options[i].text.toUpperCase() === c.country.toUpperCase()) { destSel.selectedIndex = i; foundCountry = true; break; } 
+                          if(destSel.options[i].text.toUpperCase() === (c.country||'').toUpperCase()) { destSel.selectedIndex = i; foundCountry = true; break; } 
                       }
                       if(foundCountry) {
                           destSel.dispatchEvent(new Event('change'));
