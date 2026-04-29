@@ -4,9 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuvana.ex ERP — Master Control</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <script>document.documentElement.classList.remove('dark');</script>
+    
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -19,17 +21,14 @@
         .font-lexend { font-family: 'Lexend', sans-serif; }
 
         @keyframes slideUp   { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
-        @keyframes slideDown { from { opacity:0; transform:translateY(-12px) scale(.97); } to { opacity:1; transform:translateY(0) scale(1); } }
-        @keyframes ping      { 75%,100% { transform:scale(2.1); opacity:0; } }
-        @keyframes spin      { to { transform:rotate(360deg); } }
         @keyframes fadeRow   { from { opacity:0; transform:translateY(5px); } to { opacity:1; transform:translateY(0); } }
+        @keyframes spin      { to { transform:rotate(360deg); } }
+        @keyframes ping      { 75%,100% { transform:scale(2.1); opacity:0; } }
 
         .anim-1  { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .05s both; }
         .anim-2  { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .13s both; }
-        .anim-3  { animation: slideUp .5s cubic-bezier(.16,1,.3,1) .21s both; }
-        .modal-in{ animation: slideDown .35s cubic-bezier(.16,1,.3,1) both; }
-        .ping    { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
         .spin    { animation: spin 1s linear infinite; }
+        .ping    { animation: ping 1.8s cubic-bezier(0,0,.2,1) infinite; }
         .fade-row{ animation: fadeRow .22s ease both; }
 
         ::-webkit-scrollbar { width:5px; height:5px; }
@@ -37,35 +36,22 @@
         ::-webkit-scrollbar-thumb { background:rgba(2,115,133,.18); border-radius:10px; }
         ::-webkit-scrollbar-thumb:hover { background:#F99523; }
 
-        /* ── Sidebar ── */
-        .nav-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:11px; cursor:pointer; transition:all .2s; font-size:13px; color:rgba(239,231,220,.45); text-decoration:none; }
-        .nav-item:hover { background:rgba(255,255,255,.05); color:rgba(239,231,220,.85); }
-        .nav-item.active { background:rgba(249,149,35,.13); border-left:3px solid #F99523; color:#F99523; font-weight:600; padding-left:9px; }
-        .section-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(239,231,220,.28); padding:6px 12px 4px; }
-        .divider-h { height:1px; background:rgba(255,255,255,.06); margin:4px 0; }
-
-        /* ── Panel ── */
         .panel { background:white; border:1px solid #e8e0d6; border-radius:16px; overflow:hidden; }
         .panel-hdr { padding:13px 20px; border-bottom:1px solid #f0ece6; display:flex; align-items:center; justify-content:space-between; background:#faf8f5; }
-
-        /* ── Stat card ── */
         .stat-card { background:white; border:1px solid #e8e0d6; border-radius:16px; padding:18px; position:relative; overflow:hidden; transition:transform .25s, box-shadow .25s; }
         .stat-card:hover { transform:translateY(-2px); box-shadow:0 10px 24px rgba(13,35,48,.08); }
-
-        /* ── Tab button ── */
+        
         .tab-btn { display:flex; align-items:center; gap:7px; padding:8px 18px; border-radius:10px; font-size:12px; font-weight:600; cursor:pointer; border:none; font-family:'Lexend',sans-serif; transition:all .2s; }
         .tab-active { background:#0D2330; color:white; box-shadow:0 3px 10px rgba(13,35,48,.25); }
         .tab-off { background:transparent; color:rgba(13,35,48,.4); }
         .tab-off:hover { background:rgba(2,115,133,.06); color:#0D2330; }
 
-        /* ── Data table ── */
         .data-table { width:100%; border-collapse:collapse; }
         .data-table thead th { padding:10px 16px; text-align:left; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.55); background:#faf8f5; border-bottom:1px solid #f0ece6; white-space:nowrap; position:sticky; top:0; z-index:5; }
         .data-table tbody tr { border-bottom:1px solid #f5f2ee; transition:background .15s; }
         .data-table tbody tr:hover { background:#fdf9f5; }
         .data-table tbody td { padding:12px 16px; font-size:12px; color:#374151; }
 
-        /* ── Badges ── */
         .badge { display:inline-flex; align-items:center; font-size:9px; font-weight:700; padding:3px 9px; border-radius:20px; font-family:'Lexend',sans-serif; letter-spacing:.04em; text-transform:uppercase; }
         .badge-admin  { background:rgba(239,68,68,.1);  color:#dc2626; border:1px solid rgba(239,68,68,.2);  }
         .badge-emp    { background:rgba(2,115,133,.1);  color:#027385; border:1px solid rgba(2,115,133,.2);  }
@@ -74,21 +60,18 @@
         .badge-hq     { background:rgba(249,149,35,.1); color:#c47b0a; border:1px solid rgba(249,149,35,.2); }
         .badge-branch { background:rgba(2,115,133,.08); color:#027385; border:1px solid rgba(2,115,133,.15); }
 
-        /* ── Field ── */
-        .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s, box-shadow .2s, background .2s; }
-        .field::placeholder { color:rgba(2,115,133,.3); }
+        .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s; }
         .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
         .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
-        select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
         textarea.field { resize: vertical; min-height: 80px; }
+        select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
 
-        /* ── Modal ── */
+        /* ── Modals ── */
         .modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
         .modal-overlay.active { opacity:1; pointer-events:all; }
         .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:500px; box-shadow:0 24px 60px rgba(13,35,48,.18); overflow:hidden; transform:translateY(20px) scale(.97); transition:transform .35s cubic-bezier(.16,1,.3,1); }
         .modal-overlay.active .modal-box { transform:translateY(0) scale(1); }
 
-        /* ── Action btns ── */
         .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:background .2s, transform .15s; box-shadow:0 3px 8px rgba(13,35,48,.2); }
         .btn-primary:hover { background:#122c3f; transform:translateY(-1px); }
         .btn-danger  { display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); font-size:10px; font-weight:700; cursor:pointer; font-family:'Lexend',sans-serif; transition:all .2s; }
@@ -101,14 +84,9 @@
         .btn-submit-modal:hover { background:#122c3f; transform:translateY(-1px); }
         .btn-submit-modal:hover::after { width:100%; }
 
-        /* ── Avatar circle ── */
-        .user-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Lexend',sans-serif; font-size:12px; font-weight:700; color:white; flex-shrink:0; }
-
-        /* ── Toast ── */
         .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; box-shadow:0 8px 24px rgba(13,35,48,.25); opacity:0; pointer-events:none; transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1); z-index:200; white-space:nowrap; }
         .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
-        /* ── Warning confirm box ── */
         .confirm-box { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:150; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; }
         .confirm-box.active { opacity:1; pointer-events:all; }
         .confirm-card { background:white; border-radius:16px; padding:28px; max-width:360px; width:100%; box-shadow:0 20px 50px rgba(13,35,48,.2); transform:scale(.96); transition:transform .3s cubic-bezier(.16,1,.3,1); }
@@ -154,12 +132,11 @@
                 </div>
                 <h3 class="font-lexend" style="font-size:15px;font-weight:700;color:#0D2330;" id="userModalTitle">Register New User</h3>
             </div>
-            <button onclick="closeModal('userModal')" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <button type="button" onclick="closeModal('userModal')" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                 <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
         <form id="adminUserForm" style="padding:24px;">
-            <input type="hidden" id="userActionType" value="add">
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
                 <div>
                     <label class="field-label">Username / ID</label>
@@ -212,7 +189,7 @@
                 </div>
                 <h3 class="font-lexend" style="font-size:15px;font-weight:700;color:#0D2330;" id="branchModalTitle">Register New Hub</h3>
             </div>
-            <button onclick="closeModal('branchModal')" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+            <button type="button" onclick="closeModal('branchModal')" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                 <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
@@ -253,70 +230,19 @@
     </div>
 </div>
 
-<aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
-    <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
-        <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
-             style="filter:brightness(0) invert(1);"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
-        <div style="display:none;"><p class="font-lexend text-[15px] font-bold tracking-[.14em]" style="color:#EFE7DC;">NUVANA<span style="color:#F99523;">.EX</span></p></div>
-    </div>
-    <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
-        <a href="index.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
-        <div class="section-label mt-3">Logistics</div>
-        <div class="group">
-            <div class="nav-item justify-between">
-                <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875z" clip-rule="evenodd"/></svg>New Booking</div>
-                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
-            </div>
-            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
-                <a href="international.html" class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">International</a>
-                <a href="domestic.html"      class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Domestic</a>
-            </div>
-        </div>
-        <div class="group">
-            <div class="nav-item justify-between">
-                <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div>
-                <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
-            </div>
-            <div class="hidden group-hover:flex flex-col pl-9 pr-3 pb-1 gap-0.5">
-                <a href="processing.html" class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Manage Bookings</a>
-                <a href="update.html"     class="py-1.5 px-2 rounded-lg text-[12px]" style="color:rgba(239,231,220,.4);" onmouseenter="this.style.color='rgba(249,149,35,.9)'" onmouseleave="this.style.color='rgba(239,231,220,.4)'">Process Update</a>
-            </div>
-        </div>
-        <div class="section-label mt-3">Finance & CRM</div>
-        <a href="accounts.html"  class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25z"/></svg>Accounts</a>
-        <a href="customers.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
-        <a href="reports.html"   class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
-        <div class="divider-h my-2"></div>
-        <a href="admin.html" class="nav-item active">
-            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
-            Master Control
-        </a>
-    </nav>
-    <div class="px-3 py-4" style="border-top:1px solid rgba(255,255,255,.06);">
-        <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl" style="background:rgba(255,255,255,.04);">
-            <div id="sidebarAvatar" class="w-7 h-7 rounded-[9px] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" style="background:#F99523;">A</div>
-            <div class="overflow-hidden flex-1">
-                <div id="sidebarName" class="text-[11px] font-semibold truncate" style="color:rgba(239,231,220,.9);">—</div>
-                <div id="sidebarRole" class="text-[9px]" style="color:rgba(239,231,220,.35);">—</div>
-            </div>
-        </div>
-    </div>
-</aside>
+
+<div id="global-sidebar-container" class="flex-shrink-0 z-20"></div>
 
 <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
-            style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10" style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
         <div class="flex items-center gap-3">
-            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center" style="background:rgba(239,68,68,.1);">
-                <svg class="w-4 h-4" style="color:#dc2626;" viewBox="0 0 24 24" fill="currentColor">
-                    <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/>
-                </svg>
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center bg-red-500/10 text-red-600">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
             </div>
             <div>
-                <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Master Control Panel</h2>
-                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Admin access only · Manage users, roles & settings</p>
+                <h2 class="font-lexend text-[14px] font-semibold text-charcoal">Master Control Panel</h2>
+                <p class="text-[10px] text-teal/60">Admin access only · Global Settings</p>
             </div>
         </div>
         <div class="flex items-center gap-3">
@@ -324,8 +250,6 @@
                 <svg style="width:10px;height:10px;color:#dc2626;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd"/></svg>
                 <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#dc2626;">Admin Only</span>
             </div>
-            <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm"
-                 style="background:rgba(249,149,35,.12);border:1px solid rgba(249,149,35,.25);color:#F99523;">A</div>
         </div>
     </header>
 
@@ -375,183 +299,173 @@
                 </div>
             </div>
 
-            <div class="anim-2">
-                <div class="flex items-center gap-2 mb-4 p-1 rounded-[12px] w-fit" style="background:white;border:1px solid #e8e0d6;">
-                    <button id="tabUsersBtn" class="tab-btn tab-active">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
-                        User Directory
+            <div class="flex items-center gap-2 p-1 rounded-[12px] w-fit anim-2" style="background:white;border:1px solid #e8e0d6;">
+                <button id="tabUsersBtn" class="tab-btn tab-active">User Directory</button>
+                <button id="tabBranchesBtn" class="tab-btn tab-off">Branch Network</button>
+                <button id="tabTemplatesBtn" class="tab-btn tab-off">WhatsApp Templates</button>
+            </div>
+
+            <div id="sectionUsers" class="panel flex flex-col anim-2">
+                <div class="panel-hdr">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(13,35,48,.08);">
+                            <svg class="w-3.5 h-3.5" style="color:#0D2330;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0z"/><path fill-rule="evenodd" d="M1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">System Users</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="refreshUsersBtn" class="btn-refresh">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Refresh
+                        </button>
+                        <button id="openUserModalBtn" class="btn-primary">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
+                            Add User
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow:auto;max-height:420px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>ID / Login</th>
+                                <th>Role</th>
+                                <th>Branch</th>
+                                <th>Status</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <tr><td colspan="6" style="padding:48px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
+                                    <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    <span style="font-size:12px;">Loading directory...</span>
+                                </div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;display:flex;justify-content:space-between;align-items:center;">
+                    <span id="userCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
+                    <span style="font-size:10px;color:rgba(2,115,133,.3);">Password field is write-only — not displayed for security</span>
+                </div>
+            </div>
+
+            <div id="sectionBranches" class="panel flex-col hidden anim-2">
+                <div class="panel-hdr">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
+                            <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Branch Network</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button id="refreshBranchesBtn" class="btn-refresh">
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            Refresh
+                        </button>
+                        <button id="openBranchModalBtn" class="btn-primary" style="background:#027385;box-shadow:0 3px 8px rgba(2,115,133,.3);">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
+                            Add Branch
+                        </button>
+                    </div>
+                </div>
+                <div style="overflow:auto;max-height:420px;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Branch</th>
+                                <th>Branch ID</th>
+                                <th>Type</th>
+                                <th>Manager</th>
+                                <th>Contact</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="branchesTableBody">
+                            <tr><td colspan="6" style="padding:48px;text-align:center;">
+                                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
+                                    <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                    <span style="font-size:12px;">Loading network...</span>
+                                </div>
+                            </td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;">
+                    <span id="branchCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
+                </div>
+            </div>
+
+            <div id="sectionTemplates" class="panel flex-col hidden anim-2">
+                <div class="panel-hdr">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-orange/10">
+                            <svg class="w-3.5 h-3.5 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd"/></svg>
+                        </div>
+                        <span class="font-lexend text-[13px] font-semibold text-charcoal">Global WhatsApp Notifications</span>
+                    </div>
+                    <button id="saveTemplatesBtn" class="btn-primary" style="background:#F99523;">
+                        <span id="tplBtnText">Save to Cloud</span>
                     </button>
-                    <button id="tabBranchesBtn" class="tab-btn tab-off">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
-                        Branch Network
-                    </button>
-                    <button id="tabTemplatesBtn" class="tab-btn tab-off">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM8.54 10.51l3.52-2.348a.75.75 0 01.83 0l3.52 2.348A.75.75 0 0116.5 11.75v3.5a1.5 1.5 0 01-1.5 1.5H9a1.5 1.5 0 01-1.5-1.5v-3.5a.75.75 0 01.04-1.24z" clip-rule="evenodd"/></svg>
-                        WhatsApp Templates
-                    </button>
                 </div>
+                
+                <div class="p-6 overflow-auto" style="max-height: 600px;">
+                    <div class="mb-6 p-4 rounded-xl border border-teal/20 bg-teal/5">
+                        <h4 class="font-lexend text-xs font-bold text-teal mb-2">Available Variables (Auto-Replaced)</h4>
+                        <p class="text-[11px] text-charcoal/70 leading-relaxed mb-3">Place these exact tags anywhere in your text. The system replaces them with actual shipment data when an employee clicks the WhatsApp button.</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[NAME]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[AWB]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[STATUS]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[DEST]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[WEIGHT]</span>
+                        </div>
+                    </div>
 
-                <div id="sectionUsers" class="panel flex flex-col">
-                    <div class="panel-hdr">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(13,35,48,.08);">
-                                <svg class="w-3.5 h-3.5" style="color:#0D2330;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0z"/><path fill-rule="evenodd" d="M1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z" clip-rule="evenodd"/></svg>
-                            </div>
-                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">System Users</span>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <div>
+                            <label class="field-label text-teal flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-teal block"></span> Booked / Pending</label>
+                            <textarea id="tplBooked" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button id="refreshUsersBtn" class="btn-refresh">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                                Refresh
-                            </button>
-                            <button id="openUserModalBtn" class="btn-primary">
-                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
-                                Add User
-                            </button>
+                        <div>
+                            <label class="field-label text-purple-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-600 block"></span> Arrived / Dispatched to Hub</label>
+                            <textarea id="tplHub" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                    </div>
-                    <div style="overflow:auto;max-height:420px;">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>User</th>
-                                    <th>ID / Login</th>
-                                    <th>Role</th>
-                                    <th>Branch</th>
-                                    <th>Status</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="usersTableBody">
-                                <tr><td colspan="6" style="padding:48px;text-align:center;">
-                                    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
-                                        <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                        <span style="font-size:12px;">Loading directory...</span>
-                                    </div>
-                                </td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;display:flex;justify-content:space-between;align-items:center;">
-                        <span id="userCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
-                        <span style="font-size:10px;color:rgba(2,115,133,.3);">Password field is write-only — not displayed for security</span>
-                    </div>
-                </div>
-
-                <div id="sectionBranches" class="panel flex-col hidden">
-                    <div class="panel-hdr">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
-                                <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
-                            </div>
-                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Branch Network</span>
+                        <div>
+                            <label class="field-label text-orange flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-orange block"></span> In Transit</label>
+                            <textarea id="tplTransit" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button id="refreshBranchesBtn" class="btn-refresh">
-                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                                Refresh
-                            </button>
-                            <button id="openBranchModalBtn" class="btn-primary" style="background:#027385;box-shadow:0 3px 8px rgba(2,115,133,.3);">
-                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
-                                Add Branch
-                            </button>
+                        <div>
+                            <label class="field-label text-blue-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-600 block"></span> Out for Delivery</label>
+                            <textarea id="tplOfd" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                    </div>
-                    <div style="overflow:auto;max-height:420px;">
-                        <table class="data-table">
-                            <thead>
-                                <tr>
-                                    <th>Branch</th>
-                                    <th>Branch ID</th>
-                                    <th>Type</th>
-                                    <th>Manager</th>
-                                    <th>Contact</th>
-                                    <th class="text-right">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="branchesTableBody">
-                                <tr><td colspan="6" style="padding:48px;text-align:center;">
-                                    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
-                                        <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                        <span style="font-size:12px;">Loading network...</span>
-                                    </div>
-                                </td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;">
-                        <span id="branchCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
-                    </div>
-                </div>
-
-                <div id="sectionTemplates" class="panel flex-col hidden">
-                    <div class="panel-hdr">
-                        <div class="flex items-center gap-2.5">
-                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(249,149,35,.1);">
-                                <svg class="w-3.5 h-3.5 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd"/></svg>
-                            </div>
-                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">WhatsApp Notifications</span>
+                        <div>
+                            <label class="field-label text-success flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success block"></span> Delivered</label>
+                            <textarea id="tplDelivered" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <button id="saveTemplatesBtn" class="btn-primary" style="background:#F99523;box-shadow:0 3px 8px rgba(249,149,35,.3);">
-                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/></svg>
-                                Save Templates
-                            </button>
+                        <div>
+                            <label class="field-label text-red-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-600 block"></span> Exception / Held</label>
+                            <textarea id="tplException" class="field text-xs leading-relaxed"></textarea>
                         </div>
-                    </div>
-                    
-                    <div class="p-6 overflow-auto" style="max-height: 550px;">
-                        <div class="mb-6 p-4 rounded-xl" style="background:rgba(2,115,133,.05);border:1px solid rgba(2,115,133,.15);">
-                            <h4 class="font-lexend text-xs font-bold text-teal mb-2">Available Variables</h4>
-                            <p class="text-[11px] text-charcoal/70 leading-relaxed">Use these exact placeholders in your templates. The system will automatically replace them with real data when sending the message.</p>
-                            <div class="flex flex-wrap gap-3 mt-3">
-                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[NAME]</span>
-                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[AWB]</span>
-                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[STATUS]</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <div>
-                                <label class="field-label text-teal flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-teal block"></span> Booked / Pending</label>
-                                <textarea id="tplBooked" class="field text-xs leading-relaxed" placeholder="Template for new bookings..."></textarea>
-                            </div>
-                            <div>
-                                <label class="field-label text-purple-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-600 block"></span> Arrived / Dispatched to Hub</label>
-                                <textarea id="tplHub" class="field text-xs leading-relaxed" placeholder="Template for hub updates..."></textarea>
-                            </div>
-                            <div>
-                                <label class="field-label text-orange flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-orange block"></span> In Transit</label>
-                                <textarea id="tplTransit" class="field text-xs leading-relaxed" placeholder="Template for transit..."></textarea>
-                            </div>
-                            <div>
-                                <label class="field-label text-blue-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-600 block"></span> Out for Delivery</label>
-                                <textarea id="tplOfd" class="field text-xs leading-relaxed" placeholder="Template for delivery day..."></textarea>
-                            </div>
-                            <div>
-                                <label class="field-label text-success flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success block"></span> Delivered</label>
-                                <textarea id="tplDelivered" class="field text-xs leading-relaxed" placeholder="Template for successful delivery..."></textarea>
-                            </div>
-                            <div>
-                                <label class="field-label text-red-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-600 block"></span> Exception / Held</label>
-                                <textarea id="tplException" class="field text-xs leading-relaxed" placeholder="Template for issues..."></textarea>
-                            </div>
-                            <div class="md:col-span-2">
-                                <label class="field-label text-slate-500 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-500 block"></span> Default (Any other status)</label>
-                                <textarea id="tplDefault" class="field text-xs leading-relaxed" placeholder="Fallback template..."></textarea>
-                            </div>
+                        <div class="md:col-span-2">
+                            <label class="field-label text-slate-500 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-500 block"></span> Default (Any other status)</label>
+                            <textarea id="tplDefault" class="field text-xs leading-relaxed"></textarea>
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>
     </div>
 </main>
 
+<script src="app.js"></script>
+
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
+// Replace this with your exact Script URL
+const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 
 /* ── Avatar colors ── */
 const COLORS = ['#027385','#F99523','#8b5cf6','#10B981','#dc2626','#1d4ed8','#c2410c'];
@@ -607,42 +521,6 @@ document.getElementById('tabUsersBtn').addEventListener('click',    () => switch
 document.getElementById('tabBranchesBtn').addEventListener('click', () => switchTab('branches'));
 document.getElementById('tabTemplatesBtn').addEventListener('click',() => switchTab('templates'));
 
-/* ── WhatsApp Templates Engine ── */
-const defaultTemplates = {
-    'booked': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully booked with Nuvana Express. You can track it using your AWB number.',
-    'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is currently processing securely at our logistics hub.',
-    'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to its destination.',
-    'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today. Please ensure someone is available to receive it.',
-    'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully delivered. Thank you for trusting Nuvana Express!',
-    'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Current Status: [STATUS]. Please contact us immediately.',
-    'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Current Status: [STATUS]. Please contact us for more details.'
-};
-
-function loadTemplates() {
-    const saved = JSON.parse(localStorage.getItem('erp_wa_templates')) || defaultTemplates;
-    document.getElementById('tplBooked').value    = saved.booked || defaultTemplates.booked;
-    document.getElementById('tplHub').value       = saved.hub || defaultTemplates.hub;
-    document.getElementById('tplTransit').value   = saved.transit || defaultTemplates.transit;
-    document.getElementById('tplOfd').value       = saved.ofd || defaultTemplates.ofd;
-    document.getElementById('tplDelivered').value = saved.delivered || defaultTemplates.delivered;
-    document.getElementById('tplException').value = saved.exception || defaultTemplates.exception;
-    document.getElementById('tplDefault').value   = saved.default || defaultTemplates.default;
-}
-
-document.getElementById('saveTemplatesBtn').addEventListener('click', () => {
-    const tpls = {
-        booked: document.getElementById('tplBooked').value,
-        hub: document.getElementById('tplHub').value,
-        transit: document.getElementById('tplTransit').value,
-        ofd: document.getElementById('tplOfd').value,
-        delivered: document.getElementById('tplDelivered').value,
-        exception: document.getElementById('tplException').value,
-        default: document.getElementById('tplDefault').value
-    };
-    localStorage.setItem('erp_wa_templates', JSON.stringify(tpls));
-    showToast('✓ Templates Saved Securely');
-});
-
 /* ── Render users ── */
 function renderUsers(rows) {
     const tbody = document.getElementById('usersTableBody');
@@ -679,7 +557,7 @@ function renderUsers(rows) {
             <td><span class="badge badge-branch">${branch}</span></td>
             <td>${status==='Active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-susp">Suspended</span>'}</td>
             <td style="text-align:right;">
-                <button class="btn-danger" onclick="deleteUser('${id}','${name}')">
+                <button type="button" class="btn-danger" onclick="deleteUser('${id}','${name}')">
                     <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd"/></svg>
                     Remove
                 </button>
@@ -718,7 +596,7 @@ function renderBranches(rows) {
             <td style="font-size:12px;color:#374151;">${mgr}</td>
             <td style="font-family:monospace;font-size:11px;color:#6b7280;">${contact}</td>
             <td style="text-align:right;">
-                <button class="btn-danger" onclick="deleteBranch('${code}','${loc}')">
+                <button type="button" class="btn-danger" onclick="deleteBranch('${code}','${loc}')">
                     <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd"/></svg>
                     Remove
                 </button>
@@ -727,7 +605,27 @@ function renderBranches(rows) {
     });
 }
 
-/* ── Delete handlers ── */
+/* ── API Operations (Fetch/Delete) ── */
+window.loadUsers = async function() {
+    document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading directory...</span></div></td></tr>`;
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
+        const result = await res.json();
+        if (result.result === 'success') renderUsers(result.data.length > 1 ? result.data.slice(1) : []);
+        else document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load users.</td></tr>`;
+    } catch(e) { document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
+};
+
+window.loadBranches = async function() {
+    document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading network...</span></div></td></tr>`;
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getBranches`);
+        const result = await res.json();
+        if (result.result === 'success') renderBranches(result.data.length > 1 ? result.data.slice(1) : []);
+        else document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load branches.</td></tr>`;
+    } catch(e) { document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
+};
+
 window.deleteUser = function(id, name) {
     askConfirm('Remove User', 'This will permanently delete the user account.', `Delete user "${name}" (${id})? They will lose all access immediately.`, async () => {
         try {
@@ -750,27 +648,122 @@ window.deleteBranch = function(code, loc) {
     });
 };
 
-/* ── Fetch users ── */
-window.loadUsers = async function() {
-    document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading directory...</span></div></td></tr>`;
+/* ── API Operations (Save Forms) ── */
+document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnText = document.getElementById('saveUserText');
+    const spinner = document.getElementById('saveUserSpinner');
+    btnText.textContent = "Saving..."; spinner.classList.remove('hidden');
+
+    const payload = {
+        formType: 'saveUser',
+        userId: document.getElementById('mUserId').value.trim(),
+        name: document.getElementById('mUserName').value.trim(),
+        pass: document.getElementById('mUserPass').value.trim(),
+        role: document.getElementById('mUserRole').value,
+        branch: document.getElementById('mUserBranch').value.trim().toUpperCase(),
+        status: document.getElementById('mUserStatus').value
+    };
+
     try {
-        const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
-        const result = await res.json();
-        if (result.result === 'success') renderUsers(result.data.length > 1 ? result.data.slice(1) : []);
-        else document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load users.</td></tr>`;
-    } catch(e) { document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
+        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+        const data = await res.json();
+        if (data.result === 'success') {
+            showToast('✓ User saved successfully');
+            closeModal('userModal');
+            window.loadUsers();
+        } else alert('Error: ' + (data.error || 'Failed to save.'));
+    } catch(err) { alert('Connection Error.'); }
+    finally { btnText.textContent = "Save User"; spinner.classList.add('hidden'); }
+});
+
+document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btnText = document.getElementById('saveBranchText');
+    const spinner = document.getElementById('saveBranchSpinner');
+    btnText.textContent = "Deploying..."; spinner.classList.remove('hidden');
+
+    const payload = {
+        formType: 'saveBranch',
+        branchId: document.getElementById('mBranchCode').value.trim().toUpperCase(),
+        type: document.getElementById('mBranchType').value,
+        location: document.getElementById('mBranchLoc').value.trim(),
+        manager: document.getElementById('mBranchManager').value.trim(),
+        contact: document.getElementById('mBranchContact').value.trim()
+    };
+
+    try {
+        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+        const data = await res.json();
+        if (data.result === 'success') {
+            showToast('✓ Branch deployed successfully');
+            closeModal('branchModal');
+            window.loadBranches();
+        } else alert('Error: ' + (data.error || 'Failed to save.'));
+    } catch(err) { alert('Connection Error.'); }
+    finally { btnText.textContent = "Deploy Hub"; spinner.classList.add('hidden'); }
+});
+
+
+/* ── Global WhatsApp Templates Engine ── */
+const defaultTemplates = {
+    'booked': 'Hello [NAME], your [WEIGHT]kg shipment (AWB: [AWB]) to [DEST] has been booked with Nuvana Express.',
+    'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is currently processing at our logistics hub.',
+    'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to [DEST].',
+    'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today. Please ensure someone is available.',
+    'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully delivered. Thank you for trusting Nuvana Express!',
+    'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
+    'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
 };
 
-/* ── Fetch branches ── */
-window.loadBranches = async function() {
-    document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading network...</span></div></td></tr>`;
+async function loadTemplatesFromCloud() {
     try {
-        const res = await fetch(`${SCRIPT_URL}?action=getBranches`);
-        const result = await res.json();
-        if (result.result === 'success') renderBranches(result.data.length > 1 ? result.data.slice(1) : []);
-        else document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load branches.</td></tr>`;
-    } catch(e) { document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
-};
+        const res = await fetch(`${SCRIPT_URL}?action=getTemplates`);
+        const json = await res.json();
+        const saved = (json.result === 'success' && json.data) ? json.data : defaultTemplates;
+        
+        document.getElementById('tplBooked').value    = saved.booked || defaultTemplates.booked;
+        document.getElementById('tplHub').value       = saved.hub || defaultTemplates.hub;
+        document.getElementById('tplTransit').value   = saved.transit || defaultTemplates.transit;
+        document.getElementById('tplOfd').value       = saved.ofd || defaultTemplates.ofd;
+        document.getElementById('tplDelivered').value = saved.delivered || defaultTemplates.delivered;
+        document.getElementById('tplException').value = saved.exception || defaultTemplates.exception;
+        document.getElementById('tplDefault').value   = saved.default || defaultTemplates.default;
+    } catch(e) {
+        console.error("Failed to load templates from cloud, loading defaults.");
+        document.getElementById('tplBooked').value = defaultTemplates.booked; 
+    }
+}
+
+document.getElementById('saveTemplatesBtn').addEventListener('click', async () => {
+    const btnText = document.getElementById('tplBtnText');
+    btnText.textContent = "Saving...";
+    
+    const payload = {
+        formType: 'saveTemplates',
+        templates: {
+            booked: document.getElementById('tplBooked').value,
+            hub: document.getElementById('tplHub').value,
+            transit: document.getElementById('tplTransit').value,
+            ofd: document.getElementById('tplOfd').value,
+            delivered: document.getElementById('tplDelivered').value,
+            exception: document.getElementById('tplException').value,
+            default: document.getElementById('tplDefault').value
+        }
+    };
+
+    try {
+        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (data.result === 'success') {
+            showToast('✓ Cloud Sync Successful');
+        } else { alert("Failed to save templates."); }
+    } catch(err) {
+        alert("Network Error saving templates.");
+    } finally {
+        btnText.textContent = "Save to Cloud";
+    }
+});
 
 /* ── Modal open buttons ── */
 document.getElementById('openUserModalBtn').addEventListener('click', () => {
@@ -788,16 +781,24 @@ document.getElementById('refreshBranchesBtn').addEventListener('click', window.l
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
+    // 1. Session Protection
     const raw = sessionStorage.getItem('erp_user');
-    if (raw) {
-        const u = JSON.parse(raw);
-        const i = (u.name||'U').charAt(0).toUpperCase();
-        document.getElementById('sidebarAvatar').textContent = i;
-        document.getElementById('headerAvatar').textContent  = i;
-        document.getElementById('sidebarName').textContent   = u.name;
-        document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
+    if (!raw) {
+        window.location.href = "login.html"; // Kickout if not logged in
+        return;
     }
-    loadTemplates(); // Load WA templates
+    const u = JSON.parse(raw);
+    if (u.role !== 'Admin') {
+        alert("Access Denied: Master Control requires System Admin privileges.");
+        window.location.href = "index.html";
+        return;
+    }
+    
+    // 2. Set Header Avatar
+    document.getElementById('headerAvatar').textContent  = (u.name||'A').charAt(0).toUpperCase();
+    
+    // 3. Load Data
+    loadTemplatesFromCloud(); 
     window.loadUsers();
     window.loadBranches();
 });

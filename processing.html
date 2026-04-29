@@ -231,17 +231,31 @@ function fmt(v) { if (!v) return '—'; const d = new Date(v); return isNaN(d) ?
 function initial(name) { return String(name || 'U').charAt(0).toUpperCase(); }
 
 // ─────────────────────────────────────────────────────────
-// WHATSAPP ENGINE
+// CLOUD WHATSAPP ENGINE & PLACEHOLDERS
 // ─────────────────────────────────────────────────────────
+let waCloudTemplates = null;
+
+async function fetchCloudTemplates() {
+    try {
+        const res = await fetch(`${SCRIPT_URL}?action=getTemplates`);
+        const json = await res.json();
+        if (json.result === 'success' && json.data) {
+            waCloudTemplates = json.data;
+        }
+    } catch (e) { console.error("Failed to fetch custom WA templates."); }
+}
+
 function sendWAByAwb(awb) {
     const row = allRows.find(r => r[0] === awb || r[1] === awb);
     if (!row) return;
 
-    let phone, name, status;
+    let phone, name, status, dest, weight;
     if (currentView === 'domestic') {
-        phone = row[4]; name = row[3]; status = row[22];
+        phone = row[4]; name = row[3]; status = row[22]; 
+        dest = row[14] || 'Destination'; weight = row[19] || '0';
     } else {
-        phone = row[4]; name = row[3]; status = row[34];
+        phone = row[4]; name = row[3]; status = row[34]; 
+        dest = row[17] || 'Destination'; weight = row[28] || '0';
     }
 
     if (!phone || phone === '—') return alert('No phone number attached to this shipper.');
@@ -249,16 +263,36 @@ function sendWAByAwb(awb) {
     let cleanPhone = String(phone).replace(/[^0-9]/g, '');
     if (cleanPhone.length < 8) return alert('Invalid phone number format: ' + phone);
 
-    let msg = '';
-    if (status === 'Booked' || status === 'Pending') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully booked with Nuvana Express. You can track it using your AWB number.`;
-    else if (status === 'Dispatched to Hub' || status === 'Arrived at Hub') msg = `Hello ${name}, an update! Your shipment (AWB: ${awb}) is currently processing securely at our logistics hub.`;
-    else if (status === 'In Transit') msg = `Hello ${name}, your shipment (AWB: ${awb}) is now safely in transit to its destination.`;
-    else if (status === 'Out for Delivery') msg = `Hello ${name}, great news! Your shipment (AWB: ${awb}) is out for delivery today. Please ensure someone is available to receive it.`;
-    else if (status === 'Delivered') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully delivered. Thank you for trusting Nuvana Express!`;
-    else msg = `Hello ${name}, there is an update regarding your shipment (AWB: ${awb}). Current Status: ${status}. Please contact us for more details.`;
+    const defTpl = {
+        'booked': 'Hello [NAME], your [WEIGHT]kg shipment (AWB: [AWB]) to [DEST] has been successfully booked.',
+        'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is processing at our hub.',
+        'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to [DEST].',
+        'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today.',
+        'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been delivered. Thank you!',
+        'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
+        'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
+    };
 
-    // UPDATED DIRECT WEB.WHATSAPP LINK
-    window.open(`https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`, '_blank');
+    const tplSource = waCloudTemplates || defTpl;
+    let rawMsg = '';
+    const s = String(status).toLowerCase();
+    
+    if (s.includes('booked') || s.includes('pending')) rawMsg = tplSource.booked || defTpl.booked;
+    else if (s.includes('hub')) rawMsg = tplSource.hub || defTpl.hub;
+    else if (s.includes('transit')) rawMsg = tplSource.transit || defTpl.transit;
+    else if (s.includes('delivery')) rawMsg = tplSource.ofd || defTpl.ofd;
+    else if (s.includes('delivered')) rawMsg = tplSource.delivered || defTpl.delivered;
+    else if (s.includes('exception') || s.includes('held')) rawMsg = tplSource.exception || defTpl.exception;
+    else rawMsg = tplSource.default || defTpl.default;
+
+    let finalMsg = rawMsg
+        .replace(/\[NAME\]/g, name)
+        .replace(/\[AWB\]/g, awb)
+        .replace(/\[STATUS\]/g, status)
+        .replace(/\[DEST\]/g, dest)
+        .replace(/\[WEIGHT\]/g, weight);
+
+    window.open(`https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(finalMsg)}`, '_blank');
 }
 
 // ─────────────────────────────────────────────────────────
@@ -417,12 +451,9 @@ function renderTable(rows) {
                 status = String(r[22]||'Pending');
             } else {
                 awb = String(r[0]||'—'); date = r[1]; sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
-                
-                // Fetch Alpha-3 Codes for International Table Route
                 origin = getAlpha3Code(String(r[8]||'')); 
                 receiver = String(r[12]||'—'); rPhone = String(r[13]||'—'); 
                 dest = getAlpha3Code(String(r[17]||'')); 
-                
                 status = String(r[34]||'Pending');
             }
             
@@ -522,7 +553,10 @@ document.getElementById('toggleIntBtn').addEventListener('click', () => {
     closeDrawer(); window.fetchBookings();
 });
 
-document.addEventListener('DOMContentLoaded', window.fetchBookings);
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCloudTemplates();
+    window.fetchBookings();
+});
 </script>
 </body>
 </html>
