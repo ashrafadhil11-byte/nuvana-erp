@@ -191,7 +191,9 @@
     </div>
 </main>
 
+<script src="data/countries.js"></script>
 <script src="app.js"></script>
+
 <script>
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 let currentView = 'domestic';
@@ -208,6 +210,16 @@ if (rawSession) {
         userRole = u.role || 'User';
         document.getElementById('branchDisplayBadge').textContent = `Branch: ${userBranch}`;
     } catch(e) {}
+}
+
+// Alpha-3 Lookup Helper
+function getAlpha3Code(countryName) {
+    if (!countryName) return '---';
+    if (typeof COUNTRY_MASTER !== 'undefined') {
+        const found = COUNTRY_MASTER.find(c => c.name.toLowerCase() === countryName.toLowerCase().trim());
+        if (found && found.alpha3) return found.alpha3;
+    }
+    return countryName.substring(0, 3).toUpperCase();
 }
 
 // Formatting Helpers
@@ -265,7 +277,6 @@ function printInvoice(awb, type) {
     localStorage.setItem('nuvana_print_row', JSON.stringify(row));
     localStorage.setItem('nuvana_print_type', type);
     
-    // Conditionally route to the correct HTML template
     if (type === 'international') {
         window.open('templates/internationalinvoice.html', '_blank', 'width=800,height=900');
     } else {
@@ -399,84 +410,56 @@ function renderTable(rows) {
 
             if (currentView === 'domestic') {
                 date = r[0]; awb = String(r[1]||'—'); sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
-                origin = String(r[7]||'ORG'); receiver = String(r[10]||'—'); rPhone = String(r[11]||'—'); dest = String(r[14]||'DST'); status = String(r[22]||'Pending');
-                
-                tr.innerHTML = `
-                    <td>
-                        <div class="font-lexend font-bold text-teal text-[13px]">${awb}</div>
-                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,5)}</div>
-                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,5)}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
-                        </div>
-                    </td>
-                    <td class="text-center">${badge(status)}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-1">
-                            <button onclick="printLabel('${awb}', 'domestic')" class="action-btn ab-lbl" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg></button>
-                            <button onclick="printInvoice('${awb}', 'domestic')" class="action-btn ab-inv" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
-                            <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
-                            <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                            <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                            <button onclick="deleteRow('${awb}', '${currentView}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                        </div>
-                    </td>`;
-
+                origin = String(r[7]||'ORG').substring(0,5); 
+                receiver = String(r[10]||'—'); rPhone = String(r[11]||'—'); 
+                dest = String(r[14]||'DST').substring(0,5); 
+                status = String(r[22]||'Pending');
             } else {
                 awb = String(r[0]||'—'); date = r[1]; sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
-                origin = String(r[8]||'ORG'); receiver = String(r[12]||'—'); rPhone = String(r[13]||'—'); dest = String(r[17]||'DST'); status = String(r[34]||'Pending');
                 
-                tr.innerHTML = `
-                    <td>
-                        <div class="font-lexend font-bold text-orange text-[13px]">${awb}</div>
-                        <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex flex-col items-center justify-center">
-                            <div class="text-[9px] font-bold text-charcoal uppercase">${origin.substring(0,3)}</div>
-                            <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
-                            <div class="text-[9px] font-bold text-orange uppercase">${dest.substring(0,3)}</div>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="flex items-center gap-3">
-                            <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
-                            <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
-                        </div>
-                    </td>
-                    <td class="text-center">${badge(status)}</td>
-                    <td class="text-right">
-                        <div class="flex justify-end gap-1">
-                            <button onclick="printLabel('${awb}', 'international')" class="action-btn ab-lbl" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg></button>
-                            <button onclick="printInvoice('${awb}', 'international')" class="action-btn ab-inv" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
-                            <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
+                // Fetch Alpha-3 Codes for International Table Route
+                origin = getAlpha3Code(String(r[8]||'')); 
+                receiver = String(r[12]||'—'); rPhone = String(r[13]||'—'); 
+                dest = getAlpha3Code(String(r[17]||'')); 
+                
+                status = String(r[34]||'Pending');
+            }
+            
+            tr.innerHTML = `
+                <td>
+                    <div class="font-lexend font-bold ${currentView==='domestic' ? 'text-teal' : 'text-orange'} text-[13px]">${awb}</div>
+                    <div class="text-[10px] text-teal/50 mt-0.5">${fmt(date)}</div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-teal/10 text-teal">${initial(sender)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${sender}</div><div class="text-[10px] text-gray-400 font-mono">${sPhone}</div></div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex flex-col items-center justify-center">
+                        <div class="text-[9px] font-bold text-charcoal uppercase">${origin}</div>
+                        <svg class="w-3 h-3 text-gray-300 my-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                        <div class="text-[9px] font-bold text-orange uppercase">${dest}</div>
+                    </div>
+                </td>
+                <td>
+                    <div class="flex items-center gap-3">
+                        <div class="avatar-circle bg-orange/10 text-orange">${initial(receiver)}</div>
+                        <div><div class="font-bold text-charcoal text-xs">${receiver}</div><div class="text-[10px] text-gray-400 font-mono">${rPhone}</div></div>
+                    </div>
+                </td>
+                <td class="text-center">${badge(status)}</td>
+                <td class="text-right">
+                    <div class="flex justify-end gap-1">
+                        <button onclick="printLabel('${awb}', '${currentView}')" class="action-btn ab-lbl" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg></button>
+                        <button onclick="printInvoice('${awb}', '${currentView}')" class="action-btn ab-inv" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
+                        <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
                             <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                             <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
                             <button onclick="deleteRow('${awb}', '${currentView}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                         </div>
                     </td>`;
-            }
             tbody.appendChild(tr);
             successCount++;
         } catch(e) {}
