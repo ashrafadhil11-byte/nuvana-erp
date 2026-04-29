@@ -131,18 +131,18 @@
 </div>
 
 <main style="flex:1;display:flex;flex-direction:column;height:100vh;overflow:hidden;">
-    <header style="height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 32px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;flex-shrink:0;z-index:10;">
-        <div style="display:flex;align-items:center;gap:12px;">
-            <div style="width:32px;height:32px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
-                <svg style="width:16px;height:16px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
+    <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10" style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-[10px] flex items-center justify-center bg-teal/10 text-teal">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
             </div>
             <div>
                 <h2 class="font-lexend text-[14px] font-semibold text-charcoal">Logistics Queue</h2>
                 <p class="text-[10px] text-teal/60">Manage your active shipments and tracking records</p>
             </div>
         </div>
-        <div style="display:flex;align-items:center;gap:12px;">
-            <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;">
+        <div class="flex items-center gap-3">
+            <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:#f0ece6;border:1px solid #ddd5c8;">
                 <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
                 <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;" id="branchDisplayBadge">API Online</span>
             </div>
@@ -150,7 +150,6 @@
     </header>
 
     <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;padding:24px;gap:20px;">
-
         <div class="flex items-center justify-between anim-1">
             <div class="flex items-center gap-2 p-1.5 rounded-xl bg-[#e8e0d6]">
                 <button id="toggleDomBtn" class="tab-btn tab-dom">Domestic Queue</button>
@@ -195,6 +194,7 @@
 <script src="app.js"></script>
 
 <script>
+// Replace this with your exact Script URL
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 let currentView = 'domestic';
 let allRows = [];
@@ -212,14 +212,20 @@ if (rawSession) {
     } catch(e) {}
 }
 
-// Alpha-3 Lookup Helper
-function getAlpha3Code(countryName) {
-    if (!countryName) return '---';
+// Country & Emoji Helper
+function getFlagEmoji(countryCode) {
+    if(!countryCode || countryCode.length !== 2) return '';
+    const codePoints = countryCode.toUpperCase().split('').map(char => 127397 + char.charCodeAt());
+    return String.fromCodePoint(...codePoints);
+}
+
+function getCountryDetails(countryName) {
+    if(!countryName) return { name: '—', alpha3: '---', flag: '' };
     if (typeof COUNTRY_MASTER !== 'undefined') {
         const found = COUNTRY_MASTER.find(c => c.name.toLowerCase() === countryName.toLowerCase().trim());
-        if (found && found.alpha3) return found.alpha3;
+        if (found) return { name: found.name, alpha3: found.alpha3, flag: getFlagEmoji(found.code) };
     }
-    return countryName.substring(0, 3).toUpperCase();
+    return { name: countryName, alpha3: countryName.substring(0,3).toUpperCase(), flag: '🌍' };
 }
 
 // Formatting Helpers
@@ -249,28 +255,37 @@ function sendWAByAwb(awb) {
     const row = allRows.find(r => r[0] === awb || r[1] === awb);
     if (!row) return;
 
-    let phone, name, status, dest, weight;
+    let phone, shipper, consignee, status, origin, dest, weight, boxes, originFlag, destFlag;
+    
     if (currentView === 'domestic') {
-        phone = row[4]; name = row[3]; status = row[22]; 
-        dest = row[14] || 'Destination'; weight = row[19] || '0';
+        phone = row[4]; shipper = row[3]; consignee = row[10]; status = row[22];
+        origin = row[7] || 'Origin'; dest = row[14] || 'Destination';
+        weight = row[19] || '0'; boxes = '1';
+        originFlag = '🇮🇳'; destFlag = '🇮🇳'; // Domestic implicit flag assumption
     } else {
-        phone = row[4]; name = row[3]; status = row[34]; 
-        dest = row[17] || 'Destination'; weight = row[28] || '0';
+        phone = row[4]; shipper = row[3]; consignee = row[12]; status = row[34];
+        
+        const oData = getCountryDetails(row[8]);
+        const dData = getCountryDetails(row[17]);
+        
+        origin = oData.name; originFlag = oData.flag;
+        dest = dData.name; destFlag = dData.flag;
+        
+        weight = row[28] || '0'; boxes = row[26] || '1';
     }
 
     if (!phone || phone === '—') return alert('No phone number attached to this shipper.');
-    
     let cleanPhone = String(phone).replace(/[^0-9]/g, '');
     if (cleanPhone.length < 8) return alert('Invalid phone number format: ' + phone);
 
     const defTpl = {
-        'booked': 'Hello [NAME], your [WEIGHT]kg shipment (AWB: [AWB]) to [DEST] has been successfully booked.',
-        'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is processing at our hub.',
-        'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to [DEST].',
-        'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today.',
-        'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been delivered. Thank you!',
-        'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
-        'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
+        'booked': 'Hello [SHIPPER_NAME], your [TOTAL_WEIGHT]kg shipment (AWB: [AWB]) to [DESTINATION] [DEST_FLAG] has been successfully booked.',
+        'hub': 'Hello [CONSIGNEE_NAME], an update! Your shipment (AWB: [AWB]) is processing at our hub.',
+        'transit': 'Hello [CONSIGNEE_NAME], your shipment (AWB: [AWB]) is now safely in transit to [DESTINATION] [DEST_FLAG].',
+        'ofd': 'Hello [CONSIGNEE_NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today.',
+        'delivered': 'Hello [SHIPPER_NAME], your shipment (AWB: [AWB]) has been delivered. Thank you!',
+        'exception': 'Hello [SHIPPER_NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
+        'default': 'Hello [SHIPPER_NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
     };
 
     const tplSource = waCloudTemplates || defTpl;
@@ -285,12 +300,18 @@ function sendWAByAwb(awb) {
     else if (s.includes('exception') || s.includes('held')) rawMsg = tplSource.exception || defTpl.exception;
     else rawMsg = tplSource.default || defTpl.default;
 
+    // Advanced Data Replacement
     let finalMsg = rawMsg
-        .replace(/\[NAME\]/g, name)
+        .replace(/\[SHIPPER_NAME\]/g, shipper)
+        .replace(/\[CONSIGNEE_NAME\]/g, consignee)
         .replace(/\[AWB\]/g, awb)
         .replace(/\[STATUS\]/g, status)
-        .replace(/\[DEST\]/g, dest)
-        .replace(/\[WEIGHT\]/g, weight);
+        .replace(/\[ORIGIN\]/g, origin)
+        .replace(/\[ORIGIN_FLAG\]/g, originFlag)
+        .replace(/\[DESTINATION\]/g, dest)
+        .replace(/\[DEST_FLAG\]/g, destFlag)
+        .replace(/\[TOTAL_WEIGHT\]/g, weight)
+        .replace(/\[NO_OF_BOXES\]/g, boxes);
 
     window.open(`https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(finalMsg)}`, '_blank');
 }
@@ -451,9 +472,15 @@ function renderTable(rows) {
                 status = String(r[22]||'Pending');
             } else {
                 awb = String(r[0]||'—'); date = r[1]; sender = String(r[3]||'—'); sPhone = String(r[4]||'—');
-                origin = getAlpha3Code(String(r[8]||'')); 
+                
+                // Fetch Alpha-3 Codes via helper
+                const oData = getCountryDetails(String(r[8]||''));
+                const dData = getCountryDetails(String(r[17]||''));
+                
+                origin = oData.alpha3; 
                 receiver = String(r[12]||'—'); rPhone = String(r[13]||'—'); 
-                dest = getAlpha3Code(String(r[17]||'')); 
+                dest = dData.alpha3; 
+                
                 status = String(r[34]||'Pending');
             }
             
@@ -487,11 +514,11 @@ function renderTable(rows) {
                         <button onclick="printLabel('${awb}', '${currentView}')" class="action-btn ab-lbl" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg></button>
                         <button onclick="printInvoice('${awb}', '${currentView}')" class="action-btn ab-inv" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
                         <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
-                            <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
-                            <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                            <button onclick="deleteRow('${awb}', '${currentView}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
-                        </div>
-                    </td>`;
+                        <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                        <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                        <button onclick="deleteRow('${awb}', '${currentView}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    </div>
+                </td>`;
             tbody.appendChild(tr);
             successCount++;
         } catch(e) {}

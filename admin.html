@@ -69,27 +69,21 @@
         /* ── Modals ── */
         .modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
         .modal-overlay.active { opacity:1; pointer-events:all; }
-        .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:500px; box-shadow:0 24px 60px rgba(13,35,48,.18); overflow:hidden; transform:translateY(20px) scale(.97); transition:transform .35s cubic-bezier(.16,1,.3,1); }
+        .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:500px; box-shadow:0 24px 60px rgba(13,35,48,.18); transform:translateY(20px) scale(.97); transition:transform .35s; }
         .modal-overlay.active .modal-box { transform:translateY(0) scale(1); }
 
-        .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:background .2s, transform .15s; box-shadow:0 3px 8px rgba(13,35,48,.2); }
-        .btn-primary:hover { background:#122c3f; transform:translateY(-1px); }
-        .btn-danger  { display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); font-size:10px; font-weight:700; cursor:pointer; font-family:'Lexend',sans-serif; transition:all .2s; }
-        .btn-danger:hover { background:rgba(239,68,68,.15); }
-        .btn-refresh { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:9px; background:white; border:1px solid #e8e0d6; font-size:11px; font-weight:600; color:#0D2330; cursor:pointer; font-family:'Lexend',sans-serif; transition:all .2s; }
-        .btn-refresh:hover { background:#faf8f5; }
-        .btn-submit-modal { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; border:none; cursor:pointer; transition:background .2s, transform .15s; box-shadow:0 4px 14px rgba(13,35,48,.2); display:flex; align-items:center; justify-content:center; gap:.5rem; position:relative; overflow:hidden; }
-        .btn-submit-modal::after { content:''; position:absolute; left:0; top:0; width:4px; height:100%; background:#F99523; transition:width .35s cubic-bezier(.4,0,.2,1); z-index:0; }
-        .btn-submit-modal>*{ position:relative; z-index:1; }
-        .btn-submit-modal:hover { background:#122c3f; transform:translateY(-1px); }
-        .btn-submit-modal:hover::after { width:100%; }
+        .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:transform .15s; }
+        .btn-primary:hover { transform:translateY(-1px); }
+        .btn-danger  { display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); font-size:10px; font-weight:700; cursor:pointer; font-family:'Lexend',sans-serif; }
+        .btn-refresh { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:9px; background:white; border:1px solid #e8e0d6; font-size:11px; font-weight:600; color:#0D2330; cursor:pointer; font-family:'Lexend',sans-serif; }
+        .btn-submit-modal { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.5rem; }
 
-        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; box-shadow:0 8px 24px rgba(13,35,48,.25); opacity:0; pointer-events:none; transition:opacity .3s, transform .35s cubic-bezier(.16,1,.3,1); z-index:200; white-space:nowrap; }
+        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; opacity:0; pointer-events:none; transition:opacity .3s, transform .35s; z-index:200; }
         .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
         .confirm-box { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:150; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; }
         .confirm-box.active { opacity:1; pointer-events:all; }
-        .confirm-card { background:white; border-radius:16px; padding:28px; max-width:360px; width:100%; box-shadow:0 20px 50px rgba(13,35,48,.2); transform:scale(.96); transition:transform .3s cubic-bezier(.16,1,.3,1); }
+        .confirm-card { background:white; border-radius:16px; padding:28px; max-width:360px; width:100%; box-shadow:0 20px 50px rgba(13,35,48,.2); transform:scale(.96); transition:transform .3s; }
         .confirm-box.active .confirm-card { transform:scale(1); }
     </style>
 </head>
@@ -115,10 +109,7 @@
         <p style="font-size:12px;color:#374151;margin-bottom:20px;line-height:1.6;" id="confirmMsg">Are you sure?</p>
         <div style="display:flex;gap:10px;justify-content:flex-end;">
             <button id="confirmCancel" class="btn-refresh">Cancel</button>
-            <button id="confirmOk" style="display:flex;align-items:center;gap:6px;padding:8px 18px;border-radius:10px;background:#dc2626;color:white;font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;border:none;cursor:pointer;box-shadow:0 3px 8px rgba(220,38,38,.25);transition:background .2s;">
-                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd"/></svg>
-                Delete
-            </button>
+            <button id="confirmOk" class="btn-primary" style="background:#dc2626;box-shadow:0 3px 8px rgba(220,38,38,.25);">Delete</button>
         </div>
     </div>
 </div>
@@ -172,7 +163,6 @@
                 </div>
             </div>
             <button type="submit" id="saveUserBtn" class="btn-submit-modal">
-                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/></svg>
                 <span id="saveUserText">Save User</span>
                 <svg id="saveUserSpinner" class="spin hidden" style="width:15px;height:15px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             </button>
@@ -222,14 +212,12 @@
                 </div>
             </div>
             <button type="submit" id="saveBranchBtn" class="btn-submit-modal" style="background:#027385;">
-                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
                 <span id="saveBranchText">Deploy Hub</span>
                 <svg id="saveBranchSpinner" class="spin hidden" style="width:15px;height:15px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             </button>
         </form>
     </div>
 </div>
-
 
 <div id="global-sidebar-container" class="flex-shrink-0 z-20"></div>
 
@@ -250,6 +238,7 @@
                 <svg style="width:10px;height:10px;color:#dc2626;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd"/></svg>
                 <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#dc2626;">Admin Only</span>
             </div>
+            <div id="headerAvatar" class="w-8 h-8 rounded-[10px] flex items-center justify-center font-bold text-sm bg-orange/10 text-orange border border-orange/20">A</div>
         </div>
     </header>
 
@@ -307,90 +296,35 @@
 
             <div id="sectionUsers" class="panel flex flex-col anim-2">
                 <div class="panel-hdr">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(13,35,48,.08);">
-                            <svg class="w-3.5 h-3.5" style="color:#0D2330;" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0z"/><path fill-rule="evenodd" d="M1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z" clip-rule="evenodd"/></svg>
-                        </div>
-                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">System Users</span>
-                    </div>
+                    <span class="font-lexend text-[13px] font-semibold text-charcoal">System Users</span>
                     <div class="flex items-center gap-2">
-                        <button id="refreshUsersBtn" class="btn-refresh">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Refresh
-                        </button>
-                        <button id="openUserModalBtn" class="btn-primary">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"/></svg>
-                            Add User
-                        </button>
+                        <button id="refreshUsersBtn" class="btn-refresh"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Refresh</button>
+                        <button id="openUserModalBtn" class="btn-primary">Add User</button>
                     </div>
                 </div>
                 <div style="overflow:auto;max-height:420px;">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>User</th>
-                                <th>ID / Login</th>
-                                <th>Role</th>
-                                <th>Branch</th>
-                                <th>Status</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody">
-                            <tr><td colspan="6" style="padding:48px;text-align:center;">
-                                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
-                                    <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                    <span style="font-size:12px;">Loading directory...</span>
-                                </div>
-                            </td></tr>
-                        </tbody>
+                        <thead><tr><th>User</th><th>ID / Login</th><th>Role</th><th>Branch</th><th>Status</th><th class="text-right">Actions</th></tr></thead>
+                        <tbody id="usersTableBody"><tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">Loading directory...</td></tr></tbody>
                     </table>
                 </div>
                 <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;display:flex;justify-content:space-between;align-items:center;">
                     <span id="userCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
-                    <span style="font-size:10px;color:rgba(2,115,133,.3);">Password field is write-only — not displayed for security</span>
                 </div>
             </div>
 
             <div id="sectionBranches" class="panel flex-col hidden anim-2">
                 <div class="panel-hdr">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(2,115,133,.1);">
-                            <svg class="w-3.5 h-3.5" style="color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
-                        </div>
-                        <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">Branch Network</span>
-                    </div>
+                    <span class="font-lexend text-[13px] font-semibold text-charcoal">Branch Network</span>
                     <div class="flex items-center gap-2">
-                        <button id="refreshBranchesBtn" class="btn-refresh">
-                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
-                            Refresh
-                        </button>
-                        <button id="openBranchModalBtn" class="btn-primary" style="background:#027385;box-shadow:0 3px 8px rgba(2,115,133,.3);">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 3.75a.75.75 0 01.75.75v6.75h6.75a.75.75 0 010 1.5h-6.75v6.75a.75.75 0 01-1.5 0v-6.75H4.5a.75.75 0 010-1.5h6.75V4.5a.75.75 0 01.75-.75z" clip-rule="evenodd"/></svg>
-                            Add Branch
-                        </button>
+                        <button id="refreshBranchesBtn" class="btn-refresh"><svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg> Refresh</button>
+                        <button id="openBranchModalBtn" class="btn-primary" style="background:#027385;">Add Branch</button>
                     </div>
                 </div>
                 <div style="overflow:auto;max-height:420px;">
                     <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Branch</th>
-                                <th>Branch ID</th>
-                                <th>Type</th>
-                                <th>Manager</th>
-                                <th>Contact</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="branchesTableBody">
-                            <tr><td colspan="6" style="padding:48px;text-align:center;">
-                                <div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);">
-                                    <svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                                    <span style="font-size:12px;">Loading network...</span>
-                                </div>
-                            </td></tr>
-                        </tbody>
+                        <thead><tr><th>Branch</th><th>Branch ID</th><th>Type</th><th>Manager</th><th>Contact</th><th class="text-right">Actions</th></tr></thead>
+                        <tbody id="branchesTableBody"><tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">Loading network...</td></tr></tbody>
                     </table>
                 </div>
                 <div style="padding:10px 20px;border-top:1px solid #f0ece6;background:#faf8f5;">
@@ -400,27 +334,25 @@
 
             <div id="sectionTemplates" class="panel flex-col hidden anim-2">
                 <div class="panel-hdr">
-                    <div class="flex items-center gap-2.5">
-                        <div class="w-7 h-7 rounded-lg flex items-center justify-center bg-orange/10">
-                            <svg class="w-3.5 h-3.5 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd"/></svg>
-                        </div>
-                        <span class="font-lexend text-[13px] font-semibold text-charcoal">Global WhatsApp Notifications</span>
-                    </div>
-                    <button id="saveTemplatesBtn" class="btn-primary" style="background:#F99523;">
-                        <span id="tplBtnText">Save to Cloud</span>
-                    </button>
+                    <span class="font-lexend text-[13px] font-semibold text-charcoal">Global WhatsApp Notifications</span>
+                    <button id="saveTemplatesBtn" class="btn-primary" style="background:#F99523;"><span id="tplBtnText">Save to Cloud</span></button>
                 </div>
                 
                 <div class="p-6 overflow-auto" style="max-height: 600px;">
                     <div class="mb-6 p-4 rounded-xl border border-teal/20 bg-teal/5">
                         <h4 class="font-lexend text-xs font-bold text-teal mb-2">Available Variables (Auto-Replaced)</h4>
-                        <p class="text-[11px] text-charcoal/70 leading-relaxed mb-3">Place these exact tags anywhere in your text. The system replaces them with actual shipment data when an employee clicks the WhatsApp button.</p>
+                        <p class="text-[11px] text-charcoal/70 leading-relaxed mb-3">Place these exact tags anywhere in your text. The system will replace them with actual shipment data automatically.</p>
                         <div class="flex flex-wrap gap-2">
-                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[NAME]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[SHIPPER_NAME]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[CONSIGNEE_NAME]</span>
                             <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[AWB]</span>
                             <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[STATUS]</span>
-                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[DEST]</span>
-                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[WEIGHT]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[ORIGIN]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[ORIGIN_FLAG]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[DESTINATION]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[DEST_FLAG]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[TOTAL_WEIGHT]</span>
+                            <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[NO_OF_BOXES]</span>
                         </div>
                     </div>
 
@@ -464,15 +396,8 @@
 <script src="app.js"></script>
 
 <script>
-// Replace this with your exact Script URL
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 
-/* ── Avatar colors ── */
-const COLORS = ['#027385','#F99523','#8b5cf6','#10B981','#dc2626','#1d4ed8','#c2410c'];
-function avatarColor(name) { let h=0; for(const c of name) h=c.charCodeAt(0)+((h<<5)-h); return COLORS[Math.abs(h)%COLORS.length]; }
-function initials(name) { return (name||'U').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2); }
-
-/* ── Toast ── */
 function showToast(msg) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
@@ -480,32 +405,22 @@ function showToast(msg) {
     setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-/* ── Modal helpers ── */
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 document.getElementById('userModal').addEventListener('click', e => { if(e.target===document.getElementById('userModal')) closeModal('userModal'); });
 document.getElementById('branchModal').addEventListener('click', e => { if(e.target===document.getElementById('branchModal')) closeModal('branchModal'); });
 
-/* ── Delete confirm ── */
 let confirmCallback = null;
 function askConfirm(title, subtitle, msg, cb) {
-    document.getElementById('confirmTitle').textContent    = title;
+    document.getElementById('confirmTitle').textContent = title;
     document.getElementById('confirmSubtitle').textContent = subtitle;
-    document.getElementById('confirmMsg').textContent      = msg;
+    document.getElementById('confirmMsg').textContent = msg;
     confirmCallback = cb;
     document.getElementById('confirmBox').classList.add('active');
 }
-document.getElementById('confirmCancel').addEventListener('click', () => {
-    document.getElementById('confirmBox').classList.remove('active');
-    confirmCallback = null;
-});
-document.getElementById('confirmOk').addEventListener('click', () => {
-    document.getElementById('confirmBox').classList.remove('active');
-    if (confirmCallback) confirmCallback();
-    confirmCallback = null;
-});
+document.getElementById('confirmCancel').addEventListener('click', () => { document.getElementById('confirmBox').classList.remove('active'); confirmCallback = null; });
+document.getElementById('confirmOk').addEventListener('click', () => { document.getElementById('confirmBox').classList.remove('active'); if(confirmCallback) confirmCallback(); confirmCallback = null; });
 
-/* ── Tab switch ── */
 function switchTab(tab) {
     document.getElementById('sectionUsers').classList.toggle('hidden', tab !== 'users');
     document.getElementById('sectionBranches').classList.toggle('hidden', tab !== 'branches');
@@ -521,199 +436,137 @@ document.getElementById('tabUsersBtn').addEventListener('click',    () => switch
 document.getElementById('tabBranchesBtn').addEventListener('click', () => switchTab('branches'));
 document.getElementById('tabTemplatesBtn').addEventListener('click',() => switchTab('templates'));
 
-/* ── Render users ── */
+/* ── Render Logic ── */
 function renderUsers(rows) {
     const tbody = document.getElementById('usersTableBody');
     if (!rows || rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="padding:40px;text-align:center;font-size:12px;color:rgba(2,115,133,.35);">No users found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">No users found.</td></tr>`;
         document.getElementById('userCountLabel').textContent = '0 users';
-        document.getElementById('statUsers').textContent  = 0;
-        document.getElementById('statAdmins').textContent = 0;
-        document.getElementById('statActive').textContent = 0;
+        document.getElementById('statUsers').textContent  = 0; document.getElementById('statAdmins').textContent = 0; document.getElementById('statActive').textContent = 0;
         return;
     }
-    const admins = rows.filter(r => r[3]==='Admin').length;
-    const active = rows.filter(r => (r[4]||'Active')==='Active').length;
     document.getElementById('statUsers').textContent  = rows.length;
-    document.getElementById('statAdmins').textContent = admins;
-    document.getElementById('statActive').textContent = active;
+    document.getElementById('statAdmins').textContent = rows.filter(r => r[3]==='Admin').length;
+    document.getElementById('statActive').textContent = rows.filter(r => (r[4]||'Active')==='Active').length;
     document.getElementById('userCountLabel').textContent = `${rows.length} user${rows.length!==1?'s':''}`;
 
     tbody.innerHTML = '';
     rows.forEach(r => {
         const id=r[0]||'—', name=r[1]||'—', role=r[3]||'Employee', branch=r[4]||'—', status=r[5]||'Active';
-        const col = avatarColor(name);
-        const tr = document.createElement('tr');
-        tr.className = 'fade-row';
+        const tr = document.createElement('tr'); tr.className = 'fade-row';
         tr.innerHTML = `
-            <td>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:32px;height:32px;border-radius:50%;background:${col};display:flex;align-items:center;justify-content:center;font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:white;flex-shrink:0;">${initials(name)}</div>
-                    <span style="font-size:12px;font-weight:600;color:#0D2330;">${name}</span>
-                </div>
-            </td>
+            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${name}</span></td>
             <td><span style="font-family:monospace;font-size:11px;color:#027385;">${id}</span></td>
             <td>${role==='Admin'?'<span class="badge badge-admin">Admin</span>':'<span class="badge badge-emp">Employee</span>'}</td>
             <td><span class="badge badge-branch">${branch}</span></td>
             <td>${status==='Active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-susp">Suspended</span>'}</td>
-            <td style="text-align:right;">
-                <button type="button" class="btn-danger" onclick="deleteUser('${id}','${name}')">
-                    <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd"/></svg>
-                    Remove
-                </button>
-            </td>`;
-        document.getElementById('usersTableBody').appendChild(tr);
+            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteUser('${id}','${name}')">Remove</button></td>`;
+        tbody.appendChild(tr);
     });
 }
 
-/* ── Render branches ── */
 function renderBranches(rows) {
     const tbody = document.getElementById('branchesTableBody');
     document.getElementById('statBranches').textContent = rows.length;
     document.getElementById('branchCountLabel').textContent = `${rows.length} branch${rows.length!==1?'es':''}`;
 
     if (!rows || rows.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="6" style="padding:40px;text-align:center;font-size:12px;color:rgba(2,115,133,.35);">No branches registered.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">No branches registered.</td></tr>`;
         return;
     }
     tbody.innerHTML = '';
     rows.forEach(r => {
         const code=r[0]||'—', loc=r[1]||'—', type=r[2]||'Standard Branch', mgr=r[3]||'—', contact=r[4]||'—';
         const isHQ = type === 'Head Quarters';
-        const tr = document.createElement('tr');
-        tr.className = 'fade-row';
+        const tr = document.createElement('tr'); tr.className = 'fade-row';
         tr.innerHTML = `
-            <td>
-                <div style="display:flex;align-items:center;gap:10px;">
-                    <div style="width:32px;height:32px;border-radius:10px;background:${isHQ?'rgba(249,149,35,.12)':'rgba(2,115,133,.08)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg style="width:15px;height:15px;color:${isHQ?'#F99523':'#027385'};" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
-                    </div>
-                    <span style="font-size:12px;font-weight:600;color:#0D2330;">${loc}</span>
-                </div>
-            </td>
+            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${loc}</span></td>
             <td><span style="font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;">${code}</span></td>
             <td>${isHQ?'<span class="badge badge-hq">Head Quarters</span>':'<span class="badge badge-branch">Standard Branch</span>'}</td>
             <td style="font-size:12px;color:#374151;">${mgr}</td>
             <td style="font-family:monospace;font-size:11px;color:#6b7280;">${contact}</td>
-            <td style="text-align:right;">
-                <button type="button" class="btn-danger" onclick="deleteBranch('${code}','${loc}')">
-                    <svg style="width:12px;height:12px;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M16.5 4.478v.227a48.816 48.816 0 013.878.512.75.75 0 11-.256 1.478l-.209-.035-1.005 13.07a3 3 0 01-2.991 2.77H8.084a3 3 0 01-2.991-2.77L4.087 6.66l-.209.035a.75.75 0 01-.256-1.478A48.567 48.567 0 017.5 4.705v-.227c0-1.564 1.213-2.9 2.816-2.951a52.662 52.662 0 013.369 0c1.603.051 2.815 1.387 2.815 2.951zm-6.136-1.452a51.196 51.196 0 013.273 0C14.39 3.05 15 3.684 15 4.478v.113a49.488 49.488 0 00-6 0v-.113c0-.794.609-1.428 1.364-1.452zm-.355 5.945a.75.75 0 10-1.5.058l.347 9a.75.75 0 101.499-.058l-.346-9zm5.48.058a.75.75 0 10-1.498-.058l-.347 9a.75.75 0 001.5.058l.345-9z" clip-rule="evenodd"/></svg>
-                    Remove
-                </button>
-            </td>`;
+            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteBranch('${code}','${loc}')">Remove</button></td>`;
         tbody.appendChild(tr);
     });
 }
 
-/* ── API Operations (Fetch/Delete) ── */
+/* ── API Operations ── */
 window.loadUsers = async function() {
-    document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading directory...</span></div></td></tr>`;
     try {
         const res = await fetch(`${SCRIPT_URL}?action=getUsers`);
         const result = await res.json();
         if (result.result === 'success') renderUsers(result.data.length > 1 ? result.data.slice(1) : []);
-        else document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load users.</td></tr>`;
-    } catch(e) { document.getElementById('usersTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
+    } catch(e) {}
 };
 
 window.loadBranches = async function() {
-    document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:48px;text-align:center;"><div style="display:flex;flex-direction:column;align-items:center;gap:8px;color:rgba(2,115,133,.35);"><svg class="spin" style="width:24px;height:24px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg><span style="font-size:12px;">Loading network...</span></div></td></tr>`;
     try {
         const res = await fetch(`${SCRIPT_URL}?action=getBranches`);
         const result = await res.json();
         if (result.result === 'success') renderBranches(result.data.length > 1 ? result.data.slice(1) : []);
-        else document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Failed to load branches.</td></tr>`;
-    } catch(e) { document.getElementById('branchesTableBody').innerHTML = `<tr><td colspan="6" style="padding:24px;text-align:center;font-size:12px;color:#dc2626;">Connection failed.</td></tr>`; }
+    } catch(e) {}
 };
 
 window.deleteUser = function(id, name) {
-    askConfirm('Remove User', 'This will permanently delete the user account.', `Delete user "${name}" (${id})? They will lose all access immediately.`, async () => {
+    askConfirm('Remove User', 'Permanent deletion.', `Delete user "${name}"?`, async () => {
         try {
-            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteUser', userId:id }), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteUser', userId:id }) });
             const result = await res.json();
             if (result.result === 'success') { showToast(`✓ ${name} removed`); window.loadUsers(); }
-            else alert('Error: ' + (result.error||'Delete failed.'));
-        } catch(e) { alert('Connection failed.'); }
+            else alert('Error.');
+        } catch(e) {}
     });
 };
 
 window.deleteBranch = function(code, loc) {
-    askConfirm('Remove Branch', 'This will deregister the branch from the network.', `Remove branch "${loc}" (${code}) from the system?`, async () => {
+    askConfirm('Remove Branch', 'Deregister branch.', `Remove branch "${loc}"?`, async () => {
         try {
-            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteBranch', branchId:code }), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteBranch', branchId:code }) });
             const result = await res.json();
-            if (result.result === 'success') { showToast(`✓ Branch ${code} removed`); window.loadBranches(); }
-            else alert('Error: ' + (result.error||'Delete failed.'));
-        } catch(e) { alert('Connection failed.'); }
+            if (result.result === 'success') { showToast(`✓ Branch removed`); window.loadBranches(); }
+            else alert('Error.');
+        } catch(e) {}
     });
 };
 
-/* ── API Operations (Save Forms) ── */
 document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btnText = document.getElementById('saveUserText');
-    const spinner = document.getElementById('saveUserSpinner');
-    btnText.textContent = "Saving..."; spinner.classList.remove('hidden');
-
     const payload = {
-        formType: 'saveUser',
-        userId: document.getElementById('mUserId').value.trim(),
-        name: document.getElementById('mUserName').value.trim(),
-        pass: document.getElementById('mUserPass').value.trim(),
-        role: document.getElementById('mUserRole').value,
-        branch: document.getElementById('mUserBranch').value.trim().toUpperCase(),
+        formType: 'saveUser', userId: document.getElementById('mUserId').value.trim(),
+        name: document.getElementById('mUserName').value.trim(), pass: document.getElementById('mUserPass').value.trim(),
+        role: document.getElementById('mUserRole').value, branch: document.getElementById('mUserBranch').value.trim().toUpperCase(),
         status: document.getElementById('mUserStatus').value
     };
-
     try {
-        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
         const data = await res.json();
-        if (data.result === 'success') {
-            showToast('✓ User saved successfully');
-            closeModal('userModal');
-            window.loadUsers();
-        } else alert('Error: ' + (data.error || 'Failed to save.'));
-    } catch(err) { alert('Connection Error.'); }
-    finally { btnText.textContent = "Save User"; spinner.classList.add('hidden'); }
+        if (data.result === 'success') { showToast('✓ User saved'); closeModal('userModal'); window.loadUsers(); }
+    } catch(err) {}
 });
 
 document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btnText = document.getElementById('saveBranchText');
-    const spinner = document.getElementById('saveBranchSpinner');
-    btnText.textContent = "Deploying..."; spinner.classList.remove('hidden');
-
     const payload = {
-        formType: 'saveBranch',
-        branchId: document.getElementById('mBranchCode').value.trim().toUpperCase(),
-        type: document.getElementById('mBranchType').value,
-        location: document.getElementById('mBranchLoc').value.trim(),
-        manager: document.getElementById('mBranchManager').value.trim(),
-        contact: document.getElementById('mBranchContact').value.trim()
+        formType: 'saveBranch', branchId: document.getElementById('mBranchCode').value.trim().toUpperCase(),
+        type: document.getElementById('mBranchType').value, location: document.getElementById('mBranchLoc').value.trim(),
+        manager: document.getElementById('mBranchManager').value.trim(), contact: document.getElementById('mBranchContact').value.trim()
     };
-
     try {
-        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload), headers:{'Content-Type':'text/plain;charset=utf-8'} });
+        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
         const data = await res.json();
-        if (data.result === 'success') {
-            showToast('✓ Branch deployed successfully');
-            closeModal('branchModal');
-            window.loadBranches();
-        } else alert('Error: ' + (data.error || 'Failed to save.'));
-    } catch(err) { alert('Connection Error.'); }
-    finally { btnText.textContent = "Deploy Hub"; spinner.classList.add('hidden'); }
+        if (data.result === 'success') { showToast('✓ Branch saved'); closeModal('branchModal'); window.loadBranches(); }
+    } catch(err) {}
 });
 
-
-/* ── Global WhatsApp Templates Engine ── */
+/* ── WhatsApp Templates Engine ── */
 const defaultTemplates = {
-    'booked': 'Hello [NAME], your [WEIGHT]kg shipment (AWB: [AWB]) to [DEST] has been booked with Nuvana Express.',
-    'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is currently processing at our logistics hub.',
-    'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to [DEST].',
-    'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today. Please ensure someone is available.',
-    'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully delivered. Thank you for trusting Nuvana Express!',
-    'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
-    'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
+    'booked': 'Hello [SHIPPER_NAME], your [TOTAL_WEIGHT]kg shipment (AWB: [AWB]) to [DESTINATION] [DEST_FLAG] has been booked with Nuvana Express.',
+    'hub': 'Hello [CONSIGNEE_NAME], an update! Your shipment (AWB: [AWB]) from [ORIGIN] [ORIGIN_FLAG] is currently processing at our logistics hub.',
+    'transit': 'Hello [CONSIGNEE_NAME], your shipment (AWB: [AWB]) is now safely in transit to [DESTINATION] [DEST_FLAG].',
+    'ofd': 'Hello [CONSIGNEE_NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today. Please ensure someone is available.',
+    'delivered': 'Hello [SHIPPER_NAME], your shipment (AWB: [AWB]) has been successfully delivered. Thank you for trusting Nuvana Express!',
+    'exception': 'Hello [SHIPPER_NAME], there is an issue regarding your shipment (AWB: [AWB]). Status: [STATUS]. Please contact us.',
+    'default': 'Hello [SHIPPER_NAME], there is an update regarding your shipment (AWB: [AWB]). Status: [STATUS].'
 };
 
 async function loadTemplatesFromCloud() {
@@ -729,77 +582,46 @@ async function loadTemplatesFromCloud() {
         document.getElementById('tplDelivered').value = saved.delivered || defaultTemplates.delivered;
         document.getElementById('tplException').value = saved.exception || defaultTemplates.exception;
         document.getElementById('tplDefault').value   = saved.default || defaultTemplates.default;
-    } catch(e) {
-        console.error("Failed to load templates from cloud, loading defaults.");
-        document.getElementById('tplBooked').value = defaultTemplates.booked; 
-    }
+    } catch(e) { document.getElementById('tplBooked').value = defaultTemplates.booked; }
 }
 
 document.getElementById('saveTemplatesBtn').addEventListener('click', async () => {
-    const btnText = document.getElementById('tplBtnText');
-    btnText.textContent = "Saving...";
-    
+    document.getElementById('tplBtnText').textContent = "Saving...";
     const payload = {
         formType: 'saveTemplates',
         templates: {
-            booked: document.getElementById('tplBooked').value,
-            hub: document.getElementById('tplHub').value,
-            transit: document.getElementById('tplTransit').value,
-            ofd: document.getElementById('tplOfd').value,
-            delivered: document.getElementById('tplDelivered').value,
-            exception: document.getElementById('tplException').value,
+            booked: document.getElementById('tplBooked').value, hub: document.getElementById('tplHub').value,
+            transit: document.getElementById('tplTransit').value, ofd: document.getElementById('tplOfd').value,
+            delivered: document.getElementById('tplDelivered').value, exception: document.getElementById('tplException').value,
             default: document.getElementById('tplDefault').value
         }
     };
-
     try {
         const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
         const data = await res.json();
-        if (data.result === 'success') {
-            showToast('✓ Cloud Sync Successful');
-        } else { alert("Failed to save templates."); }
-    } catch(err) {
-        alert("Network Error saving templates.");
-    } finally {
-        btnText.textContent = "Save to Cloud";
-    }
+        if (data.result === 'success') showToast('✓ Cloud Sync Successful');
+    } catch(err) {} 
+    finally { document.getElementById('tplBtnText').textContent = "Save to Cloud"; }
 });
-
-/* ── Modal open buttons ── */
-document.getElementById('openUserModalBtn').addEventListener('click', () => {
-    document.getElementById('userModalTitle').textContent = 'Register New User';
-    document.getElementById('adminUserForm').reset();
-    openModal('userModal');
-});
-document.getElementById('openBranchModalBtn').addEventListener('click', () => {
-    document.getElementById('branchModalTitle').textContent = 'Register New Hub';
-    document.getElementById('adminBranchForm').reset();
-    openModal('branchModal');
-});
-document.getElementById('refreshUsersBtn').addEventListener('click',    window.loadUsers);
-document.getElementById('refreshBranchesBtn').addEventListener('click', window.loadBranches);
 
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Session Protection
     const raw = sessionStorage.getItem('erp_user');
-    if (!raw) {
-        window.location.href = "login.html"; 
-        return;
-    }
+    if (!raw) { window.location.href = "login.html"; return; }
+    
     const u = JSON.parse(raw);
-    if (u.role !== 'Admin') {
-        alert("Access Denied: Master Control requires System Admin privileges.");
-        window.location.href = "index.html";
-        return;
+    if (u.role !== 'Admin') { alert("Access Denied."); window.location.href = "index.html"; return; }
+    
+    // Safely re-applied Header Avatar Logic
+    const headerAvatar = document.getElementById('headerAvatar');
+    if (headerAvatar) {
+        headerAvatar.textContent = (u.name || 'A').charAt(0).toUpperCase();
     }
     
-    // 2. Load Data
     loadTemplatesFromCloud(); 
     window.loadUsers();
     window.loadBranches();
 });
 </script>
-
 </body>
 </html>
