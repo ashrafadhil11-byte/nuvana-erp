@@ -6,6 +6,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;700&family=Lexend:wght@400;700&family=Montserrat:ital,wght@0,400;0,700;1,700&family=Libre+Barcode+39&display=swap" rel="stylesheet">
+    
+    <script src="../data/countries.js"></script>
+
     <style>
         @page {
             size: A4;
@@ -82,7 +85,7 @@
         
         .waffle td {
             overflow: hidden;
-            background-color: transparent !important; /* Forces transparency so watermark shows! */
+            background-color: transparent !important; 
         }
 
         /* Re-apply solid colors to specific headers only */
@@ -132,6 +135,16 @@
     </div>
 
     <script>
+    // Helper function to find the Alpha-3 Code from your countries.js
+    function getAlpha3Code(countryName) {
+        if (!countryName) return '---';
+        if (typeof COUNTRY_MASTER !== 'undefined') {
+            const found = COUNTRY_MASTER.find(c => c.name.toLowerCase() === countryName.toLowerCase().trim());
+            if (found && found.alpha3) return found.alpha3;
+        }
+        return countryName.substring(0, 3).toUpperCase(); // Fallback if not found
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         const rawRow = localStorage.getItem('nuvana_print_row');
         if (!rawRow) {
@@ -159,8 +172,9 @@
                 // Header Details
                 '\\[Booking Date\\]': dateStr,
                 '\\[Booking ID\\]': row[0] || '',
-                '\\[ORG\\]': (row[8] || 'ORG').substring(0,3).toUpperCase(),
-                '\\[DST\\]': (row[17] || 'DST').substring(0,3).toUpperCase(),
+                // Using the Alpha-3 Code Helper here!
+                '\\[ORG\\]': getAlpha3Code(row[8] || 'ORG'),
+                '\\[DST\\]': getAlpha3Code(row[17] || 'DST'),
                 
                 // Shipper Details
                 '\\[Shipper Name\\]': row[3] || '',
