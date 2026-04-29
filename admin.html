@@ -784,7 +784,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Session Protection
     const raw = sessionStorage.getItem('erp_user');
     if (!raw) {
-        window.location.href = "login.html"; // Kickout if not logged in
+        window.location.href = "login.html"; 
         return;
     }
     const u = JSON.parse(raw);
@@ -794,10 +794,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
-    // 2. Set Header Avatar
-    document.getElementById('headerAvatar').textContent  = (u.name||'A').charAt(0).toUpperCase();
-    
-    // 3. Load Data
+    // 2. Load Data
     loadTemplatesFromCloud(); 
     window.loadUsers();
     window.loadBranches();
