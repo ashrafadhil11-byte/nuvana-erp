@@ -257,7 +257,8 @@ function sendWAByAwb(awb) {
     else if (status === 'Delivered') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully delivered. Thank you for trusting Nuvana Express!`;
     else msg = `Hello ${name}, there is an update regarding your shipment (AWB: ${awb}). Current Status: ${status}. Please contact us for more details.`;
 
-    window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    // UPDATED DIRECT WEB.WHATSAPP LINK
+    window.open(`https://web.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(msg)}`, '_blank');
 }
 
 // ─────────────────────────────────────────────────────────
