@@ -80,6 +80,7 @@
         .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
         .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
         select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
+        textarea.field { resize: vertical; min-height: 80px; }
 
         /* ── Modal ── */
         .modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
@@ -117,13 +118,11 @@
 
 <body class="min-h-screen flex overflow-hidden">
 
-<!-- ══ TOAST ══ -->
 <div class="toast" id="toast">
     <svg style="width:15px;height:15px;color:#10B981;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
     <span id="toastMsg">Done!</span>
 </div>
 
-<!-- ══ DELETE CONFIRM ══ -->
 <div class="confirm-box" id="confirmBox">
     <div class="confirm-card">
         <div class="flex items-center gap-3 mb-4">
@@ -146,7 +145,6 @@
     </div>
 </div>
 
-<!-- ══ USER MODAL ══ -->
 <div class="modal-overlay" id="userModal">
     <div class="modal-box">
         <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;">
@@ -205,7 +203,6 @@
     </div>
 </div>
 
-<!-- ══ BRANCH MODAL ══ -->
 <div class="modal-overlay" id="branchModal">
     <div class="modal-box">
         <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;">
@@ -256,7 +253,6 @@
     </div>
 </div>
 
-<!-- ══ SIDEBAR ══ -->
 <aside class="w-[220px] flex-shrink-0 flex flex-col h-screen" style="background:#0D2330;">
     <div class="px-5 py-5 border-b" style="border-color:rgba(255,255,255,.06);">
         <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
@@ -292,7 +288,6 @@
         <a href="customers.html" class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
         <a href="reports.html"   class="nav-item"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
         <div class="divider-h my-2"></div>
-        <!-- Admin active -->
         <a href="admin.html" class="nav-item active">
             <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
             Master Control
@@ -309,10 +304,8 @@
     </div>
 </aside>
 
-<!-- ══ MAIN ══ -->
 <main class="flex-1 flex flex-col h-screen overflow-hidden">
 
-    <!-- Header -->
     <header class="h-[62px] flex items-center justify-between px-8 flex-shrink-0 z-10"
             style="background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid #e8e0d6;">
         <div class="flex items-center gap-3">
@@ -323,11 +316,10 @@
             </div>
             <div>
                 <h2 class="font-lexend text-[14px] font-semibold" style="color:#0D2330;">Master Control Panel</h2>
-                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Admin access only · Manage users, roles & branch network</p>
+                <p class="text-[10px]" style="color:rgba(2,115,133,.6);">Admin access only · Manage users, roles & settings</p>
             </div>
         </div>
         <div class="flex items-center gap-3">
-            <!-- Restricted badge -->
             <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);">
                 <svg style="width:10px;height:10px;color:#dc2626;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 1.5a5.25 5.25 0 00-5.25 5.25v3a3 3 0 00-3 3v6.75a3 3 0 003 3h10.5a3 3 0 003-3v-6.75a3 3 0 00-3-3v-3c0-2.9-2.35-5.25-5.25-5.25zm3.75 8.25v-3a3.75 3.75 0 10-7.5 0v3h7.5z" clip-rule="evenodd"/></svg>
                 <span class="text-[9px] font-bold tracking-wider uppercase" style="color:#dc2626;">Admin Only</span>
@@ -337,11 +329,9 @@
         </div>
     </header>
 
-    <!-- Body -->
     <div class="flex-1 overflow-y-auto p-6" style="background:#f5f2ee;">
         <div class="max-w-7xl mx-auto flex flex-col gap-5">
 
-            <!-- ── STAT CARDS ── -->
             <div class="grid grid-cols-2 xl:grid-cols-4 gap-5 anim-1">
                 <div class="stat-card border-l-4" style="border-left-color:#0D2330;">
                     <div class="flex justify-between items-start mb-3">
@@ -385,21 +375,22 @@
                 </div>
             </div>
 
-            <!-- ── TABS + TABLES ── -->
             <div class="anim-2">
-                <!-- Tab switcher -->
                 <div class="flex items-center gap-2 mb-4 p-1 rounded-[12px] w-fit" style="background:white;border:1px solid #e8e0d6;">
                     <button id="tabUsersBtn" class="tab-btn tab-active">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122z"/></svg>
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M4.5 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM14.25 8.625a3.375 3.375 0 116.75 0 3.375 3.375 0 01-6.75 0zM1.5 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM17.25 19.128l-.001.144a2.25 2.25 0 01-.233.96 10.088 10.088 0 005.06-1.01.75.75 0 00.42-.643 4.875 4.875 0 00-6.957-4.611 8.586 8.586 0 011.71 5.157v.003z"/></svg>
                         User Directory
                     </button>
                     <button id="tabBranchesBtn" class="tab-btn tab-off">
                         <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
                         Branch Network
                     </button>
+                    <button id="tabTemplatesBtn" class="tab-btn tab-off">
+                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM8.54 10.51l3.52-2.348a.75.75 0 01.83 0l3.52 2.348A.75.75 0 0116.5 11.75v3.5a1.5 1.5 0 01-1.5 1.5H9a1.5 1.5 0 01-1.5-1.5v-3.5a.75.75 0 01.04-1.24z" clip-rule="evenodd"/></svg>
+                        WhatsApp Templates
+                    </button>
                 </div>
 
-                <!-- Users section -->
                 <div id="sectionUsers" class="panel flex flex-col">
                     <div class="panel-hdr">
                         <div class="flex items-center gap-2.5">
@@ -447,7 +438,6 @@
                     </div>
                 </div>
 
-                <!-- Branches section -->
                 <div id="sectionBranches" class="panel flex-col hidden">
                     <div class="panel-hdr">
                         <div class="flex items-center gap-2.5">
@@ -493,6 +483,67 @@
                         <span id="branchCountLabel" style="font-size:10px;color:rgba(2,115,133,.45);">Loading...</span>
                     </div>
                 </div>
+
+                <div id="sectionTemplates" class="panel flex-col hidden">
+                    <div class="panel-hdr">
+                        <div class="flex items-center gap-2.5">
+                            <div class="w-7 h-7 rounded-lg flex items-center justify-center" style="background:rgba(249,149,35,.1);">
+                                <svg class="w-3.5 h-3.5 text-orange" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.804 21.644A6.707 6.707 0 006 21.75a6.721 6.721 0 003.583-1.029c.774.182 1.584.279 2.417.279 5.322 0 9.75-3.97 9.75-9 0-5.03-4.428-9-9.75-9s-9.75 3.97-9.75 9c0 2.409 1.025 4.587 2.674 6.192.232.226.277.428.254.543a3.73 3.73 0 01-.814 1.686.75.75 0 00.44 1.223zM8.25 10.875a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25zM10.875 12a1.125 1.125 0 112.25 0 1.125 1.125 0 01-2.25 0zm4.875-1.125a1.125 1.125 0 100 2.25 1.125 1.125 0 000-2.25z" clip-rule="evenodd"/></svg>
+                            </div>
+                            <span class="font-lexend text-[13px] font-semibold" style="color:#0D2330;">WhatsApp Notifications</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button id="saveTemplatesBtn" class="btn-primary" style="background:#F99523;box-shadow:0 3px 8px rgba(249,149,35,.3);">
+                                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M19.916 4.626a.75.75 0 01.208 1.04l-9 13.5a.75.75 0 01-1.154.114l-6-6a.75.75 0 011.06-1.06l5.353 5.353 8.493-12.739a.75.75 0 011.04-.208z" clip-rule="evenodd"/></svg>
+                                Save Templates
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="p-6 overflow-auto" style="max-height: 550px;">
+                        <div class="mb-6 p-4 rounded-xl" style="background:rgba(2,115,133,.05);border:1px solid rgba(2,115,133,.15);">
+                            <h4 class="font-lexend text-xs font-bold text-teal mb-2">Available Variables</h4>
+                            <p class="text-[11px] text-charcoal/70 leading-relaxed">Use these exact placeholders in your templates. The system will automatically replace them with real data when sending the message.</p>
+                            <div class="flex flex-wrap gap-3 mt-3">
+                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[NAME]</span>
+                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[AWB]</span>
+                                <span class="bg-white px-2 py-1 rounded text-[10px] font-mono font-bold border border-teal/20 text-teal">[STATUS]</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div>
+                                <label class="field-label text-teal flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-teal block"></span> Booked / Pending</label>
+                                <textarea id="tplBooked" class="field text-xs leading-relaxed" placeholder="Template for new bookings..."></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label text-purple-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-purple-600 block"></span> Arrived / Dispatched to Hub</label>
+                                <textarea id="tplHub" class="field text-xs leading-relaxed" placeholder="Template for hub updates..."></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label text-orange flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-orange block"></span> In Transit</label>
+                                <textarea id="tplTransit" class="field text-xs leading-relaxed" placeholder="Template for transit..."></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label text-blue-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-blue-600 block"></span> Out for Delivery</label>
+                                <textarea id="tplOfd" class="field text-xs leading-relaxed" placeholder="Template for delivery day..."></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label text-success flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-success block"></span> Delivered</label>
+                                <textarea id="tplDelivered" class="field text-xs leading-relaxed" placeholder="Template for successful delivery..."></textarea>
+                            </div>
+                            <div>
+                                <label class="field-label text-red-600 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-red-600 block"></span> Exception / Held</label>
+                                <textarea id="tplException" class="field text-xs leading-relaxed" placeholder="Template for issues..."></textarea>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="field-label text-slate-500 flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-slate-500 block"></span> Default (Any other status)</label>
+                                <textarea id="tplDefault" class="field text-xs leading-relaxed" placeholder="Fallback template..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
         </div>
@@ -542,15 +593,55 @@ document.getElementById('confirmOk').addEventListener('click', () => {
 
 /* ── Tab switch ── */
 function switchTab(tab) {
-    const isUsers = tab === 'users';
-    document.getElementById('sectionUsers').classList.toggle('hidden', !isUsers);
-    document.getElementById('sectionBranches').classList.toggle('hidden', isUsers);
-    document.getElementById('sectionBranches').classList.toggle('flex', !isUsers);
-    document.getElementById('tabUsersBtn').className   = `tab-btn ${isUsers?'tab-active':'tab-off'}`;
-    document.getElementById('tabBranchesBtn').className = `tab-btn ${!isUsers?'tab-active':'tab-off'}`;
+    document.getElementById('sectionUsers').classList.toggle('hidden', tab !== 'users');
+    document.getElementById('sectionBranches').classList.toggle('hidden', tab !== 'branches');
+    document.getElementById('sectionBranches').classList.toggle('flex', tab === 'branches');
+    document.getElementById('sectionTemplates').classList.toggle('hidden', tab !== 'templates');
+    document.getElementById('sectionTemplates').classList.toggle('flex', tab === 'templates');
+
+    document.getElementById('tabUsersBtn').className    = `tab-btn ${tab==='users'?'tab-active':'tab-off'}`;
+    document.getElementById('tabBranchesBtn').className = `tab-btn ${tab==='branches'?'tab-active':'tab-off'}`;
+    document.getElementById('tabTemplatesBtn').className = `tab-btn ${tab==='templates'?'tab-active':'tab-off'}`;
 }
 document.getElementById('tabUsersBtn').addEventListener('click',    () => switchTab('users'));
 document.getElementById('tabBranchesBtn').addEventListener('click', () => switchTab('branches'));
+document.getElementById('tabTemplatesBtn').addEventListener('click',() => switchTab('templates'));
+
+/* ── WhatsApp Templates Engine ── */
+const defaultTemplates = {
+    'booked': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully booked with Nuvana Express. You can track it using your AWB number.',
+    'hub': 'Hello [NAME], an update! Your shipment (AWB: [AWB]) is currently processing securely at our logistics hub.',
+    'transit': 'Hello [NAME], your shipment (AWB: [AWB]) is now safely in transit to its destination.',
+    'ofd': 'Hello [NAME], great news! Your shipment (AWB: [AWB]) is out for delivery today. Please ensure someone is available to receive it.',
+    'delivered': 'Hello [NAME], your shipment (AWB: [AWB]) has been successfully delivered. Thank you for trusting Nuvana Express!',
+    'exception': 'Hello [NAME], there is an issue regarding your shipment (AWB: [AWB]). Current Status: [STATUS]. Please contact us immediately.',
+    'default': 'Hello [NAME], there is an update regarding your shipment (AWB: [AWB]). Current Status: [STATUS]. Please contact us for more details.'
+};
+
+function loadTemplates() {
+    const saved = JSON.parse(localStorage.getItem('erp_wa_templates')) || defaultTemplates;
+    document.getElementById('tplBooked').value    = saved.booked || defaultTemplates.booked;
+    document.getElementById('tplHub').value       = saved.hub || defaultTemplates.hub;
+    document.getElementById('tplTransit').value   = saved.transit || defaultTemplates.transit;
+    document.getElementById('tplOfd').value       = saved.ofd || defaultTemplates.ofd;
+    document.getElementById('tplDelivered').value = saved.delivered || defaultTemplates.delivered;
+    document.getElementById('tplException').value = saved.exception || defaultTemplates.exception;
+    document.getElementById('tplDefault').value   = saved.default || defaultTemplates.default;
+}
+
+document.getElementById('saveTemplatesBtn').addEventListener('click', () => {
+    const tpls = {
+        booked: document.getElementById('tplBooked').value,
+        hub: document.getElementById('tplHub').value,
+        transit: document.getElementById('tplTransit').value,
+        ofd: document.getElementById('tplOfd').value,
+        delivered: document.getElementById('tplDelivered').value,
+        exception: document.getElementById('tplException').value,
+        default: document.getElementById('tplDefault').value
+    };
+    localStorage.setItem('erp_wa_templates', JSON.stringify(tpls));
+    showToast('✓ Templates Saved Securely');
+});
 
 /* ── Render users ── */
 function renderUsers(rows) {
@@ -573,7 +664,6 @@ function renderUsers(rows) {
     tbody.innerHTML = '';
     rows.forEach(r => {
         const id=r[0]||'—', name=r[1]||'—', role=r[3]||'Employee', branch=r[4]||'—', status=r[5]||'Active';
-        // Note: password is r[2] — we never display it
         const col = avatarColor(name);
         const tr = document.createElement('tr');
         tr.className = 'fade-row';
@@ -707,11 +797,11 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('sidebarName').textContent   = u.name;
         document.getElementById('sidebarRole').textContent   = `${u.role} · ${u.branchId}`;
     }
+    loadTemplates(); // Load WA templates
     window.loadUsers();
     window.loadBranches();
 });
 </script>
 
-<script src="app.js"></script>
 </body>
 </html>
