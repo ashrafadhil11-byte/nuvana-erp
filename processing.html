@@ -47,6 +47,8 @@
         
         .action-btn {width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; cursor:pointer;}
         .ab-wa   {background:rgba(34,197,94,0.1); color:#22c55e;} .ab-wa:hover {background:#22c55e; color:white;}
+        .ab-lbl  {background:rgba(139,92,246,0.1); color:#8b5cf6;} .ab-lbl:hover {background:#8b5cf6; color:white;}
+        .ab-inv  {background:rgba(59,130,246,0.1); color:#3b82f6;} .ab-inv:hover {background:#3b82f6; color:white;}
         .ab-view {background:rgba(2,115,133,0.1); color:#027385;} .ab-view:hover {background:#027385; color:white;}
         .ab-edit {background:rgba(249,149,35,0.1); color:#F99523;} .ab-edit:hover {background:#F99523; color:white;}
         .ab-del  {background:rgba(239,68,68,0.1); color:#ef4444;} .ab-del:hover {background:#ef4444; color:white;}
@@ -142,7 +144,7 @@
         <div style="display:flex;align-items:center;gap:12px;">
             <div style="display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;background:#f0ece6;border:1px solid #ddd5c8;">
                 <div class="w-1.5 h-1.5 rounded-full bg-success"></div>
-                <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;">API Online</span>
+                <span style="font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0D2330;" id="branchDisplayBadge">API Online</span>
             </div>
         </div>
     </header>
@@ -169,12 +171,12 @@
             <table class="data-table">
                 <thead>
                     <tr>
-                        <th class="w-[18%]">Waybill (AWB)</th>
+                        <th class="w-[15%]">Waybill (AWB)</th>
                         <th class="w-[20%]">Shipper</th>
                         <th class="w-[10%] text-center">Route</th>
                         <th class="w-[20%]">Receiver</th>
-                        <th class="w-[13%] text-center">Status</th>
-                        <th class="w-[19%] text-right">Actions</th>
+                        <th class="w-[10%] text-center">Status</th>
+                        <th class="w-[25%] text-right">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="bookingsTableBody">
@@ -194,6 +196,19 @@
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 let currentView = 'domestic';
 let allRows = [];
+
+// Session & Branch Setup
+const rawSession = sessionStorage.getItem('erp_user');
+let userBranch = 'UNKNOWN';
+let userRole = 'User';
+if (rawSession) {
+    try {
+        const u = JSON.parse(rawSession);
+        userBranch = u.branchId || 'UNKNOWN';
+        userRole = u.role || 'User';
+        document.getElementById('branchDisplayBadge').textContent = `Branch: ${userBranch}`;
+    } catch(e) {}
+}
 
 // Formatting Helpers
 function badge(s) {
@@ -219,11 +234,9 @@ function sendWAByAwb(awb) {
 
     if (!phone || phone === '—') return alert('No phone number attached to this shipper.');
     
-    // Strip everything except numbers to ensure a perfect WhatsApp link
     let cleanPhone = String(phone).replace(/[^0-9]/g, '');
     if (cleanPhone.length < 8) return alert('Invalid phone number format: ' + phone);
 
-    // Contextual Pre-Template Messages
     let msg = '';
     if (status === 'Booked' || status === 'Pending') msg = `Hello ${name}, your shipment (AWB: ${awb}) has been successfully booked with Nuvana Express. You can track it using your AWB number.`;
     else if (status === 'Dispatched to Hub' || status === 'Arrived at Hub') msg = `Hello ${name}, an update! Your shipment (AWB: ${awb}) is currently processing securely at our logistics hub.`;
@@ -233,6 +246,25 @@ function sendWAByAwb(awb) {
     else msg = `Hello ${name}, there is an update regarding your shipment (AWB: ${awb}). Current Status: ${status}. Please contact us for more details.`;
 
     window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+}
+
+// ─────────────────────────────────────────────────────────
+// PRINT TEMPLATE ENGINE
+// ─────────────────────────────────────────────────────────
+function printLabel(awb) {
+    const row = allRows.find(r => r[0] === awb || r[1] === awb);
+    if (!row) return;
+    localStorage.setItem('nuvana_print_row', JSON.stringify(row));
+    localStorage.setItem('nuvana_print_type', currentView);
+    window.open('templates/waybill-label.html', '_blank', 'width=500,height=750');
+}
+
+function printInvoice(awb) {
+    const row = allRows.find(r => r[0] === awb || r[1] === awb);
+    if (!row) return;
+    localStorage.setItem('nuvana_print_row', JSON.stringify(row));
+    localStorage.setItem('nuvana_print_type', currentView);
+    window.open('templates/invoice.html', '_blank', 'width=800,height=900');
 }
 
 // ─────────────────────────────────────────────────────────
@@ -393,7 +425,9 @@ function renderTable(rows) {
                 </td>
                 <td class="text-center">${badge(status)}</td>
                 <td class="text-right">
-                    <div class="flex justify-end gap-2">
+                    <div class="flex justify-end gap-1">
+                        <button onclick="printLabel('${awb}')" class="action-btn ab-lbl" title="Print Label"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg></button>
+                        <button onclick="printInvoice('${awb}')" class="action-btn ab-inv" title="Print Invoice"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></button>
                         <button onclick="sendWAByAwb('${awb}')" class="action-btn ab-wa" title="WhatsApp Shipper"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.052.246C5.534.245.244 5.535.242 12.052c0 2.083.545 4.116 1.583 5.914L.25 24l6.205-1.631a11.862 11.862 0 0 0 5.592 1.39h.005c6.517 0 11.805-5.29 11.808-11.808a11.822 11.822 0 0 0-3.393-8.416"/></svg></button>
                         <button onclick="openDrawerByAwb('${awb}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                         <button onclick="openEditByAwb('${awb}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
@@ -429,7 +463,15 @@ window.fetchBookings = async function() {
         if (currentView !== fetchTarget) return;
 
         if (result.result === 'success') {
-            allRows = result.data.length > 1 ? [...result.data].slice(1).reverse() : [];
+            // Apply Branch Filtering directly to the incoming array
+            let rawRows = result.data.length > 1 ? [...result.data].slice(1).reverse() : [];
+            
+            if (userRole !== 'Admin' && userBranch !== 'UNKNOWN' && userBranch !== 'ALL') {
+                // For both Domestic (Col 2) and Intl (Col 2), Branch_ID is index 2.
+                rawRows = rawRows.filter(r => String(r[2]).trim().toUpperCase() === String(userBranch).trim().toUpperCase());
+            }
+
+            allRows = rawRows;
             renderTable(allRows);
         } else {
             tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-danger font-bold text-sm">Failed to load data: ${result.message}</td></tr>`;
