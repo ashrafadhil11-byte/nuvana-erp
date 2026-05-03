@@ -558,24 +558,27 @@ document.getElementById('tabTemplatesBtn').addEventListener('click',() => switch
 
 /* ── Dynamic Dropdown ── */
 function populateBranchDropdown(selectedValue) {
-    const select = document.getElementById('mUserBranch');
-    select.innerHTML = '';
-    if (globalBranches.length === 0) {
-        select.innerHTML = '<option value="">No Branches Found</option>';
-    } else {
-        globalBranches.forEach(b => {
-            const opt = document.createElement('option');
-            opt.value = b[9] || b[0]; 
-            opt.textContent = `${b[1]} (${b[9] || 'N/A'})`; 
-            if((b[9] || b[0]) === selectedValue) opt.selected = true;
-            select.appendChild(opt);
-        });
-    }
+    try {
+        const select = document.getElementById('mUserBranch');
+        if(!select) return;
+        select.innerHTML = '';
+        if (!globalBranches || globalBranches.length === 0) {
+            select.innerHTML = '<option value="">No Branches Found</option>';
+        } else {
+            globalBranches.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b[9] || b[0]; 
+                opt.textContent = `${b[1]} (${b[9] || 'N/A'})`; 
+                if(String(b[9] || b[0]) === String(selectedValue)) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+    } catch(e) { console.error("Dropdown error:", e); }
 }
 
 /* ── VIEW / EDIT Logics ── */
 window.openUserDrawer = function(id) {
-    const r = globalUsers.find(row => row[0] === id);
+    const r = globalUsers.find(row => String(row[0]) === String(id));
     if(!r) return;
     openDrawer("User Details", id, [
         ["Full Name", r[2]], ["Username", r[5]], ["Role", r[1]], 
@@ -584,7 +587,7 @@ window.openUserDrawer = function(id) {
 };
 
 window.openBranchDrawer = function(code) {
-    const r = globalBranches.find(row => row[0] === code);
+    const r = globalBranches.find(row => String(row[0]) === String(code));
     if(!r) return;
     openDrawer("Branch Details", code, [
         ["Branch Name", r[1]], ["Type", r[2]], ["Location", r[3]], 
@@ -594,8 +597,9 @@ window.openBranchDrawer = function(code) {
 };
 
 window.editUser = function(id) {
-    const r = globalUsers.find(row => row[0] === id);
-    if(!r) return;
+    const r = globalUsers.find(row => String(row[0]) === String(id));
+    if(!r) { console.error("User not found for ID:", id); return; }
+    
     document.getElementById('userModalTitle').textContent = 'Edit User';
     document.getElementById('mUserId').value = r[0];
     document.getElementById('mUserRole').value = r[1] || 'Employee';
@@ -604,6 +608,7 @@ window.editUser = function(id) {
     document.getElementById('mUserEmail').value = r[4] || '';
     document.getElementById('mUserName').value = r[5] || '';
     
+    // Passwords shouldn't be pre-filled. Optional on Edit.
     document.getElementById('mUserPass').value = ''; 
     document.getElementById('mUserPass').placeholder = 'Leave blank to keep unchanged';
     document.getElementById('mUserPass').required = false; 
@@ -616,8 +621,9 @@ window.editUser = function(id) {
 };
 
 window.editBranch = function(id) {
-    const r = globalBranches.find(row => row[0] === id);
-    if(!r) return;
+    const r = globalBranches.find(row => String(row[0]) === String(id));
+    if(!r) { console.error("Branch not found for ID:", id); return; }
+    
     document.getElementById('branchModalTitle').textContent = 'Edit Branch';
     document.getElementById('mBranchId').value = r[0];
     document.getElementById('mBranchName').value = r[1] || '';
@@ -670,7 +676,7 @@ function renderUsers(rows) {
                 <div class="flex justify-end gap-1">
                     <button onclick="openUserDrawer('${id}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                     <button onclick="editUser('${id}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                    <button onclick="deleteUser('${id}','${fullName}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    <button onclick="deleteUser('${id}', '${fullName.replace(/'/g, "\\'")}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
             </td>`;
         tbody.appendChild(tr);
@@ -691,7 +697,9 @@ function renderBranches(rows) {
     tbody.innerHTML = '';
     
     rows.forEach(r => {
-        const code=r[0]||'—', bName=r[1]||'—', type=r[2]||'Standard Branch', loc=r[3]||'—', phone=r[5]||'—', curr=r[8]||'OMR', inv=r[9]||'—';
+        // Ensure ID is cast strictly
+        const code = r[0] ? String(r[0]) : `TMP-${Math.random()}`; 
+        const bName=r[1]||'—', type=r[2]||'Standard Branch', loc=r[3]||'—', phone=r[5]||'—', curr=r[8]||'OMR', inv=r[9]||'—';
         const isHQ = type === 'Head Quarters';
         const tr = document.createElement('tr'); tr.className = 'fade-row';
         
@@ -712,7 +720,7 @@ function renderBranches(rows) {
                 <div class="flex justify-end gap-1">
                     <button onclick="openBranchDrawer('${code}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
                     <button onclick="editBranch('${code}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                    <button onclick="deleteBranch('${code}','${bName}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    <button onclick="deleteBranch('${code}','${bName.replace(/'/g, "\\'")}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
                 </div>
             </td>`;
         tbody.appendChild(tr);
