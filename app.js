@@ -94,12 +94,14 @@ if (intForm) {
         boxCount++; 
         const row = document.createElement('div'); 
         row.className = 'grid grid-cols-6 gap-2 animate-fade-in mb-2';
+        
         row.innerHTML = `<div class="flex items-center justify-center text-teal/70 dark:text-beige/60 font-mono text-sm bg-slate-50 dark:bg-charcoal/50 rounded-lg border border-teal/10 dark:border-white/10">Box ${boxCount}</div>
         <input type="number" step="0.01" id="b${boxCount}W" placeholder="0.0" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}L" placeholder="L" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}Wi" placeholder="W" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}H" placeholder="H" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}CW" readonly placeholder="0.0" class="w-full bg-orange/5 border border-orange/20 rounded-lg p-2 text-sm text-center text-orange font-bold focus:outline-none">`;
+        
         boxContainer.appendChild(row); 
         window.calculateTotals();
     };
@@ -115,6 +117,7 @@ if (intForm) {
             document.getElementById(`b${i}CW`).value = cw > 0 ? cw.toFixed(2) : ""; 
             totalActual += actW; totalCW += cw;
         }
+        
         if(document.getElementById('lblTotalBoxes')) document.getElementById('lblTotalBoxes').innerText = boxCount; 
         if(document.getElementById('lblTotalActual')) document.getElementById('lblTotalActual').innerText = totalActual.toFixed(2); 
         if(document.getElementById('lblTotalCW')) document.getElementById('lblTotalCW').innerText = totalCW.toFixed(2);
@@ -122,35 +125,54 @@ if (intForm) {
         let rate = parseFloat(document.getElementById('rate') ? document.getElementById('rate').value : 0) || 0; 
         let pack = parseFloat(document.getElementById('packingCharges') ? document.getElementById('packingCharges').value : 0) || 0; 
         let add = parseFloat(document.getElementById('additionalCharges') ? document.getElementById('additionalCharges').value : 0) || 0;
+        
         if(document.getElementById('grandTotal')) {
             if(rate > 0) document.getElementById('grandTotal').value = ((totalCW * rate) + pack + add).toFixed(2); 
             else document.getElementById('grandTotal').value = "";
         }
     };
-    
+
     ['rate', 'packingCharges', 'additionalCharges'].forEach(id => { 
-        if(document.getElementById(id)) { document.getElementById(id).addEventListener('input', window.calculateTotals); }
+        if(document.getElementById(id)) {
+            document.getElementById(id).addEventListener('input', window.calculateTotals); 
+        }
     });
+
     addBox(); 
     if(addBoxBtn) addBoxBtn.addEventListener('click', addBox);
     
     intForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
-        const btnTextInt = document.getElementById('btnTextInt'); const loadingIconInt = document.getElementById('loadingIconInt'); const submitIntBtn = document.getElementById('submitIntBtn');
-        btnTextInt.innerText = "Transmitting..."; if(loadingIconInt) loadingIconInt.classList.remove('hidden'); submitIntBtn.disabled = true; submitIntBtn.classList.add('opacity-50');
+        const btnTextInt = document.getElementById('btnTextInt'); 
+        const loadingIconInt = document.getElementById('loadingIconInt'); 
+        const submitIntBtn = document.getElementById('submitIntBtn');
+        
+        btnTextInt.innerText = "Transmitting..."; 
+        if(loadingIconInt) loadingIconInt.classList.remove('hidden'); 
+        submitIntBtn.disabled = true; submitIntBtn.classList.add('opacity-50');
+        
         const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "";
         const getDim = (i) => { let l = getVal(`b${i}L`), w = getVal(`b${i}Wi`), h = getVal(`b${i}H`); return (l && w && h) ? `${l}x${w}x${h}` : ""; };
         
         const payload = { 
-            formType: "international", branchId: activeUser.branchId, shipperName: getVal('shipperName'), contactNumber: getVal('contactNumber'), altNumber: getVal('altNumber'), shipperAddress: getVal('shipperAddress'), originCountry: getVal('originCountry'), postalCode: getVal('postalCode'), receiverName: getVal('receiverNameInt'), receiverPhone: getVal('receiverPhoneInt'), receiverAlt: getVal('receiverAltInt'), receiverAddress: getVal('receiverAddress'), destCountry: getVal('destCountry'), destCountryCode: getVal('destCountryCode'), zipCode: getVal('zipCode'), shipmentType: getVal('shipmentType'), cargoType: getVal('cargoType'), commodity: getVal('commodity'), description: getVal('description'), shipmentValue: getVal('shipmentValue'), totalBoxes: boxCount, totalWeight: getVal('lblTotalActual'), totalChargeableWeight: getVal('lblTotalCW'), rate: getVal('rate'), packingCharges: getVal('packingCharges'), additionalCharges: getVal('additionalCharges'), grandTotal: getVal('grandTotal'), b1W: getVal('b1W'), b1D: getDim(1), b1CW: getVal('b1CW'), b2W: getVal('b2W'), b2D: getDim(2), b2CW: getVal('b2CW'), b3W: getVal('b3W'), b3D: getDim(3), b3CW: getVal('b3CW'), b4W: getVal('b4W'), b4D: getDim(4), b4CW: getVal('b4CW'), b5W: getVal('b5W'), b5D: getDim(5), b5CW: getVal('b5CW'), b6W: getVal('b6W'), b6D: getDim(6), b6CW: getVal('b6CW'), b7W: getVal('b7W'), b7D: getDim(7), b7CW: getVal('b7CW'), b8W: getVal('b8W'), b8D: getDim(8), b8CW: getVal('b8CW'), b9W: getVal('b9W'), b9D: getDim(9), b9CW: getVal('b9CW'), b10W: getVal('b10W'), b10D: getDim(10), b10CW: getVal('b10CW') 
+            formType: "international", branchId: activeUser.branchId, shipperName: getVal('shipperName'), contactNumber: getVal('contactNumber'), altNumber: getVal('altNumber'), shipperAddress: getVal('shipperAddress'), originCountry: getVal('originCountry'), postalCode: getVal('postalCode'), receiverName: getVal('receiverNameInt'), receiverPhone: getVal('receiverPhoneInt'), receiverAlt: getVal('receiverAltInt'), receiverAddress: getVal('receiverAddress'), destCountry: getVal('destCountry'), zipCode: getVal('zipCode'), shipmentType: getVal('shipmentType'), cargoType: getVal('cargoType'), commodity: getVal('commodity'), description: getVal('description'), shipmentValue: getVal('shipmentValue'), totalBoxes: boxCount, totalWeight: getVal('lblTotalActual'), totalChargeableWeight: getVal('lblTotalCW'), rate: getVal('rate'), packingCharges: getVal('packingCharges'), additionalCharges: getVal('additionalCharges'), grandTotal: getVal('grandTotal'), b1W: getVal('b1W'), b1D: getDim(1), b1CW: getVal('b1CW'), b2W: getVal('b2W'), b2D: getDim(2), b2CW: getVal('b2CW'), b3W: getVal('b3W'), b3D: getDim(3), b3CW: getVal('b3CW'), b4W: getVal('b4W'), b4D: getDim(4), b4CW: getVal('b4CW'), b5W: getVal('b5W'), b5D: getDim(5), b5CW: getVal('b5CW'), b6W: getVal('b6W'), b6D: getDim(6), b6CW: getVal('b6CW'), b7W: getVal('b7W'), b7D: getDim(7), b7CW: getVal('b7CW'), b8W: getVal('b8W'), b8D: getDim(8), b8CW: getVal('b8CW'), b9W: getVal('b9W'), b9D: getDim(9), b9CW: getVal('b9CW'), b10W: getVal('b10W'), b10D: getDim(10), b10CW: getVal('b10CW') 
         };
+        
         try {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
-            if(result.result === 'success') { alert(`Success! AWB Generated: ${result.masterAWB}`); intForm.reset(); boxContainer.innerHTML = ''; boxCount = 0; addBox(); window.calculateTotals(); 
-            } else { alert('Error: ' + result.error); }
-        } catch (error) { alert('Transmission failed.'); } finally {
-            btnTextInt.innerText = "Transmit International Booking"; if(loadingIconInt) loadingIconInt.classList.add('hidden'); submitIntBtn.disabled = false; submitIntBtn.classList.remove('opacity-50');
+            if(result.result === 'success') { 
+                alert(`Success! AWB Generated: ${result.masterAWB}`); 
+                intForm.reset(); boxContainer.innerHTML = ''; boxCount = 0; addBox(); window.calculateTotals(); 
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) { 
+            alert('Transmission failed.'); 
+        } finally {
+            btnTextInt.innerText = "Transmit International Booking"; 
+            if(loadingIconInt) loadingIconInt.classList.add('hidden'); 
+            submitIntBtn.disabled = false; submitIntBtn.classList.remove('opacity-50');
         }
     });
 }
@@ -158,8 +180,7 @@ if (intForm) {
 // ==========================================
 // 5. PROCESSING MODULE (SAFETY CHECKED)
 // ==========================================
-// FIX: We check if `tableHeaderRow` exists. If it does NOT exist (meaning we are on the NEW processing.html), 
-// app.js will completely skip this section to avoid crashing and overwriting the new built-in logic.
+// FIX: We strictly check for tableHeaderRow to avoid crashing on the new layout
 const tableBody = document.getElementById('bookingsTableBody');
 const tableHeaderRow = document.getElementById('tableHeaderRow');
 
@@ -514,23 +535,13 @@ function loadGlobalSidebar() {
                     <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
                 </div>
                 <div class="${isLogistics ? 'flex' : 'hidden group-hover:flex'} flex-col pl-9 pr-3 pb-1 gap-0.5">
-                    <a href="international.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('international.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">
-                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.25a.75.75 0 01.75.75v11.69l3.22-3.22a.75.75 0 111.06 1.06l-4.5 4.5a.75.75 0 01-1.06 0l-4.5-4.5a.75.75 0 111.06-1.06l3.22 3.22V3a.75.75 0 01.75-.75zm-9 13.5a.75.75 0 01.75.75v2.25a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5V16.5a.75.75 0 011.5 0v2.25a3 3 0 01-3 3H5.25a3 3 0 01-3-3V16.5a.75.75 0 01.75-.75z"/></svg>
-                        International
-                    </a>
-                    <a href="domestic.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('domestic.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">
-                        <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                        Domestic
-                    </a>
+                    <a href="international.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('international.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">International</a>
+                    <a href="domestic.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition flex items-center gap-2 ${isActive('domestic.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">Domestic</a>
                 </div>
             </div>
-
             <div class="group">
                 <div class="sidebar-nav-item justify-between ${isProcessing ? 'text-[#F99523] font-semibold' : ''}">
-                    <div class="flex items-center gap-2.5">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>
-                        Processing
-                    </div>
+                    <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875v.75c0 1.036.84 1.875 1.875 1.875h17.25c1.035 0 1.875-.84 1.875-1.875v-.75C22.5 3.839 21.66 3 20.625 3H3.375z"/><path fill-rule="evenodd" d="M3.087 9l.54 9.176A3 3 0 006.622 21h10.757a3 3 0 002.995-2.824L20.913 9H3.087z" clip-rule="evenodd"/></svg>Processing</div>
                     <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
                 </div>
                 <div class="${isProcessing ? 'flex' : 'hidden group-hover:flex'} flex-col pl-9 pr-3 pb-1 gap-0.5">
@@ -538,36 +549,19 @@ function loadGlobalSidebar() {
                     <a href="update.html" class="text-[12px] py-1.5 px-2 rounded-lg hover:bg-white/5 transition ${isActive('update.html') ? 'text-[#F99523] font-semibold bg-white/10' : 'text-[#EFE7DC]/40 hover:text-[#F99523]'}">Process Update</a>
                 </div>
             </div>
-
             <div class="sidebar-section-label mt-3">Finance & CRM</div>
-
-            <a href="accounts.html" class="sidebar-nav-item ${isActive('accounts.html')}">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/></svg>
-                Accounts
-            </a>
-            <a href="customers.html" class="sidebar-nav-item ${isActive('customers.html')}">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
-                CRM
-            </a>
-            <a href="reports.html" class="sidebar-nav-item ${isActive('reports.html')}">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>
-                Analytics
-            </a>
-
+            <a href="accounts.html" class="sidebar-nav-item ${isActive('accounts.html')}"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2.25 6A2.25 2.25 0 014.5 3.75h15A2.25 2.25 0 0121.75 6v1.5H2.25V6zM2.25 9v11.25A2.25 2.25 0 004.5 22.5h15a2.25 2.25 0 002.25-2.25V9H2.25zm11.25 5.625a.75.75 0 01.75-.75h2.25a.75.75 0 01.75.75v1.5a.75.75 0 01-.75.75h-2.25a.75.75 0 01-.75-.75v-1.5z"/></svg>Accounts</a>
+            <a href="customers.html" class="sidebar-nav-item ${isActive('customers.html')}"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>CRM</a>
+            <a href="reports.html" class="sidebar-nav-item ${isActive('reports.html')}"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 13.5a8.25 8.25 0 018.25-8.25.75.75 0 01.75.75v6.75H18a.75.75 0 01.75.75 8.25 8.25 0 01-16.5 0z" clip-rule="evenodd"/><path fill-rule="evenodd" d="M12.75 3a.75.75 0 01.75-.75 8.25 8.25 0 018.25 8.25.75.75 0 01-.75.75h-7.5a.75.75 0 01-.75-.75V3z" clip-rule="evenodd"/></svg>Analytics</a>
             <div class="sidebar-divider"></div>
-
-            <a href="admin.html" id="globalNavAdminLink" class="sidebar-nav-item hidden ${isActive('admin.html')}">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>
-                Master Control
-            </a>
+            <a href="admin.html" id="globalNavAdminLink" class="sidebar-nav-item hidden ${isActive('admin.html')}"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm11.378-3.917c-.89-.777-2.366-.777-3.255 0a.75.75 0 01-.988-1.129c1.454-1.272 3.776-1.272 5.23 0 1.513 1.324 1.513 3.518 0 4.842a3.75 3.75 0 01-.837.552c-.676.328-1.028.774-1.028 1.152v.75a.75.75 0 01-1.5 0v-.75c0-1.279 1.06-2.107 1.875-2.502.182-.088.351-.199.503-.331.89-.777.89-2.038 0-2.813zM12 15.75a.75.75 0 000 1.5h.008a.75.75 0 000-1.5H12z" clip-rule="evenodd"/></svg>Master Control</a>
         </nav>
-
         <div class="px-3 py-4 border-t border-white/[0.06]">
             <div class="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-white/[0.04] cursor-pointer hover:bg-white/[0.07] transition" id="globalSidebarProfileBtn">
                 <div class="w-7 h-7 rounded-[9px] bg-[#F99523] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" id="globalSidebarAvatarText">U</div>
                 <div class="overflow-hidden flex-1">
                     <div class="text-[11px] font-semibold text-[#EFE7DC]/90 truncate" id="globalSidebarUserName">Loading...</div>
-                    <div class="text-[9px] text-[#EFE7DC]/40" id="globalSidebarUserBranch">—</div>
+                    <div class="text-[9px] text-[#EFE7DC]/40" id="globalSidebarUserRole">—</div>
                 </div>
                 <svg class="w-3 h-3 text-[#EFE7DC]/25 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/></svg>
             </div>
@@ -643,7 +637,9 @@ function loadGlobalSidebar() {
             
             document.getElementById('globalSidebarAvatarText').textContent = firstChar;
             document.getElementById('globalSidebarUserName').textContent = activeUser.name;
-            document.getElementById('globalSidebarUserBranch').textContent = activeUser.branchName || activeUser.branchId || 'No Branch';
+            
+            // Set Role and Branch Name exactly as requested
+            document.getElementById('globalSidebarUserRole').textContent = `${activeUser.role} • ${activeUser.branchName || activeUser.branchId}`;
             
             if (activeUser.role === 'Admin') {
                 const adminLink = document.getElementById('globalNavAdminLink');
@@ -697,7 +693,7 @@ function loadGlobalSidebar() {
 
         const payload = {
             formType: "updateProfile",
-            userId: activeUser.userId,
+            userId: activeUser.userId, 
             newName: document.getElementById('gpName').value.trim(),
             newUsername: document.getElementById('gpUsername').value.trim(),
             newPhone: document.getElementById('gpPhone').value.trim(),
