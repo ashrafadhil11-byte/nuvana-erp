@@ -67,15 +67,29 @@
         textarea.field { resize: vertical; min-height: 80px; }
         select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
 
-        /* ── Modals ── */
+        /* ── Actions & Modals ── */
+        .action-btn {width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; transition:all 0.2s; cursor:pointer;}
+        .ab-view {background:rgba(2,115,133,0.1); color:#027385;} .ab-view:hover {background:#027385; color:white;}
+        .ab-edit {background:rgba(249,149,35,0.1); color:#F99523;} .ab-edit:hover {background:#F99523; color:white;}
+        .ab-del  {background:rgba(239,68,68,0.1); color:#ef4444;} .ab-del:hover {background:#ef4444; color:white;}
+
         .modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
         .modal-overlay.active { opacity:1; pointer-events:all; }
         .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:650px; max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(13,35,48,.18); transform:translateY(20px) scale(.97); transition:transform .35s; }
         .modal-overlay.active .modal-box { transform:translateY(0) scale(1); }
 
+        /* ── Detail Drawer ── */
+        .detail-drawer {position:fixed;right:0;top:0;bottom:0;width:400px;background:white;box-shadow:-8px 0 32px rgba(13,35,48,.1);z-index:150;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);}
+        .detail-drawer.open {transform:translateX(0);}
+        .drawer-overlay {position:fixed;inset:0;background:rgba(13,35,48,.25);backdrop-filter:blur(2px);z-index:140;opacity:0;pointer-events:none;transition:opacity .3s;}
+        .drawer-overlay.open {opacity:1;pointer-events:all;}
+        .detail-row {display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px dashed #f0ece6;gap:12px;}
+        .detail-row:last-child {border-bottom:none;}
+        .d-label {font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:rgba(2,115,133,.5);flex-shrink:0;}
+        .d-value {font-size:13px;font-weight:600;color:#0D2330;text-align:right;}
+
         .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:transform .15s; box-shadow:0 3px 8px rgba(13,35,48,.2); }
         .btn-primary:hover { transform:translateY(-1px); }
-        .btn-danger  { display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); font-size:10px; font-weight:700; cursor:pointer; font-family:'Lexend',sans-serif; }
         .btn-refresh { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:9px; background:white; border:1px solid #e8e0d6; font-size:11px; font-weight:600; color:#0D2330; cursor:pointer; font-family:'Lexend',sans-serif; }
         .btn-submit-modal { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.5rem; }
 
@@ -94,6 +108,20 @@
 <div class="toast" id="toast">
     <svg style="width:15px;height:15px;color:#10B981;flex-shrink:0;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm13.36-1.814a.75.75 0 10-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 00-1.06 1.06l2.25 2.25a.75.75 0 001.14-.094l3.75-5.25z" clip-rule="evenodd"/></svg>
     <span id="toastMsg">Done!</span>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay"></div>
+<div class="detail-drawer" id="detailDrawer">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px;border-bottom:1px solid #f0ece6;background:#faf8f5;">
+        <div>
+            <h3 class="font-lexend text-lg font-bold text-charcoal" id="drawerTitle">Details</h3>
+            <p class="text-[11px] text-teal/60 mt-0.5" id="drawerSub">—</p>
+        </div>
+        <button id="closeDrawer" style="width:36px;height:36px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
+            <svg style="width:16px;height:16px;color:#0D2330;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px;" id="drawerBody"></div>
 </div>
 
 <div class="confirm-box" id="confirmBox">
@@ -226,36 +254,50 @@
                     <input type="text" id="mBranchName" required placeholder="e.g. Nuvana Salalah Main" class="field">
                 </div>
                 <div>
-                    <label class="field-label">Location / Area</label>
-                    <input type="text" id="mBranchLoc" required placeholder="e.g. Salalah, Oman" class="field">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 mb-4">
-                <div>
-                    <label class="field-label">Contact Phone</label>
-                    <input type="text" id="mBranchPhone" required placeholder="+968 XXXXXXXX" class="field">
-                </div>
-                <div>
-                    <label class="field-label">Email ID</label>
-                    <input type="email" id="mBranchEmail" placeholder="branch@nuvana.com" class="field">
+                    <label class="field-label">Hub Type</label>
+                    <select id="mBranchType" class="field">
+                        <option value="Standard Branch">Standard Branch</option>
+                        <option value="Head Quarters">Head Quarters</option>
+                    </select>
                 </div>
             </div>
             
             <div class="mb-4">
-                <label class="field-label">Operating Currency</label>
-                <select id="mBranchCurrency" class="field font-bold">
-                    <option value="INR">🇮🇳 INR - Indian Rupee</option>
-                    <option value="OMR" selected>🇴🇲 OMR - Omani Rial</option>
-                    <option value="AED">🇦🇪 AED - UAE Dirham</option>
-                    <option value="USD">🇺🇸 USD - US Dollar</option>
-                    <option value="GBP">🇬🇧 GBP - British Pound</option>
-                    <option value="EUR">🇪🇺 EUR - Euro</option>
-                    <option value="QAR">🇶🇦 QAR - Qatari Riyal</option>
-                    <option value="SAR">🇸🇦 SAR - Saudi Riyal</option>
-                    <option value="KWD">🇰🇼 KWD - Kuwaiti Dinar</option>
-                    <option value="BHD">🇧🇭 BHD - Bahraini Dinar</option>
-                </select>
+                <label class="field-label">Location / Area</label>
+                <input type="text" id="mBranchLoc" required placeholder="e.g. Salalah, Oman" class="field">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="field-label">Manager Name</label>
+                    <input type="text" id="mBranchManager" placeholder="Branch manager" class="field">
+                </div>
+                <div>
+                    <label class="field-label">Contact Phone</label>
+                    <input type="text" id="mBranchPhone" required placeholder="+968 XXXXXXXX" class="field">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="field-label">Email ID</label>
+                    <input type="email" id="mBranchEmail" placeholder="branch@nuvana.com" class="field">
+                </div>
+                <div>
+                    <label class="field-label">Operating Currency</label>
+                    <select id="mBranchCurrency" class="field font-bold">
+                        <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                        <option value="OMR" selected>🇴🇲 OMR - Omani Rial</option>
+                        <option value="AED">🇦🇪 AED - UAE Dirham</option>
+                        <option value="USD">🇺🇸 USD - US Dollar</option>
+                        <option value="GBP">🇬🇧 GBP - British Pound</option>
+                        <option value="EUR">🇪🇺 EUR - Euro</option>
+                        <option value="QAR">🇶🇦 QAR - Qatari Riyal</option>
+                        <option value="SAR">🇸🇦 SAR - Saudi Riyal</option>
+                        <option value="KWD">🇰🇼 KWD - Kuwaiti Dinar</option>
+                        <option value="BHD">🇧🇭 BHD - Bahraini Dinar</option>
+                    </select>
+                </div>
             </div>
 
             <div class="mb-6">
@@ -450,20 +492,43 @@
 <script>
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 
+let globalUsers = [];
 let globalBranches = [];
 
+/* ── UI Helpers ── */
 function showToast(msg) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 3200);
 }
+function badge(s) {
+    if(s === 'Active') return `<span class="badge badge-active">Active</span>`;
+    if(s === 'Suspended') return `<span class="badge badge-susp">Suspended</span>`;
+    return `<span class="badge" style="background:#eee;color:#333;">${s}</span>`;
+}
 
+/* ── Modals & Drawers ── */
 function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 document.getElementById('userModal').addEventListener('click', e => { if(e.target===document.getElementById('userModal')) closeModal('userModal'); });
 document.getElementById('branchModal').addEventListener('click', e => { if(e.target===document.getElementById('branchModal')) closeModal('branchModal'); });
 
+function openDrawer(title, sub, fields) {
+    document.getElementById('drawerTitle').textContent = title; 
+    document.getElementById('drawerSub').textContent = sub;
+    document.getElementById('drawerBody').innerHTML = fields.map(([l,v]) => `<div class="detail-row"><span class="d-label">${l}</span><span class="d-value">${v||'—'}</span></div>`).join('');
+    document.getElementById('detailDrawer').classList.add('open'); 
+    document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer() { 
+    document.getElementById('detailDrawer').classList.remove('open'); 
+    document.getElementById('drawerOverlay').classList.remove('open'); 
+}
+document.getElementById('closeDrawer').addEventListener('click', closeDrawer);
+document.getElementById('drawerOverlay').addEventListener('click', closeDrawer);
+
+/* ── Confirm Box ── */
 let confirmCallback = null;
 function askConfirm(title, subtitle, msg, cb) {
     document.getElementById('confirmTitle').textContent = title;
@@ -475,6 +540,7 @@ function askConfirm(title, subtitle, msg, cb) {
 document.getElementById('confirmCancel').addEventListener('click', () => { document.getElementById('confirmBox').classList.remove('active'); confirmCallback = null; });
 document.getElementById('confirmOk').addEventListener('click', () => { document.getElementById('confirmBox').classList.remove('active'); if(confirmCallback) confirmCallback(); confirmCallback = null; });
 
+/* ── Tab Switch ── */
 function switchTab(tab) {
     document.getElementById('sectionUsers').classList.toggle('hidden', tab !== 'users');
     document.getElementById('sectionBranches').classList.toggle('hidden', tab !== 'branches');
@@ -490,9 +556,90 @@ document.getElementById('tabUsersBtn').addEventListener('click',    () => switch
 document.getElementById('tabBranchesBtn').addEventListener('click', () => switchTab('branches'));
 document.getElementById('tabTemplatesBtn').addEventListener('click',() => switchTab('templates'));
 
-/* ── Render Logic ── */
+/* ── Dynamic Dropdown ── */
+function populateBranchDropdown(selectedValue) {
+    const select = document.getElementById('mUserBranch');
+    select.innerHTML = '';
+    if (globalBranches.length === 0) {
+        select.innerHTML = '<option value="">No Branches Found</option>';
+    } else {
+        globalBranches.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b[9]; // Invoice Code as the Branch assignment value
+            opt.textContent = `${b[1]} (${b[9]})`; 
+            if(b[9] === selectedValue) opt.selected = true;
+            select.appendChild(opt);
+        });
+    }
+}
+
+/* ── VIEW / EDIT Logics ── */
+window.openUserDrawer = function(id) {
+    const r = globalUsers.find(row => row[0] === id);
+    if(!r) return;
+    openDrawer("User Details", id, [
+        ["Full Name", r[2]], ["Username", r[5]], ["Role", r[1]], 
+        ["Branch", r[7]], ["Phone", r[3]], ["Email", r[4]], ["Status", badge(r[8])]
+    ]);
+};
+
+window.openBranchDrawer = function(code) {
+    const r = globalBranches.find(row => row[0] === code);
+    if(!r) return;
+    openDrawer("Branch Details", code, [
+        ["Branch Name", r[1]], ["Type", r[2]], ["Location", r[3]], 
+        ["Manager", r[4]], ["Phone", r[5]], ["Email", r[6]], 
+        ["Currency", r[8]], ["Invoice Code", r[9]], ["Full Address", r[7]]
+    ]);
+};
+
+window.editUser = function(id) {
+    const r = globalUsers.find(row => row[0] === id);
+    if(!r) return;
+    document.getElementById('userModalTitle').textContent = 'Edit User';
+    document.getElementById('mUserId').value = r[0];
+    document.getElementById('mUserRole').value = r[1] || 'Employee';
+    document.getElementById('mUserFullName').value = r[2] || '';
+    document.getElementById('mUserPhone').value = r[3] || '';
+    document.getElementById('mUserEmail').value = r[4] || '';
+    document.getElementById('mUserName').value = r[5] || '';
+    
+    // Passwords shouldn't be pre-filled. Optional on Edit.
+    document.getElementById('mUserPass').value = ''; 
+    document.getElementById('mUserPass').placeholder = 'Leave blank to keep unchanged';
+    document.getElementById('mUserPass').required = false; 
+
+    populateBranchDropdown(r[7]);
+    document.getElementById('mUserStatus').value = r[8] || 'Active';
+    
+    document.getElementById('saveUserText').textContent = 'Update User';
+    openModal('userModal');
+};
+
+window.editBranch = function(id) {
+    const r = globalBranches.find(row => row[0] === id);
+    if(!r) return;
+    document.getElementById('branchModalTitle').textContent = 'Edit Branch';
+    document.getElementById('mBranchId').value = r[0];
+    document.getElementById('mBranchName').value = r[1] || '';
+    document.getElementById('mBranchType').value = r[2] || 'Standard Branch';
+    document.getElementById('mBranchLoc').value = r[3] || '';
+    document.getElementById('mBranchManager').value = r[4] || '';
+    document.getElementById('mBranchPhone').value = r[5] || '';
+    document.getElementById('mBranchEmail').value = r[6] || '';
+    document.getElementById('mBranchAddress').value = r[7] || '';
+    document.getElementById('mBranchCurrency').value = r[8] || 'OMR';
+    document.getElementById('mBranchInvoiceCode').value = r[9] || '';
+    
+    document.getElementById('saveBranchText').textContent = 'Update Branch';
+    openModal('branchModal');
+};
+
+/* ── Render Tables ── */
 function renderUsers(rows) {
     const tbody = document.getElementById('usersTableBody');
+    globalUsers = rows;
+
     if (!rows || rows.length === 0) {
         tbody.innerHTML = `<tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">No users found.</td></tr>`;
         document.getElementById('userCountLabel').textContent = '0 users';
@@ -500,8 +647,6 @@ function renderUsers(rows) {
         return;
     }
     
-    // Assuming GS Structure: [UserID, UserType, FullName, Phone, Email, UserName, Pass, Branch, Status]
-    // Adjusting these indices based on typical column expansion. If your sheet differs, adjust the indices below!
     document.getElementById('statUsers').textContent  = rows.length;
     document.getElementById('statAdmins').textContent = rows.filter(r => r[1]==='Admin').length;
     document.getElementById('statActive').textContent = rows.filter(r => (r[8]||'Active')==='Active').length;
@@ -522,13 +667,21 @@ function renderUsers(rows) {
             <td>${roleBadge}</td>
             <td><span class="badge badge-branch">${branch}</span></td>
             <td>${status==='Active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-susp">Suspended</span>'}</td>
-            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteUser('${id}','${fullName}')">Remove</button></td>`;
+            <td style="text-align:right;">
+                <div class="flex justify-end gap-1">
+                    <button onclick="openUserDrawer('${id}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                    <button onclick="editUser('${id}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                    <button onclick="deleteUser('${id}','${fullName}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+            </td>`;
         tbody.appendChild(tr);
     });
 }
 
 function renderBranches(rows) {
     const tbody = document.getElementById('branchesTableBody');
+    globalBranches = rows; 
+
     document.getElementById('statBranches').textContent = rows.length;
     document.getElementById('branchCountLabel').textContent = `${rows.length} branch${rows.length!==1?'es':''}`;
 
@@ -537,20 +690,32 @@ function renderBranches(rows) {
         return;
     }
     tbody.innerHTML = '';
-    globalBranches = rows; // Store for the User Modal Dropdown
-
+    
     rows.forEach(r => {
-        // Assuming GS Structure: [BranchID, BranchName, Location, Address, Phone, Email, Currency, InvCode]
-        const code=r[0]||'—', bName=r[1]||'—', loc=r[2]||'—', phone=r[4]||'—', curr=r[6]||'OMR', inv=r[7]||'—';
-        
+        const code=r[0]||'—', bName=r[1]||'—', type=r[2]||'Standard Branch', loc=r[3]||'—', phone=r[5]||'—', curr=r[8]||'OMR', inv=r[9]||'—';
+        const isHQ = type === 'Head Quarters';
         const tr = document.createElement('tr'); tr.className = 'fade-row';
+        
         tr.innerHTML = `
-            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${bName}</span></td>
+            <td>
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <div style="width:32px;height:32px;border-radius:10px;background:${isHQ?'rgba(249,149,35,.12)':'rgba(2,115,133,.08)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <svg style="width:15px;height:15px;color:${isHQ?'#F99523':'#027385'};" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <span style="font-size:12px;font-weight:600;color:#0D2330;">${bName}</span>
+                </div>
+            </td>
             <td><span style="font-size:11px;color:#374151;">${loc}</span></td>
             <td><span style="font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#F99523;">${inv}</span></td>
             <td style="font-family:monospace;font-size:11px;color:#6b7280;">${phone}</td>
             <td><span style="font-family:monospace;font-size:11px;font-weight:700;color:#027385;">${curr}</span></td>
-            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteBranch('${code}','${bName}')">Remove</button></td>`;
+            <td style="text-align:right;">
+                <div class="flex justify-end gap-1">
+                    <button onclick="openBranchDrawer('${code}')" class="action-btn ab-view" title="View"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg></button>
+                    <button onclick="editBranch('${code}')" class="action-btn ab-edit" title="Edit"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                    <button onclick="deleteBranch('${code}','${bName}')" class="action-btn ab-del" title="Delete"><svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                </div>
+            </td>`;
         tbody.appendChild(tr);
     });
 }
@@ -594,9 +759,36 @@ window.deleteBranch = function(code, name) {
     });
 };
 
+/* ── Open ADD Modals ── */
+document.getElementById('openUserModalBtn').addEventListener('click', () => {
+    document.getElementById('adminUserForm').reset();
+    document.getElementById('userModalTitle').textContent = 'Register New User';
+    document.getElementById('mUserId').value = 'USR-' + Date.now().toString().slice(-6); 
+    document.getElementById('mUserPass').required = true;
+    document.getElementById('mUserPass').placeholder = 'Set a secure password';
+    document.getElementById('saveUserText').textContent = 'Save User';
+    populateBranchDropdown('');
+    openModal('userModal');
+});
+
+document.getElementById('openBranchModalBtn').addEventListener('click', () => {
+    document.getElementById('adminBranchForm').reset();
+    document.getElementById('branchModalTitle').textContent = 'Register New Branch';
+    document.getElementById('mBranchId').value = 'BRN-' + Date.now().toString().slice(-6); 
+    document.getElementById('saveBranchText').textContent = 'Deploy Branch';
+    openModal('branchModal');
+});
+
+document.getElementById('refreshUsersBtn').addEventListener('click', window.loadUsers);
+document.getElementById('refreshBranchesBtn').addEventListener('click', window.loadBranches);
+
 // Form Submissions
 document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('saveUserText');
+    const spin = document.getElementById('saveUserSpinner');
+    btn.textContent = "Saving..."; spin.classList.remove('hidden');
+    
     const payload = {
         formType: 'saveUser', 
         userId: document.getElementById('mUserId').value,
@@ -613,11 +805,17 @@ document.getElementById('adminUserForm').addEventListener('submit', async (e) =>
         const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
         const data = await res.json();
         if (data.result === 'success') { showToast('✓ User saved'); closeModal('userModal'); window.loadUsers(); }
+        else alert('Error: ' + data.error);
     } catch(err) {}
+    finally { btn.textContent = "Save User"; spin.classList.add('hidden'); }
 });
 
 document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('saveBranchText');
+    const spin = document.getElementById('saveBranchSpinner');
+    btn.textContent = "Deploying..."; spin.classList.remove('hidden');
+
     const payload = {
         formType: 'saveBranch', 
         branchId: document.getElementById('mBranchId').value,
@@ -627,40 +825,16 @@ document.getElementById('adminBranchForm').addEventListener('submit', async (e) 
         phone: document.getElementById('mBranchPhone').value.trim(),
         email: document.getElementById('mBranchEmail').value.trim(),
         currency: document.getElementById('mBranchCurrency').value,
+        type: document.getElementById('mBranchType').value,
         invoiceCode: document.getElementById('mBranchInvoiceCode').value.trim().toUpperCase()
     };
     try {
         const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
         const data = await res.json();
         if (data.result === 'success') { showToast('✓ Branch saved'); closeModal('branchModal'); window.loadBranches(); }
+        else alert('Error: ' + data.error);
     } catch(err) {}
-});
-
-/* ── Modal Generators ── */
-document.getElementById('openUserModalBtn').addEventListener('click', () => {
-    document.getElementById('adminUserForm').reset();
-    document.getElementById('mUserId').value = 'USR-' + Date.now().toString().slice(-6); // Auto Generate ID
-    
-    // Populate Branch Dropdown Dynamically
-    const branchSelect = document.getElementById('mUserBranch');
-    branchSelect.innerHTML = '';
-    if (globalBranches.length === 0) {
-        branchSelect.innerHTML = '<option value="">No Branches Found</option>';
-    } else {
-        globalBranches.forEach(b => {
-            const opt = document.createElement('option');
-            opt.value = b[7]; // Assign Invoice Identity Code as value
-            opt.textContent = `${b[1]} (${b[7]})`; // Branch Name (Inv Code)
-            branchSelect.appendChild(opt);
-        });
-    }
-    openModal('userModal');
-});
-
-document.getElementById('openBranchModalBtn').addEventListener('click', () => {
-    document.getElementById('adminBranchForm').reset();
-    document.getElementById('mBranchId').value = 'BRN-' + Date.now().toString().slice(-6); // Auto Generate ID
-    openModal('branchModal');
+    finally { btn.textContent = "Deploy Branch"; spin.classList.add('hidden'); }
 });
 
 /* ── WhatsApp Templates Engine ── */
