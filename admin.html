@@ -567,9 +567,9 @@ function populateBranchDropdown(selectedValue) {
         } else {
             globalBranches.forEach(b => {
                 const opt = document.createElement('option');
-                opt.value = b[9] || b[0]; 
+                opt.value = b[1]; // <--- THE FIX: Set value to Branch Name (Index 1) instead of Invoice Code (Index 9)
                 opt.textContent = `${b[1]} (${b[9] || 'N/A'})`; 
-                if(String(b[9] || b[0]) === String(selectedValue)) opt.selected = true;
+                if(String(b[1]) === String(selectedValue)) opt.selected = true;
                 select.appendChild(opt);
             });
         }
