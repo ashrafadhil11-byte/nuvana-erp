@@ -55,13 +55,14 @@
         .badge { display:inline-flex; align-items:center; font-size:9px; font-weight:700; padding:3px 9px; border-radius:20px; font-family:'Lexend',sans-serif; letter-spacing:.04em; text-transform:uppercase; }
         .badge-admin  { background:rgba(239,68,68,.1);  color:#dc2626; border:1px solid rgba(239,68,68,.2);  }
         .badge-emp    { background:rgba(2,115,133,.1);  color:#027385; border:1px solid rgba(2,115,133,.2);  }
+        .badge-agent  { background:rgba(139,92,246,.1); color:#7c3aed; border:1px solid rgba(139,92,246,.2); }
         .badge-active { background:rgba(16,185,129,.1); color:#059669; border:1px solid rgba(16,185,129,.2); }
         .badge-susp   { background:rgba(239,68,68,.08); color:#b91c1c; border:1px solid rgba(239,68,68,.15); }
-        .badge-hq     { background:rgba(249,149,35,.1); color:#c47b0a; border:1px solid rgba(249,149,35,.2); }
-        .badge-branch { background:rgba(2,115,133,.08); color:#027385; border:1px solid rgba(2,115,133,.15); }
+        .badge-branch { background:rgba(249,149,35,.1); color:#c47b0a; border:1px solid rgba(249,149,35,.2); }
 
         .field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s; }
         .field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
+        .field:disabled, .field[readonly] { background:rgba(13,35,48,.03); border-color:transparent; color:rgba(13,35,48,.5); cursor:not-allowed; }
         .field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
         textarea.field { resize: vertical; min-height: 80px; }
         select.field { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23027385' opacity='0.4'%3E%3Cpath fill-rule='evenodd' d='M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z' clip-rule='evenodd'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .65rem center; background-size:14px; padding-right:2rem; }
@@ -69,16 +70,16 @@
         /* ── Modals ── */
         .modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:100; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
         .modal-overlay.active { opacity:1; pointer-events:all; }
-        .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:500px; box-shadow:0 24px 60px rgba(13,35,48,.18); transform:translateY(20px) scale(.97); transition:transform .35s; }
+        .modal-box { background:white; border-radius:20px; padding:0; width:100%; max-width:650px; max-height:90vh; overflow-y:auto; box-shadow:0 24px 60px rgba(13,35,48,.18); transform:translateY(20px) scale(.97); transition:transform .35s; }
         .modal-overlay.active .modal-box { transform:translateY(0) scale(1); }
 
-        .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:transform .15s; }
+        .btn-primary { display:flex; align-items:center; gap:6px; padding:8px 18px; border-radius:10px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:11px; font-weight:700; border:none; cursor:pointer; transition:transform .15s; box-shadow:0 3px 8px rgba(13,35,48,.2); }
         .btn-primary:hover { transform:translateY(-1px); }
         .btn-danger  { display:flex; align-items:center; gap:5px; padding:5px 10px; border-radius:8px; background:rgba(239,68,68,.08); color:#dc2626; border:1px solid rgba(239,68,68,.2); font-size:10px; font-weight:700; cursor:pointer; font-family:'Lexend',sans-serif; }
         .btn-refresh { display:flex; align-items:center; gap:6px; padding:7px 14px; border-radius:9px; background:white; border:1px solid #e8e0d6; font-size:11px; font-weight:600; color:#0D2330; cursor:pointer; font-family:'Lexend',sans-serif; }
         .btn-submit-modal { width:100%; padding:.85rem 1rem; border-radius:12px; background:#0D2330; color:white; font-family:'Lexend',sans-serif; font-size:.875rem; font-weight:600; border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:.5rem; }
 
-        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; opacity:0; pointer-events:none; transition:opacity .3s, transform .35s; z-index:200; }
+        .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(20px); background:#0D2330; color:white; padding:12px 22px; border-radius:14px; display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; font-family:'Lexend',sans-serif; opacity:0; pointer-events:none; transition:opacity .3s, transform .35s; z-index:200; white-space:nowrap; }
         .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
 
         .confirm-box { position:fixed; inset:0; background:rgba(13,35,48,.55); backdrop-filter:blur(6px); z-index:150; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; }
@@ -116,7 +117,7 @@
 
 <div class="modal-overlay" id="userModal">
     <div class="modal-box">
-        <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
             <div style="display:flex;align-items:center;gap:12px;">
                 <div style="width:36px;height:36px;border-radius:10px;background:rgba(249,149,35,.1);display:flex;align-items:center;justify-content:center;">
                     <svg style="width:18px;height:18px;color:#F99523;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
@@ -128,40 +129,64 @@
             </button>
         </div>
         <form id="adminUserForm" style="padding:24px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label class="field-label">Username / ID</label>
-                    <input type="text" id="mUserId" required placeholder="e.g. ahmed.01" class="field" style="font-family:'Lexend',sans-serif;letter-spacing:.04em;">
+                    <label class="field-label">User ID (Auto-Generated)</label>
+                    <input type="text" id="mUserId" readonly class="field font-mono font-bold text-teal" style="background:#f3f4f6;">
                 </div>
                 <div>
                     <label class="field-label">Status</label>
-                    <select id="mUserStatus" class="field">
-                        <option value="Active">Active</option>
-                        <option value="Suspended">Suspended</option>
+                    <select id="mUserStatus" class="field font-bold">
+                        <option value="Active">🟢 Active</option>
+                        <option value="Suspended">🔴 Suspended</option>
                     </select>
                 </div>
             </div>
-            <div style="margin-bottom:14px;">
-                <label class="field-label">Full Name</label>
-                <input type="text" id="mUserName" required placeholder="Full legal name" class="field">
-            </div>
-            <div style="margin-bottom:14px;">
-                <label class="field-label">Account Password</label>
-                <input type="password" id="mUserPass" required placeholder="Set a secure password" class="field">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="field-label">System Role</label>
                     <select id="mUserRole" class="field">
                         <option value="Employee">Employee</option>
+                        <option value="Agent">Agent</option>
                         <option value="Admin">System Admin</option>
                     </select>
                 </div>
                 <div>
                     <label class="field-label">Branch Assignment</label>
-                    <input type="text" id="mUserBranch" required placeholder="e.g. SLL-01" class="field" style="font-family:'Lexend',sans-serif;text-transform:uppercase;letter-spacing:.06em;">
+                    <select id="mUserBranch" class="field">
+                        <option value="">Loading Branches...</option>
+                    </select>
                 </div>
             </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="field-label">Full Name</label>
+                    <input type="text" id="mUserFullName" required placeholder="Full legal name" class="field">
+                </div>
+                <div>
+                    <label class="field-label">User Name (Login)</label>
+                    <input type="text" id="mUserName" required placeholder="e.g. jdoe88" class="field">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="field-label">Phone Number</label>
+                    <input type="text" id="mUserPhone" placeholder="+968 XXXXXXXX" class="field">
+                </div>
+                <div>
+                    <label class="field-label">Email ID</label>
+                    <input type="email" id="mUserEmail" placeholder="user@nuvana.com" class="field">
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <label class="field-label">Account Password</label>
+                <input type="password" id="mUserPass" required placeholder="Set a secure password" class="field">
+            </div>
+
             <button type="submit" id="saveUserBtn" class="btn-submit-modal">
                 <span id="saveUserText">Save User</span>
                 <svg id="saveUserSpinner" class="spin hidden" style="width:15px;height:15px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -172,47 +197,74 @@
 
 <div class="modal-overlay" id="branchModal">
     <div class="modal-box">
-        <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;">
+        <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10;">
             <div style="display:flex;align-items:center;gap:12px;">
                 <div style="width:36px;height:36px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
                     <svg style="width:18px;height:18px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M3 2.25a.75.75 0 000 1.5v16.5h-.75a.75.75 0 000 1.5H21a.75.75 0 000-1.5h-.75V3.75a.75.75 0 000-1.5h-16.5zm5.25 4.5a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5zm5.25 0a.75.75 0 01.75-.75h2.5a.75.75 0 01.75.75v2.5a.75.75 0 01-.75.75h-2.5a.75.75 0 01-.75-.75v-2.5z" clip-rule="evenodd"/></svg>
                 </div>
-                <h3 class="font-lexend" style="font-size:15px;font-weight:700;color:#0D2330;" id="branchModalTitle">Register New Hub</h3>
+                <h3 class="font-lexend" style="font-size:15px;font-weight:700;color:#0D2330;" id="branchModalTitle">Register New Branch</h3>
             </div>
             <button type="button" onclick="closeModal('branchModal')" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
                 <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
             </button>
         </div>
         <form id="adminBranchForm" style="padding:24px;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label class="field-label">Branch ID Code</label>
-                    <input type="text" id="mBranchCode" required placeholder="e.g. MCT-01" class="field" style="font-family:'Lexend',sans-serif;text-transform:uppercase;letter-spacing:.08em;">
+                    <label class="field-label">Branch ID (Auto-Generated)</label>
+                    <input type="text" id="mBranchId" readonly class="field font-mono font-bold text-teal" style="background:#f3f4f6;">
                 </div>
                 <div>
-                    <label class="field-label">Hub Type</label>
-                    <select id="mBranchType" class="field">
-                        <option value="Standard Branch">Standard Branch</option>
-                        <option value="Head Quarters">Head Quarters</option>
-                    </select>
+                    <label class="field-label">Invoice Identity Code</label>
+                    <input type="text" id="mBranchInvoiceCode" required placeholder="e.g. SLL, MCT, DXB" class="field font-mono uppercase" maxlength="4">
                 </div>
             </div>
-            <div style="margin-bottom:14px;">
-                <label class="field-label">Location / City</label>
-                <input type="text" id="mBranchLoc" required placeholder="e.g. Muscat, Oman" class="field">
-            </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label class="field-label">Manager Name</label>
-                    <input type="text" id="mBranchManager" placeholder="Branch manager" class="field">
+                    <label class="field-label">Branch Name</label>
+                    <input type="text" id="mBranchName" required placeholder="e.g. Nuvana Salalah Main" class="field">
                 </div>
+                <div>
+                    <label class="field-label">Location / Area</label>
+                    <input type="text" id="mBranchLoc" required placeholder="e.g. Salalah, Oman" class="field">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mb-4">
                 <div>
                     <label class="field-label">Contact Phone</label>
-                    <input type="text" id="mBranchContact" placeholder="+968 XXXX XXXX" class="field">
+                    <input type="text" id="mBranchPhone" required placeholder="+968 XXXXXXXX" class="field">
+                </div>
+                <div>
+                    <label class="field-label">Email ID</label>
+                    <input type="email" id="mBranchEmail" placeholder="branch@nuvana.com" class="field">
                 </div>
             </div>
+            
+            <div class="mb-4">
+                <label class="field-label">Operating Currency</label>
+                <select id="mBranchCurrency" class="field font-bold">
+                    <option value="INR">🇮🇳 INR - Indian Rupee</option>
+                    <option value="OMR" selected>🇴🇲 OMR - Omani Rial</option>
+                    <option value="AED">🇦🇪 AED - UAE Dirham</option>
+                    <option value="USD">🇺🇸 USD - US Dollar</option>
+                    <option value="GBP">🇬🇧 GBP - British Pound</option>
+                    <option value="EUR">🇪🇺 EUR - Euro</option>
+                    <option value="QAR">🇶🇦 QAR - Qatari Riyal</option>
+                    <option value="SAR">🇸🇦 SAR - Saudi Riyal</option>
+                    <option value="KWD">🇰🇼 KWD - Kuwaiti Dinar</option>
+                    <option value="BHD">🇧🇭 BHD - Bahraini Dinar</option>
+                </select>
+            </div>
+
+            <div class="mb-6">
+                <label class="field-label">Full Address (Street, City, District, State, Pincode, Country)</label>
+                <textarea id="mBranchAddress" required placeholder="Enter complete physical address..." class="field"></textarea>
+            </div>
+
             <button type="submit" id="saveBranchBtn" class="btn-submit-modal" style="background:#027385;">
-                <span id="saveBranchText">Deploy Hub</span>
+                <span id="saveBranchText">Deploy Branch</span>
                 <svg id="saveBranchSpinner" class="spin hidden" style="width:15px;height:15px;" fill="none" viewBox="0 0 24 24"><circle style="opacity:.25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path style="opacity:.75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             </button>
         </form>
@@ -304,7 +356,7 @@
                 </div>
                 <div style="overflow:auto;max-height:420px;">
                     <table class="data-table">
-                        <thead><tr><th>User</th><th>ID / Login</th><th>Role</th><th>Branch</th><th>Status</th><th class="text-right">Actions</th></tr></thead>
+                        <thead><tr><th>User (Full Name)</th><th>Username</th><th>Role</th><th>Branch</th><th>Status</th><th class="text-right">Actions</th></tr></thead>
                         <tbody id="usersTableBody"><tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">Loading directory...</td></tr></tbody>
                     </table>
                 </div>
@@ -323,7 +375,7 @@
                 </div>
                 <div style="overflow:auto;max-height:420px;">
                     <table class="data-table">
-                        <thead><tr><th>Branch</th><th>Branch ID</th><th>Type</th><th>Manager</th><th>Contact</th><th class="text-right">Actions</th></tr></thead>
+                        <thead><tr><th>Branch Name</th><th>Location</th><th>Inv Code</th><th>Contact</th><th>Currency</th><th class="text-right">Actions</th></tr></thead>
                         <tbody id="branchesTableBody"><tr><td colspan="6" class="text-center py-10 text-teal/40 text-xs">Loading network...</td></tr></tbody>
                     </table>
                 </div>
@@ -398,6 +450,8 @@
 <script>
 const SCRIPT_URL = (typeof _globalConfig !== 'undefined') ? _globalConfig.scriptURL : 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec';
 
+let globalBranches = [];
+
 function showToast(msg) {
     const t = document.getElementById('toast');
     document.getElementById('toastMsg').textContent = msg;
@@ -445,22 +499,30 @@ function renderUsers(rows) {
         document.getElementById('statUsers').textContent  = 0; document.getElementById('statAdmins').textContent = 0; document.getElementById('statActive').textContent = 0;
         return;
     }
+    
+    // Assuming GS Structure: [UserID, UserType, FullName, Phone, Email, UserName, Pass, Branch, Status]
+    // Adjusting these indices based on typical column expansion. If your sheet differs, adjust the indices below!
     document.getElementById('statUsers').textContent  = rows.length;
-    document.getElementById('statAdmins').textContent = rows.filter(r => r[3]==='Admin').length;
-    document.getElementById('statActive').textContent = rows.filter(r => (r[4]||'Active')==='Active').length;
+    document.getElementById('statAdmins').textContent = rows.filter(r => r[1]==='Admin').length;
+    document.getElementById('statActive').textContent = rows.filter(r => (r[8]||'Active')==='Active').length;
     document.getElementById('userCountLabel').textContent = `${rows.length} user${rows.length!==1?'s':''}`;
 
     tbody.innerHTML = '';
     rows.forEach(r => {
-        const id=r[0]||'—', name=r[1]||'—', role=r[3]||'Employee', branch=r[4]||'—', status=r[5]||'Active';
+        const id=r[0]||'—', role=r[1]||'Employee', fullName=r[2]||'—', userName=r[5]||'—', branch=r[7]||'—', status=r[8]||'Active';
         const tr = document.createElement('tr'); tr.className = 'fade-row';
+        
+        let roleBadge = '<span class="badge badge-emp">Employee</span>';
+        if(role === 'Admin') roleBadge = '<span class="badge badge-admin">Admin</span>';
+        if(role === 'Agent') roleBadge = '<span class="badge badge-agent">Agent</span>';
+
         tr.innerHTML = `
-            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${name}</span></td>
-            <td><span style="font-family:monospace;font-size:11px;color:#027385;">${id}</span></td>
-            <td>${role==='Admin'?'<span class="badge badge-admin">Admin</span>':'<span class="badge badge-emp">Employee</span>'}</td>
+            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${fullName}</span></td>
+            <td><span style="font-family:monospace;font-size:11px;color:#027385;">${userName}</span></td>
+            <td>${roleBadge}</td>
             <td><span class="badge badge-branch">${branch}</span></td>
             <td>${status==='Active'?'<span class="badge badge-active">Active</span>':'<span class="badge badge-susp">Suspended</span>'}</td>
-            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteUser('${id}','${name}')">Remove</button></td>`;
+            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteUser('${id}','${fullName}')">Remove</button></td>`;
         tbody.appendChild(tr);
     });
 }
@@ -475,17 +537,20 @@ function renderBranches(rows) {
         return;
     }
     tbody.innerHTML = '';
+    globalBranches = rows; // Store for the User Modal Dropdown
+
     rows.forEach(r => {
-        const code=r[0]||'—', loc=r[1]||'—', type=r[2]||'Standard Branch', mgr=r[3]||'—', contact=r[4]||'—';
-        const isHQ = type === 'Head Quarters';
+        // Assuming GS Structure: [BranchID, BranchName, Location, Address, Phone, Email, Currency, InvCode]
+        const code=r[0]||'—', bName=r[1]||'—', loc=r[2]||'—', phone=r[4]||'—', curr=r[6]||'OMR', inv=r[7]||'—';
+        
         const tr = document.createElement('tr'); tr.className = 'fade-row';
         tr.innerHTML = `
-            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${loc}</span></td>
-            <td><span style="font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#027385;">${code}</span></td>
-            <td>${isHQ?'<span class="badge badge-hq">Head Quarters</span>':'<span class="badge badge-branch">Standard Branch</span>'}</td>
-            <td style="font-size:12px;color:#374151;">${mgr}</td>
-            <td style="font-family:monospace;font-size:11px;color:#6b7280;">${contact}</td>
-            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteBranch('${code}','${loc}')">Remove</button></td>`;
+            <td><span style="font-size:12px;font-weight:600;color:#0D2330;">${bName}</span></td>
+            <td><span style="font-size:11px;color:#374151;">${loc}</span></td>
+            <td><span style="font-family:'Lexend',sans-serif;font-size:11px;font-weight:700;color:#F99523;">${inv}</span></td>
+            <td style="font-family:monospace;font-size:11px;color:#6b7280;">${phone}</td>
+            <td><span style="font-family:monospace;font-size:11px;font-weight:700;color:#027385;">${curr}</span></td>
+            <td style="text-align:right;"><button type="button" class="btn-danger" onclick="deleteBranch('${code}','${bName}')">Remove</button></td>`;
         tbody.appendChild(tr);
     });
 }
@@ -518,8 +583,8 @@ window.deleteUser = function(id, name) {
     });
 };
 
-window.deleteBranch = function(code, loc) {
-    askConfirm('Remove Branch', 'Deregister branch.', `Remove branch "${loc}"?`, async () => {
+window.deleteBranch = function(code, name) {
+    askConfirm('Remove Branch', 'Deregister branch.', `Remove branch "${name}"?`, async () => {
         try {
             const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteBranch', branchId:code }) });
             const result = await res.json();
@@ -529,12 +594,19 @@ window.deleteBranch = function(code, loc) {
     });
 };
 
+// Form Submissions
 document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
-        formType: 'saveUser', userId: document.getElementById('mUserId').value.trim(),
-        name: document.getElementById('mUserName').value.trim(), pass: document.getElementById('mUserPass').value.trim(),
-        role: document.getElementById('mUserRole').value, branch: document.getElementById('mUserBranch').value.trim().toUpperCase(),
+        formType: 'saveUser', 
+        userId: document.getElementById('mUserId').value,
+        role: document.getElementById('mUserRole').value,
+        fullName: document.getElementById('mUserFullName').value.trim(),
+        phone: document.getElementById('mUserPhone').value.trim(),
+        email: document.getElementById('mUserEmail').value.trim(),
+        userName: document.getElementById('mUserName').value.trim(),
+        pass: document.getElementById('mUserPass').value.trim(),
+        branch: document.getElementById('mUserBranch').value,
         status: document.getElementById('mUserStatus').value
     };
     try {
@@ -547,15 +619,48 @@ document.getElementById('adminUserForm').addEventListener('submit', async (e) =>
 document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const payload = {
-        formType: 'saveBranch', branchId: document.getElementById('mBranchCode').value.trim().toUpperCase(),
-        type: document.getElementById('mBranchType').value, location: document.getElementById('mBranchLoc').value.trim(),
-        manager: document.getElementById('mBranchManager').value.trim(), contact: document.getElementById('mBranchContact').value.trim()
+        formType: 'saveBranch', 
+        branchId: document.getElementById('mBranchId').value,
+        branchName: document.getElementById('mBranchName').value.trim(),
+        location: document.getElementById('mBranchLoc').value.trim(),
+        address: document.getElementById('mBranchAddress').value.trim(),
+        phone: document.getElementById('mBranchPhone').value.trim(),
+        email: document.getElementById('mBranchEmail').value.trim(),
+        currency: document.getElementById('mBranchCurrency').value,
+        invoiceCode: document.getElementById('mBranchInvoiceCode').value.trim().toUpperCase()
     };
     try {
         const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
         const data = await res.json();
         if (data.result === 'success') { showToast('✓ Branch saved'); closeModal('branchModal'); window.loadBranches(); }
     } catch(err) {}
+});
+
+/* ── Modal Generators ── */
+document.getElementById('openUserModalBtn').addEventListener('click', () => {
+    document.getElementById('adminUserForm').reset();
+    document.getElementById('mUserId').value = 'USR-' + Date.now().toString().slice(-6); // Auto Generate ID
+    
+    // Populate Branch Dropdown Dynamically
+    const branchSelect = document.getElementById('mUserBranch');
+    branchSelect.innerHTML = '';
+    if (globalBranches.length === 0) {
+        branchSelect.innerHTML = '<option value="">No Branches Found</option>';
+    } else {
+        globalBranches.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b[7]; // Assign Invoice Identity Code as value
+            opt.textContent = `${b[1]} (${b[7]})`; // Branch Name (Inv Code)
+            branchSelect.appendChild(opt);
+        });
+    }
+    openModal('userModal');
+});
+
+document.getElementById('openBranchModalBtn').addEventListener('click', () => {
+    document.getElementById('adminBranchForm').reset();
+    document.getElementById('mBranchId').value = 'BRN-' + Date.now().toString().slice(-6); // Auto Generate ID
+    openModal('branchModal');
 });
 
 /* ── WhatsApp Templates Engine ── */
@@ -612,7 +717,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const u = JSON.parse(raw);
     if (u.role !== 'Admin') { alert("Access Denied."); window.location.href = "index.html"; return; }
     
-    // Safely re-applied Header Avatar Logic
     const headerAvatar = document.getElementById('headerAvatar');
     if (headerAvatar) {
         headerAvatar.textContent = (u.name || 'A').charAt(0).toUpperCase();
