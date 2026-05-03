@@ -565,9 +565,9 @@ function populateBranchDropdown(selectedValue) {
     } else {
         globalBranches.forEach(b => {
             const opt = document.createElement('option');
-            opt.value = b[9]; // Invoice Code as the Branch assignment value
-            opt.textContent = `${b[1]} (${b[9]})`; 
-            if(b[9] === selectedValue) opt.selected = true;
+            opt.value = b[9] || b[0]; 
+            opt.textContent = `${b[1]} (${b[9] || 'N/A'})`; 
+            if((b[9] || b[0]) === selectedValue) opt.selected = true;
             select.appendChild(opt);
         });
     }
@@ -604,7 +604,6 @@ window.editUser = function(id) {
     document.getElementById('mUserEmail').value = r[4] || '';
     document.getElementById('mUserName').value = r[5] || '';
     
-    // Passwords shouldn't be pre-filled. Optional on Edit.
     document.getElementById('mUserPass').value = ''; 
     document.getElementById('mUserPass').placeholder = 'Leave blank to keep unchanged';
     document.getElementById('mUserPass').required = false; 
@@ -740,7 +739,11 @@ window.loadBranches = async function() {
 window.deleteUser = function(id, name) {
     askConfirm('Remove User', 'Permanent deletion.', `Delete user "${name}"?`, async () => {
         try {
-            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteUser', userId:id }) });
+            const res = await fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ formType: 'deleteUser', userId: id }) 
+            });
             const result = await res.json();
             if (result.result === 'success') { showToast(`✓ ${name} removed`); window.loadUsers(); }
             else alert('Error.');
@@ -751,7 +754,11 @@ window.deleteUser = function(id, name) {
 window.deleteBranch = function(code, name) {
     askConfirm('Remove Branch', 'Deregister branch.', `Remove branch "${name}"?`, async () => {
         try {
-            const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify({ formType:'deleteBranch', branchId:code }) });
+            const res = await fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({ formType: 'deleteBranch', branchId: code }) 
+            });
             const result = await res.json();
             if (result.result === 'success') { showToast(`✓ Branch removed`); window.loadBranches(); }
             else alert('Error.');
@@ -802,7 +809,11 @@ document.getElementById('adminUserForm').addEventListener('submit', async (e) =>
         status: document.getElementById('mUserStatus').value
     };
     try {
-        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload) 
+        });
         const data = await res.json();
         if (data.result === 'success') { showToast('✓ User saved'); closeModal('userModal'); window.loadUsers(); }
         else alert('Error: ' + data.error);
@@ -829,7 +840,11 @@ document.getElementById('adminBranchForm').addEventListener('submit', async (e) 
         invoiceCode: document.getElementById('mBranchInvoiceCode').value.trim().toUpperCase()
     };
     try {
-        const res = await fetch(SCRIPT_URL, { method:'POST', body:JSON.stringify(payload) });
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload) 
+        });
         const data = await res.json();
         if (data.result === 'success') { showToast('✓ Branch saved'); closeModal('branchModal'); window.loadBranches(); }
         else alert('Error: ' + data.error);
@@ -876,7 +891,11 @@ document.getElementById('saveTemplatesBtn').addEventListener('click', async () =
         }
     };
     try {
-        const res = await fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const res = await fetch(SCRIPT_URL, { 
+            method: 'POST', 
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload) 
+        });
         const data = await res.json();
         if (data.result === 'success') showToast('✓ Cloud Sync Successful');
     } catch(err) {} 
