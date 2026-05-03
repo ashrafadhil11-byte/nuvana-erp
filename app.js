@@ -40,8 +40,17 @@ if (loginForm) {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
             if(result.result === 'success') {
-                // THE FIX: "username: result.username" is now saved correctly!
-                sessionStorage.setItem('erp_user', JSON.stringify({ username: result.username, name: result.name, role: result.role, branchId: result.branchId }));
+                sessionStorage.setItem('erp_user', JSON.stringify({ 
+                    userId: result.userId,
+                    username: result.username, 
+                    name: result.name, 
+                    role: result.role, 
+                    branchId: result.branchId,
+                    branchName: result.branchName,
+                    phone: result.phone || '',
+                    email: result.email || '',
+                    dob: result.dob || ''
+                }));
                 window.location.replace('index.html'); 
             } else { alert(result.error); loginForm.reset(); }
         } catch (error) { alert('Connection failed.'); } finally {
@@ -85,18 +94,15 @@ if (intForm) {
         boxCount++; 
         const row = document.createElement('div'); 
         row.className = 'grid grid-cols-6 gap-2 animate-fade-in mb-2';
-        
-        // Added window.calculateTotals() to oninput to ensure it fires globally
         row.innerHTML = `<div class="flex items-center justify-center text-teal/70 dark:text-beige/60 font-mono text-sm bg-slate-50 dark:bg-charcoal/50 rounded-lg border border-teal/10 dark:border-white/10">Box ${boxCount}</div>
         <input type="number" step="0.01" id="b${boxCount}W" placeholder="0.0" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}L" placeholder="L" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}Wi" placeholder="W" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}H" placeholder="H" class="w-full bg-white dark:bg-charcoal/50 border border-teal/10 dark:border-white/10 rounded-lg p-2 text-sm text-center text-charcoal dark:text-white focus:outline-none focus:border-orange transition" oninput="window.calculateTotals()">
         <input type="number" step="0.01" id="b${boxCount}CW" readonly placeholder="0.0" class="w-full bg-orange/5 border border-orange/20 rounded-lg p-2 text-sm text-center text-orange font-bold focus:outline-none">`;
-        
         boxContainer.appendChild(row); 
         window.calculateTotals();
-    }; // <--- CRITICAL SEMICOLON ADDED
+    };
 
     window.calculateTotals = function() {
         let totalActual = 0; let totalCW = 0;
@@ -109,7 +115,6 @@ if (intForm) {
             document.getElementById(`b${i}CW`).value = cw > 0 ? cw.toFixed(2) : ""; 
             totalActual += actW; totalCW += cw;
         }
-        
         if(document.getElementById('lblTotalBoxes')) document.getElementById('lblTotalBoxes').innerText = boxCount; 
         if(document.getElementById('lblTotalActual')) document.getElementById('lblTotalActual').innerText = totalActual.toFixed(2); 
         if(document.getElementById('lblTotalCW')) document.getElementById('lblTotalCW').innerText = totalCW.toFixed(2);
@@ -117,68 +122,51 @@ if (intForm) {
         let rate = parseFloat(document.getElementById('rate') ? document.getElementById('rate').value : 0) || 0; 
         let pack = parseFloat(document.getElementById('packingCharges') ? document.getElementById('packingCharges').value : 0) || 0; 
         let add = parseFloat(document.getElementById('additionalCharges') ? document.getElementById('additionalCharges').value : 0) || 0;
-        
         if(document.getElementById('grandTotal')) {
             if(rate > 0) document.getElementById('grandTotal').value = ((totalCW * rate) + pack + add).toFixed(2); 
             else document.getElementById('grandTotal').value = "";
         }
-    }; // <--- CRITICAL SEMICOLON ADDED
-
-    // Now this array won't crash the function above it!
+    };
+    
     ['rate', 'packingCharges', 'additionalCharges'].forEach(id => { 
-        if(document.getElementById(id)) {
-            document.getElementById(id).addEventListener('input', window.calculateTotals); 
-        }
+        if(document.getElementById(id)) { document.getElementById(id).addEventListener('input', window.calculateTotals); }
     });
-
     addBox(); 
     if(addBoxBtn) addBoxBtn.addEventListener('click', addBox);
     
     intForm.addEventListener('submit', async (e) => {
         e.preventDefault(); 
-        const btnTextInt = document.getElementById('btnTextInt'); 
-        const loadingIconInt = document.getElementById('loadingIconInt'); 
-        const submitIntBtn = document.getElementById('submitIntBtn');
-        
-        btnTextInt.innerText = "Transmitting..."; 
-        if(loadingIconInt) loadingIconInt.classList.remove('hidden'); 
-        submitIntBtn.disabled = true; submitIntBtn.classList.add('opacity-50');
-        
+        const btnTextInt = document.getElementById('btnTextInt'); const loadingIconInt = document.getElementById('loadingIconInt'); const submitIntBtn = document.getElementById('submitIntBtn');
+        btnTextInt.innerText = "Transmitting..."; if(loadingIconInt) loadingIconInt.classList.remove('hidden'); submitIntBtn.disabled = true; submitIntBtn.classList.add('opacity-50');
         const getVal = (id) => document.getElementById(id) ? document.getElementById(id).value : "";
         const getDim = (i) => { let l = getVal(`b${i}L`), w = getVal(`b${i}Wi`), h = getVal(`b${i}H`); return (l && w && h) ? `${l}x${w}x${h}` : ""; };
         
         const payload = { 
-            formType: "international", shipperName: getVal('shipperName'), contactNumber: getVal('contactNumber'), altNumber: getVal('altNumber'), shipperAddress: getVal('shipperAddress'), originCountry: getVal('originCountry'), postalCode: getVal('postalCode'), receiverName: getVal('receiverNameInt'), receiverPhone: getVal('receiverPhoneInt'), receiverAlt: getVal('receiverAltInt'), receiverAddress: getVal('receiverAddress'), destCountry: getVal('destCountry'), zipCode: getVal('zipCode'), shipmentType: getVal('shipmentType'), cargoType: getVal('cargoType'), commodity: getVal('commodity'), description: getVal('description'), shipmentValue: getVal('shipmentValue'), totalBoxes: boxCount, totalWeight: getVal('lblTotalActual'), totalChargeableWeight: getVal('lblTotalCW'), rate: getVal('rate'), packingCharges: getVal('packingCharges'), additionalCharges: getVal('additionalCharges'), grandTotal: getVal('grandTotal'), b1W: getVal('b1W'), b1D: getDim(1), b1CW: getVal('b1CW'), b2W: getVal('b2W'), b2D: getDim(2), b2CW: getVal('b2CW'), b3W: getVal('b3W'), b3D: getDim(3), b3CW: getVal('b3CW'), b4W: getVal('b4W'), b4D: getDim(4), b4CW: getVal('b4CW'), b5W: getVal('b5W'), b5D: getDim(5), b5CW: getVal('b5CW'), b6W: getVal('b6W'), b6D: getDim(6), b6CW: getVal('b6CW'), b7W: getVal('b7W'), b7D: getDim(7), b7CW: getVal('b7CW'), b8W: getVal('b8W'), b8D: getDim(8), b8CW: getVal('b8CW'), b9W: getVal('b9W'), b9D: getDim(9), b9CW: getVal('b9CW'), b10W: getVal('b10W'), b10D: getDim(10), b10CW: getVal('b10CW') 
+            formType: "international", branchId: activeUser.branchId, shipperName: getVal('shipperName'), contactNumber: getVal('contactNumber'), altNumber: getVal('altNumber'), shipperAddress: getVal('shipperAddress'), originCountry: getVal('originCountry'), postalCode: getVal('postalCode'), receiverName: getVal('receiverNameInt'), receiverPhone: getVal('receiverPhoneInt'), receiverAlt: getVal('receiverAltInt'), receiverAddress: getVal('receiverAddress'), destCountry: getVal('destCountry'), destCountryCode: getVal('destCountryCode'), zipCode: getVal('zipCode'), shipmentType: getVal('shipmentType'), cargoType: getVal('cargoType'), commodity: getVal('commodity'), description: getVal('description'), shipmentValue: getVal('shipmentValue'), totalBoxes: boxCount, totalWeight: getVal('lblTotalActual'), totalChargeableWeight: getVal('lblTotalCW'), rate: getVal('rate'), packingCharges: getVal('packingCharges'), additionalCharges: getVal('additionalCharges'), grandTotal: getVal('grandTotal'), b1W: getVal('b1W'), b1D: getDim(1), b1CW: getVal('b1CW'), b2W: getVal('b2W'), b2D: getDim(2), b2CW: getVal('b2CW'), b3W: getVal('b3W'), b3D: getDim(3), b3CW: getVal('b3CW'), b4W: getVal('b4W'), b4D: getDim(4), b4CW: getVal('b4CW'), b5W: getVal('b5W'), b5D: getDim(5), b5CW: getVal('b5CW'), b6W: getVal('b6W'), b6D: getDim(6), b6CW: getVal('b6CW'), b7W: getVal('b7W'), b7D: getDim(7), b7CW: getVal('b7CW'), b8W: getVal('b8W'), b8D: getDim(8), b8CW: getVal('b8CW'), b9W: getVal('b9W'), b9D: getDim(9), b9CW: getVal('b9CW'), b10W: getVal('b10W'), b10D: getDim(10), b10CW: getVal('b10CW') 
         };
-        
         try {
             const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
             const result = await response.json();
-            if(result.result === 'success') { 
-                alert(`Success! Order ID: ${result.orderId}`); 
-                intForm.reset(); boxContainer.innerHTML = ''; boxCount = 0; addBox(); window.calculateTotals(); 
-            } else {
-                alert('Error: ' + result.error);
-            }
-        } catch (error) { 
-            alert('Transmission failed.'); 
-        } finally {
-            btnTextInt.innerText = "Transmit International Booking"; 
-            if(loadingIconInt) loadingIconInt.classList.add('hidden'); 
-            submitIntBtn.disabled = false; submitIntBtn.classList.remove('opacity-50');
+            if(result.result === 'success') { alert(`Success! AWB Generated: ${result.masterAWB}`); intForm.reset(); boxContainer.innerHTML = ''; boxCount = 0; addBox(); window.calculateTotals(); 
+            } else { alert('Error: ' + result.error); }
+        } catch (error) { alert('Transmission failed.'); } finally {
+            btnTextInt.innerText = "Transmit International Booking"; if(loadingIconInt) loadingIconInt.classList.add('hidden'); submitIntBtn.disabled = false; submitIntBtn.classList.remove('opacity-50');
         }
     });
 }
 
 // ==========================================
-// 5. PROCESSING MODULE (DUAL TOGGLE)
+// 5. PROCESSING MODULE (SAFETY CHECKED)
 // ==========================================
+// FIX: We check if `tableHeaderRow` exists. If it does NOT exist (meaning we are on the NEW processing.html), 
+// app.js will completely skip this section to avoid crashing and overwriting the new built-in logic.
 const tableBody = document.getElementById('bookingsTableBody');
-if (tableBody) {
+const tableHeaderRow = document.getElementById('tableHeaderRow');
+
+if (tableBody && tableHeaderRow) {
     const refreshBtn = document.getElementById('refreshTableBtn');
     const toggleDomBtn = document.getElementById('toggleDomBtn');
     const toggleIntBtn = document.getElementById('toggleIntBtn');
-    const tableHeaderRow = document.getElementById('tableHeaderRow');
     
     let currentView = 'domestic';
 
@@ -396,11 +384,10 @@ if (reportsDashboard) {
 }
 
 // ==========================================
-// 10. DYNAMIC MAIN DASHBOARD & PROFILE
+// 10. DYNAMIC MAIN DASHBOARD (index.html)
 // ==========================================
 const mainDashboardView = document.getElementById('mainDashboardView');
 if (mainDashboardView && activeUser) {
-    
     window.loadDashboardStats = async function() {
         try {
             const [domRes, intRes, custRes] = await Promise.all([ fetch(`${scriptURL}?action=getDomestic`), fetch(`${scriptURL}?action=getInternational`), fetch(`${scriptURL}?action=getCustomers`) ]);
@@ -421,7 +408,7 @@ if (mainDashboardView && activeUser) {
 
                 if (domJson.result === 'success' && domJson.data.length > 1) {
                     let row = domJson.data[domJson.data.length - 1]; 
-                    let awb = row[1]; let dest = row[7]; let status = row[9];
+                    let awb = row[1]; let dest = row[7]; let status = row[22] || row[9];
                     let pClass = status === 'Delivered' ? 'bg-success/10 text-success border-success/20' : 'bg-teal/10 text-teal dark:bg-teal/20 dark:text-teal border-teal/20';
                     liveStatusContainer.innerHTML += `
                         <div class="flex justify-between items-center pb-4 border-b border-teal/10 dark:border-white/5">
@@ -433,7 +420,7 @@ if (mainDashboardView && activeUser) {
 
                 if (intJson.result === 'success' && intJson.data.length > 1) {
                     let row = intJson.data[intJson.data.length - 1];
-                    let orderId = row[0]; let dest = row[14]; let status = row[61];
+                    let orderId = row[0]; let dest = row[17] || row[14]; let status = row[34] || row[61];
                     let pClass = status === 'Delivered' ? 'bg-success/10 text-success border-success/20' : 'bg-orange/10 text-orange dark:bg-orange/20 dark:text-orange border-orange/20';
                     liveStatusContainer.innerHTML += `
                         <div class="flex justify-between items-center pb-4 border-b border-teal/10 dark:border-white/5">
@@ -451,52 +438,6 @@ if (mainDashboardView && activeUser) {
         }
     }
     window.loadDashboardStats();
-
-    const editProfileForm = document.getElementById('editProfileForm');
-    if (editProfileForm) {
-        const saveProfileBtn = document.getElementById('saveProfileBtn');
-        const saveProfileText = document.getElementById('saveProfileText');
-        
-        editProfileForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (!activeUser.username) {
-                alert("Security Session Expired. Please log out and log back in to edit your profile.");
-                return;
-            }
-
-            saveProfileText.innerText = "Saving...";
-            saveProfileBtn.disabled = true; saveProfileBtn.classList.add('opacity-50');
-
-            const payload = {
-                formType: "updateProfile",
-                username: activeUser.username,
-                newName: document.getElementById('editProfileName').value,
-                newPassword: document.getElementById('editProfilePass').value
-            };
-
-            try {
-                const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
-                const result = await response.json();
-                
-                if (result.result === 'success') {
-                    activeUser.name = result.newName;
-                    sessionStorage.setItem('erp_user', JSON.stringify(activeUser));
-                    
-                    alert('Profile updated successfully!');
-                    document.getElementById('profileModal').classList.add('hidden');
-                    window.location.reload(); 
-                } else {
-                    alert('Error: ' + result.error);
-                }
-            } catch (error) {
-                alert('Connection failed. Could not update profile.');
-            } finally {
-                saveProfileText.innerText = "Save Changes";
-                saveProfileBtn.disabled = false; saveProfileBtn.classList.remove('opacity-50');
-            }
-        });
-    }
 }
 
 // ==========================================
@@ -513,154 +454,14 @@ if (themeToggleBtnGlobal) {
         }
     });
 }
-// ==========================================
-// 12. ADMIN CONTROL PANEL MODULE (MODAL VERSION)
-// ==========================================
-if (window.location.href.includes('admin.html') && activeUser && activeUser.role !== 'Admin') { window.location.replace('index.html'); }
-if (activeUser && activeUser.role === 'Admin') {
-    const adminLinks = document.querySelectorAll('#navAdminLink');
-    adminLinks.forEach(link => { link.classList.remove('hidden'); link.classList.add('flex'); });
-}
-
-const adminDashboardView = document.getElementById('adminDashboardView');
-if (adminDashboardView && activeUser && activeUser.role === 'Admin') {
-    
-    // Tabs Logic
-    const tabUsersBtn = document.getElementById('tabUsersBtn'); const tabBranchesBtn = document.getElementById('tabBranchesBtn');
-    const sectionUsers = document.getElementById('sectionUsers'); const sectionBranches = document.getElementById('sectionBranches');
-
-    tabUsersBtn.addEventListener('click', () => {
-        sectionUsers.classList.remove('hidden'); sectionBranches.classList.add('hidden');
-        tabUsersBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold bg-orange/10 dark:bg-orange/20 text-orange transition flex items-center shadow-sm';
-        tabBranchesBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold text-teal/70 dark:text-beige/60 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center';
-        window.fetchUsers();
-    });
-
-    tabBranchesBtn.addEventListener('click', () => {
-        sectionBranches.classList.remove('hidden'); sectionUsers.classList.add('hidden');
-        tabBranchesBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold bg-orange/10 dark:bg-orange/20 text-orange transition flex items-center shadow-sm';
-        tabUsersBtn.className = 'px-5 py-2.5 rounded-xl text-sm font-bold text-teal/70 dark:text-beige/60 hover:bg-teal/5 dark:hover:bg-white/5 transition flex items-center';
-        window.fetchBranches();
-    });
-
-    // Users Logic
-    const usersTableBody = document.getElementById('usersTableBody');
-    window.fetchUsers = async function() {
-        usersTableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center animate-pulse text-teal/50">Loading directory...</td></tr>';
-        try {
-            const response = await fetch(`${scriptURL}?action=getUsers`); const result = await response.json();
-            if (result.result === 'success') {
-                usersTableBody.innerHTML = '';
-                if (result.data.length <= 1) return usersTableBody.innerHTML = '<tr><td colspan="6" class="p-10 text-center text-teal/50">No users found.</td></tr>';
-                for (let i = 1; i < result.data.length; i++) {
-                    let r = result.data[i]; 
-                    // Badges Logic
-                    let roleBadge = r[4] === 'Admin' ? '<span class="badge-admin">Admin</span>' : `<span class="badge-role">${r[4]}</span>`;
-                    // Determine Status: If they have a branch, they are active. We will assume Active for now.
-                    let statusBadge = '<span class="badge-active">Active</span>';
-
-                    let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
-                    tr.innerHTML = `
-                        <td class="p-5 font-mono font-bold text-charcoal dark:text-white">${r[1]}</td>
-                        <td class="p-5 font-medium">${r[3]}</td>
-                        <td class="p-5">${roleBadge}</td>
-                        <td class="p-5"><span class="px-2 py-1 rounded bg-teal/5 dark:bg-white/10 text-xs font-mono font-bold">${r[5]}</span></td>
-                        <td class="p-5">${statusBadge}</td>
-                        <td class="p-5 text-right">
-                            <button onclick="deleteUser('${r[1]}')" class="text-danger hover:text-red-700 transition p-2 bg-red-50 dark:bg-red-500/10 rounded-lg" title="Delete User">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                            </button>
-                        </td>`;
-                    usersTableBody.appendChild(tr);
-                }
-            }
-        } catch (e) { usersTableBody.innerHTML = '<tr><td colspan="6" class="text-danger p-10 text-center">Failed to fetch data</td></tr>'; }
-    }
-
-    document.getElementById('adminUserForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('saveUserBtn'); const text = document.getElementById('saveUserText');
-        text.innerText = "Saving..."; btn.disabled = true; btn.classList.add('opacity-50');
-        const payload = { formType: "addUser", newUsername: document.getElementById('mUserId').value, fullName: document.getElementById('mUserName').value, newPassword: document.getElementById('mUserPass').value, role: document.getElementById('mUserRole').value, branchId: document.getElementById('mUserBranch').value };
-        try {
-            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
-            if(result.result === 'success') { 
-                document.getElementById('adminUserForm').reset(); 
-                document.getElementById('userModal').classList.remove('active');
-                window.fetchUsers(); 
-            } else alert(result.error);
-        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Save User"; btn.disabled = false; btn.classList.remove('opacity-50'); }
-    });
-
-    window.deleteUser = async function(targetUser) {
-        if(targetUser === activeUser.username) return alert("You cannot delete your own account.");
-        if(!confirm(`Are you sure you want to permanently delete user: ${targetUser}?`)) return;
-        try {
-            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify({ formType: "deleteUser", targetUsername: targetUser }) }); const result = await res.json();
-            if(result.result === 'success') { window.fetchUsers(); } else alert(result.error);
-        } catch(e) { alert('Deletion failed.'); }
-    }
-
-    // Branches Logic
-    const branchesTableBody = document.getElementById('branchesTableBody');
-    window.fetchBranches = async function() {
-        branchesTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center animate-pulse text-teal/50">Loading network...</td></tr>';
-        try {
-            const response = await fetch(`${scriptURL}?action=getBranches`); const result = await response.json();
-            if (result.result === 'success') {
-                branchesTableBody.innerHTML = '';
-                if (result.data.length <= 1) return branchesTableBody.innerHTML = '<tr><td colspan="5" class="p-10 text-center text-teal/50">No branches found.</td></tr>';
-                for (let i = 1; i < result.data.length; i++) {
-                    let r = result.data[i];
-                    let typeBadge = r[2].includes('HQ') || r[2].includes('Head') ? '<span class="badge-hq">Head Quarters</span>' : '<span class="badge-role">Branch Hub</span>';
-                    
-                    let tr = document.createElement('tr'); tr.className = 'hover:bg-slate-50 dark:hover:bg-white/5 transition';
-                    tr.innerHTML = `
-                        <td class="p-5 font-mono font-bold text-orange">${r[1]}</td>
-                        <td class="p-5"><p class="font-bold text-charcoal dark:text-white">${r[2]}</p><p class="text-xs text-teal/70 dark:text-beige/60 mt-1">${r[3]}</p></td>
-                        <td class="p-5">${typeBadge}</td>
-                        <td class="p-5 font-medium">${r[4]}</td>
-                        <td class="p-5 text-right font-mono text-sm">${r[5]}</td>`;
-                    branchesTableBody.appendChild(tr);
-                }
-            }
-        } catch (e) { branchesTableBody.innerHTML = '<tr><td colspan="5" class="text-danger p-10 text-center">Failed to fetch data</td></tr>'; }
-    }
-
-    document.getElementById('adminBranchForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('saveBranchBtn'); const text = document.getElementById('saveBranchText');
-        text.innerText = "Deploying..."; btn.disabled = true; btn.classList.add('opacity-50');
-        const payload = { formType: "addBranch", branchId: document.getElementById('mBranchCode').value, branchName: document.getElementById('mBranchName').value, location: document.getElementById('mBranchLoc').value, manager: document.getElementById('mBranchManager').value, contact: document.getElementById('mBranchContact').value };
-        try {
-            const res = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) }); const result = await res.json();
-            if(result.result === 'success') { 
-                document.getElementById('adminBranchForm').reset(); 
-                document.getElementById('branchModal').classList.remove('active');
-                window.fetchBranches(); 
-            } else alert(result.error);
-        } catch (e) { alert('Transmission failed.'); } finally { text.innerText = "Deploy Hub"; btn.disabled = false; btn.classList.remove('opacity-50'); }
-    });
-
-    if(document.getElementById('refreshUsersBtn')) document.getElementById('refreshUsersBtn').addEventListener('click', window.fetchUsers);
-    if(document.getElementById('refreshBranchesBtn')) document.getElementById('refreshBranchesBtn').addEventListener('click', window.fetchBranches);
-    window.fetchUsers(); 
-}
-// ==========================================
-// GLOBAL CONFIGURATION
-// ==========================================
-const _globalConfig = {
-    scriptURL: 'https://script.google.com/macros/s/AKfycbweIJLcyZTR619HQgD3IJvHI2Dn-3EnT7WEo3g0pKeCsPdPZCeSnhyonP_1QQjd5pQw/exec'
-};
 
 // ==========================================
-// GLOBAL SIDEBAR COMPONENT
+// 12. GLOBAL SIDEBAR & PROFILE MODAL INJECTION
 // ==========================================
 function loadGlobalSidebar() {
     const container = document.getElementById('global-sidebar-container');
-    if (!container) return; // Exit if the container isn't placed on the page
+    if (!container) return; 
 
-    // 1. Detect Current Page for Active State Logic
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
 
@@ -668,10 +469,8 @@ function loadGlobalSidebar() {
     const isLogistics = ['international.html', 'domestic.html'].includes(page);
     const isProcessing = ['processing.html', 'update.html'].includes(page);
 
-    // 2. Inject the HTML & CSS Template
     container.innerHTML = `
     <style>
-        /* Embedded CSS to ensure the sidebar renders perfectly on every page */
         .sidebar-nav-item {
             display: flex; align-items: center; gap: 10px;
             padding: 9px 12px; border-radius: 11px;
@@ -688,34 +487,30 @@ function loadGlobalSidebar() {
         }
         .sidebar-section-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(239,231,220,.28); padding: 6px 12px 4px; }
         .sidebar-divider { height: 1px; background: rgba(255,255,255,.06); margin: 8px 0; }
+        
+        .global-modal-overlay { position:fixed; inset:0; background:rgba(13,35,48,.65); backdrop-filter:blur(6px); z-index:200; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .25s; padding:20px; }
+        .global-modal-overlay.active { opacity:1; pointer-events:all; }
+        .global-modal-box { background:white; border-radius:20px; width:100%; max-width:600px; box-shadow:0 24px 60px rgba(13,35,48,.18); transform:translateY(20px) scale(.97); transition:transform .35s; overflow:hidden; }
+        .global-modal-overlay.active .global-modal-box { transform:translateY(0) scale(1); }
+        .global-field { width:100%; background:rgba(2,115,133,.03); border:1px solid rgba(2,115,133,.15); border-radius:10px; padding:.65rem 1rem; font-family:'Poppins',sans-serif; font-size:.8125rem; color:#0D2330; outline:none; transition:border-color .2s; }
+        .global-field:focus { border-color:#F99523; box-shadow:0 0 0 3px rgba(249,149,35,.1); background:#fff; }
+        .global-field-label { display:block; font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:rgba(2,115,133,.6); margin-bottom:5px; }
     </style>
 
     <aside class="w-[220px] bg-[#0D2330] flex flex-col flex-shrink-0 z-20 h-screen">
-        
         <div class="px-5 py-4 border-b border-white/[0.06] flex items-center">
-            <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
+            <img src="assets/nuvana-ex logo long.svg" alt="Nuvana.ex" class="h-10 w-auto object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='block'">
             <div style="display:none">
                 <div class="font-lexend text-[15px] font-bold tracking-[.14em] text-[#EFE7DC]">NUVANA<span class="text-[#F99523]">.EX</span></div>
                 <div class="text-[9px] tracking-[.1em] text-[#EFE7DC]/25 mt-0.5 uppercase">Enterprise Platform</div>
             </div>
         </div>
-
         <nav class="flex-1 px-3 py-4 overflow-y-auto space-y-0.5">
-
-            <a href="index.html" class="sidebar-nav-item ${isActive('index.html')}">
-                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>
-                Command Center
-            </a>
-
+            <a href="index.html" class="sidebar-nav-item ${isActive('index.html')}"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 7.962a.75.75 0 01-.023 1.08l-.013.01A.75.75 0 0120 13.5v5.25A2.25 2.25 0 0117.75 21h-3a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-2.5a.75.75 0 00-.75.75V20.25a.75.75 0 01-.75.75h-3A2.25 2.25 0 014 18.75V13.5a.75.75 0 01-.19-.516l-.012-.01A.75.75 0 013.82 11.8l8.69-7.962z"/></svg>Command Center</a>
             <div class="sidebar-section-label mt-3">Logistics</div>
-
             <div class="group">
                 <div class="sidebar-nav-item justify-between ${isLogistics ? 'text-[#F99523] font-semibold' : ''}">
-                    <div class="flex items-center gap-2.5">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"/></svg>
-                        New Booking
-                    </div>
+                    <div class="flex items-center gap-2.5"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M5.625 1.5H9a3.75 3.75 0 013.75 3.75v1.875c0 1.036.84 1.875 1.875 1.875H16.5a3.75 3.75 0 013.75 3.75v7.875c0 1.035-.84 1.875-1.875 1.875H5.625a1.875 1.875 0 01-1.875-1.875V3.375c0-1.036.84-1.875 1.875-1.875zM12.75 12a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V18a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V12z" clip-rule="evenodd"/></svg>New Booking</div>
                     <svg class="w-3 h-3 transition-transform group-hover:rotate-180" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M12.53 16.28a.75.75 0 01-1.06 0l-7.5-7.5a.75.75 0 011.06-1.06L12 14.69l6.97-6.97a.75.75 0 111.06 1.06l-7.5 7.5z" clip-rule="evenodd"/></svg>
                 </div>
                 <div class="${isLogistics ? 'flex' : 'hidden group-hover:flex'} flex-col pl-9 pr-3 pb-1 gap-0.5">
@@ -772,27 +567,85 @@ function loadGlobalSidebar() {
                 <div class="w-7 h-7 rounded-[9px] bg-[#F99523] flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0" id="globalSidebarAvatarText">U</div>
                 <div class="overflow-hidden flex-1">
                     <div class="text-[11px] font-semibold text-[#EFE7DC]/90 truncate" id="globalSidebarUserName">Loading...</div>
-                    <div class="text-[9px] text-[#EFE7DC]/35" id="globalSidebarUserRole">—</div>
+                    <div class="text-[9px] text-[#EFE7DC]/40" id="globalSidebarUserBranch">—</div>
                 </div>
                 <svg class="w-3 h-3 text-[#EFE7DC]/25 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M4.5 12a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zm6 0a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" clip-rule="evenodd"/></svg>
             </div>
         </div>
     </aside>
+
+    <div class="global-modal-overlay" id="globalProfileModal">
+        <div class="global-modal-box flex flex-col">
+            <div style="padding:20px 24px;border-bottom:1px solid #f0ece6;background:#faf8f5;display:flex;align-items:center;justify-content:space-between;">
+                <div style="display:flex;align-items:center;gap:12px;">
+                    <div style="width:36px;height:36px;border-radius:10px;background:rgba(2,115,133,.1);display:flex;align-items:center;justify-content:center;">
+                        <svg style="width:18px;height:18px;color:#027385;" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z" clip-rule="evenodd"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-lexend text-[15px] font-bold text-charcoal">Account Settings</h3>
+                        <p class="text-[10px] text-teal/60 uppercase tracking-widest font-semibold mt-0.5" id="gpRoleBranch">Loading...</p>
+                    </div>
+                </div>
+                <button type="button" id="closeGlobalProfileBtn" style="width:30px;height:30px;border-radius:50%;background:rgba(13,35,48,.06);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:14px;height:14px;color:#0D2330;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            
+            <form id="globalProfileForm" style="padding:24px;">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                    <div>
+                        <label class="global-field-label">Full Name</label>
+                        <input type="text" id="gpName" required class="global-field">
+                    </div>
+                    <div>
+                        <label class="global-field-label">Username</label>
+                        <input type="text" id="gpUsername" required class="global-field">
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
+                    <div>
+                        <label class="global-field-label">Phone Number</label>
+                        <input type="text" id="gpPhone" class="global-field" placeholder="+968 XXXXXXXX">
+                    </div>
+                    <div>
+                        <label class="global-field-label">Email ID</label>
+                        <input type="email" id="gpEmail" class="global-field" placeholder="user@nuvana.com">
+                    </div>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px;">
+                    <div>
+                        <label class="global-field-label">Date of Birth</label>
+                        <input type="date" id="gpDob" class="global-field text-charcoal/70">
+                    </div>
+                    <div>
+                        <label class="global-field-label">Reset Password</label>
+                        <input type="password" id="gpPass" class="global-field" placeholder="Leave blank to keep current">
+                    </div>
+                </div>
+
+                <div class="flex gap-3">
+                    <button type="button" id="gpLogoutBtn" style="padding:12px 24px;border-radius:12px;background:rgba(239,68,68,.1);color:#dc2626;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;border:none;cursor:pointer;transition:background .2s;" class="hover:bg-red-500/20">Sign Out</button>
+                    <button type="submit" id="gpSaveBtn" style="flex:1;padding:12px;border-radius:12px;background:#0D2330;color:white;font-family:'Lexend',sans-serif;font-size:13px;font-weight:700;border:none;cursor:pointer;box-shadow:0 4px 14px rgba(13,35,48,.2);display:flex;align-items:center;justify-content:center;gap:8px;">
+                        <span id="gpSaveText">Save Changes</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
     `;
 
     // 3. Populate User Details Securely from SessionStorage
-    const rawUser = sessionStorage.getItem('erp_user');
-    if (rawUser) {
+    if (activeUser) {
         try {
-            const u = JSON.parse(rawUser);
-            const firstChar = (u.name || 'U').charAt(0).toUpperCase();
+            const firstChar = (activeUser.name || 'U').charAt(0).toUpperCase();
             
             document.getElementById('globalSidebarAvatarText').textContent = firstChar;
-            document.getElementById('globalSidebarUserName').textContent = u.name;
-            document.getElementById('globalSidebarUserRole').textContent = `${u.role} · ${u.branchId}`;
+            document.getElementById('globalSidebarUserName').textContent = activeUser.name;
+            document.getElementById('globalSidebarUserBranch').textContent = activeUser.branchName || activeUser.branchId || 'No Branch';
             
-            // Show Admin Link if they have Master Control access
-            if (u.role === 'Admin') {
+            if (activeUser.role === 'Admin') {
                 const adminLink = document.getElementById('globalNavAdminLink');
                 if (adminLink) {
                     adminLink.classList.remove('hidden');
@@ -802,17 +655,82 @@ function loadGlobalSidebar() {
         } catch(e) { console.error("Error parsing user session data.", e); }
     }
 
-    // 4. Connect the Profile Button Click Router
+    // 4. Connect the Profile Modal Router
     document.getElementById('globalSidebarProfileBtn')?.addEventListener('click', () => {
-        const modal = document.getElementById('profileModal');
+        const modal = document.getElementById('globalProfileModal');
         if (modal) {
-            // If the modal exists on the current page (like index.html), open it
-            modal.classList.remove('hidden');
-        } else {
-            // If they click on a sub-page without the modal, redirect them to the main dash
-            if (page !== 'index.html') {
-                window.location.href = 'index.html';
+            document.getElementById('gpRoleBranch').textContent = `${activeUser.role} • ${activeUser.branchName || activeUser.branchId}`;
+            document.getElementById('gpName').value = activeUser.name || '';
+            document.getElementById('gpUsername').value = activeUser.username || '';
+            document.getElementById('gpPhone').value = activeUser.phone || '';
+            document.getElementById('gpEmail').value = activeUser.email || '';
+            
+            let dobValue = '';
+            if (activeUser.dob) {
+                try {
+                    const d = new Date(activeUser.dob);
+                    if (!isNaN(d.getTime())) dobValue = d.toISOString().split('T')[0];
+                } catch(e) {}
             }
+            document.getElementById('gpDob').value = dobValue;
+            document.getElementById('gpPass').value = '';
+            
+            modal.classList.add('active');
+        }
+    });
+
+    document.getElementById('closeGlobalProfileBtn')?.addEventListener('click', () => {
+        document.getElementById('globalProfileModal').classList.remove('active');
+    });
+
+    document.getElementById('gpLogoutBtn')?.addEventListener('click', () => {
+        sessionStorage.removeItem('erp_user');
+        window.location.href = 'login.html';
+    });
+
+    document.getElementById('globalProfileForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('gpSaveBtn');
+        const text = document.getElementById('gpSaveText');
+        
+        text.textContent = "Saving..."; btn.disabled = true; btn.classList.add('opacity-50');
+
+        const payload = {
+            formType: "updateProfile",
+            userId: activeUser.userId,
+            newName: document.getElementById('gpName').value.trim(),
+            newUsername: document.getElementById('gpUsername').value.trim(),
+            newPhone: document.getElementById('gpPhone').value.trim(),
+            newEmail: document.getElementById('gpEmail').value.trim(),
+            newDob: document.getElementById('gpDob').value,
+            newPassword: document.getElementById('gpPass').value.trim()
+        };
+
+        try {
+            const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload), headers: { 'Content-Type': 'text/plain;charset=utf-8' } });
+            const result = await response.json();
+            
+            if (result.result === 'success') {
+                activeUser.name = payload.newName;
+                activeUser.username = payload.newUsername;
+                activeUser.phone = payload.newPhone;
+                activeUser.email = payload.newEmail;
+                activeUser.dob = payload.newDob;
+                
+                sessionStorage.setItem('erp_user', JSON.stringify(activeUser));
+                
+                document.getElementById('globalSidebarAvatarText').textContent = activeUser.name.charAt(0).toUpperCase();
+                document.getElementById('globalSidebarUserName').textContent = activeUser.name;
+                
+                document.getElementById('globalProfileModal').classList.remove('active');
+                alert('Profile updated successfully!');
+            } else {
+                alert('Error: ' + result.error);
+            }
+        } catch (error) {
+            alert('Connection failed. Could not update profile.');
+        } finally {
+            text.textContent = "Save Changes"; btn.disabled = false; btn.classList.remove('opacity-50');
         }
     });
 }
@@ -820,7 +738,6 @@ function loadGlobalSidebar() {
 // ==========================================
 // INITIALIZATION LISTENER
 // ==========================================
-// Guarantee the sidebar paints itself regardless of page loading speed
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', loadGlobalSidebar);
 } else {
